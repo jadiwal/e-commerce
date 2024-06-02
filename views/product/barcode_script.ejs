@@ -1,0 +1,177 @@
+<script>
+    //     let data = <%- JSON.stringify(data) %>
+    //     console.log(data)
+    //   let limitInput = document.querySelector('#limit');
+    //   let barcodeGen = document.querySelector('#barcodeGen');
+    //   let barcodeParent = document.querySelector('#barcode_parent');
+    //   function handleButtonClick() {
+    //     let limit = parseInt(limitInput.value)
+    //     console.log('Limit:', limit);
+    //     barcodeParent.innerHTML = "";
+    //     let barcodeChild = '';
+
+    // for (let i = 0; i < limit; i++) {
+    //     data.forEach((v, j) => { // Changed map to forEach to avoid potential confusion with index i
+    //         barcodeChild += `<div class="item style24" id="${i}_${j}">
+    //                                 <span class="barcode_site text-capitalize">${v.brand_name}</span>
+    //                                 <span class="barcode_name text-capitalize">${v.name}</span>
+    //                                 <div class="barcode_price text-capitalize">
+    //                                     ₹${v.purchase_price}.00
+    //                                 </div>
+    //                                 <img src="assets/img/barcode.jpg" alt="barcode">
+    //                                 <div class="barcode_code text-capitalize">Code : ${v.code}</div>
+    //                             </div>`;
+    //     });
+    // }
+
+    // // Create a temporary container element to hold the parsed HTML
+    // let tempContainer = document.createElement('div');
+    // tempContainer.innerHTML = barcodeChild;
+
+    // // Append the children of the temporary container to the parent element
+    // document.querySelector('#barcode_parent').appendChild(tempContainer);
+
+    // }
+    //   barcodeGen.addEventListener('click', handleButtonClick);
+
+    // let resetBarcode = document.querySelector('#resetBarcode')
+
+    // resetBarcode.addEventListener("click", ()=>{
+    //     barcodeParent.innerHTML = "";
+    // })
+
+
+    // let print_bar = document.querySelector('#print_bar')
+
+    // print_bar.addEventListener("click", ()=>{
+    //     window.print()
+    // })
+
+    // let data = <%- JSON.stringify(data) %>;
+    // console.log(data)
+    //     let limitInput = document.querySelector('#limit');
+    //     let barcodeGen = document.querySelector('#barcodeGen');
+    //     let barcodeParent = document.querySelector('#barcode_parent');
+
+    //     function generateBarcode() {
+    //         let limit = parseInt(limitInput.value);
+    //         console.log('Limit:', limit);
+    //         barcodeParent.innerHTML = "";
+    //         let barcodeChild = '';
+    //         for (let i = 0; i < limit; i++) {
+    //             data.forEach((v, j) => {
+    //                 barcodeChild += `<div class="item style24" id="${i}_${j}">
+    //                                     <span class="barcode_site text-capitalize">${v.brand_name}</span>
+    //                                     <span class="barcode_name text-capitalize">${v.name}</span>
+    //                                     <div class="barcode_price text-capitalize">
+    //                                         ₹${v.purchase_price}.00
+    //                                     </div>
+    //                                     <img src="assets/img/barcode.jpg" alt="barcode">
+    //                                     <div class="barcode_code text-capitalize">Code : ${v.code}</div>
+    //                                 </div>`;
+    //             });
+    //         }
+    //         let tempContainer = document.createElement('div');
+    //         tempContainer.innerHTML = barcodeChild;
+    //         document.querySelector('#barcode_parent').appendChild(tempContainer);  
+    //     }
+
+    function printPage() {
+        generateBarcode(); // Ensure barcode is generated before printing
+        window.print();
+    }
+
+    // barcodeGen.addEventListener('click', generateBarcode);
+
+    let resetBarcode = document.querySelector('#resetBarcode');
+    resetBarcode.addEventListener("click", () => {
+        barcodeParent.innerHTML = "";
+    });
+
+    let print_bar = document.querySelector('#print_bar');
+    print_bar.addEventListener("click", printPage);
+
+
+
+
+
+
+
+    function generateBarcode1() {
+        var barcodeValue = "123456789";
+
+        JsBarcode("#barcodeCanvas", barcodeValue, {
+            format: "CODE128",
+            displayValue: true,
+            fontSize: 20,
+            textAlign: "center"
+        });
+    }
+
+
+    let data = <%- JSON.stringify(data) %>;
+    console.log(data)
+    let limitInput = document.querySelector('#limit');
+    let barcodeGen = document.querySelector('#barcodeGen');
+    let barcodeParent = document.querySelector('#barcode_parent');
+
+    // Function to generate barcode using JsBarcode
+    function generateBarcode(value) {
+        JsBarcode("#barcodeCanvas_" + value, value, {
+            format: "CODE128",
+            displayValue: true,
+            fontSize: 20,
+            textAlign: "center"
+        });
+    }
+
+    // Function to generate barcodes for all values in data
+    function generateBarcodes() {
+        let limit = parseInt(limitInput.value);
+        console.log('Limit:', limit);
+        barcodeParent.innerHTML = "";
+        for (let i = 0; i < limit; i++) {
+            data.forEach((v, j) => {
+                let div = document.createElement('div');
+                div.className = "item style24";
+                div.id = `${i}_${j}`;
+                div.innerHTML = `
+                <div class="barcode_code text-capitalize">Code : ${v.code}</div>
+                <span class="barcode_site text-capitalize">${v.brand_name}</span>
+                <span class="barcode_name text-capitalize">${v.name}</span>
+                <div class="barcode_price text-capitalize">
+                    ₹${v.purchase_price}.00
+                </div>
+                <!-- Canvas element to render the barcode -->
+                <canvas id="barcodeCanvas_${v.code}"></canvas>
+                <div class="barcode_code text-capitalize">Code : ${v.code}</div>
+            `;
+                barcodeParent.appendChild(div);
+                generateBarcode(v.code); // Generate barcode for each value
+            });
+        }
+    }
+
+    barcodeGen.addEventListener('click', generateBarcodes);
+
+
+</script>
+
+<style>
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+
+        #printarea,
+        #printarea * {
+            visibility: visible;
+        }
+
+        #printarea {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    }
+</style>

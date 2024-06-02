@@ -1,0 +1,406 @@
+<%- include('../header', { pageTitle: 'Sale Details' }) %>
+    <%- include('../sidebar') %>
+        <div class="page-wrapper">
+            <div class="content container-fluid">
+                <!-- Page Title -->
+                <div class="mb-4">
+                    <h2 class="h1 mb-0 text-capitalize d-flex align-items-center gap-2">
+                        <img src="http://192.168.1.180/e_dibo/public/assets/back-end/img/all-orders.png" alt="">
+                        Order Details
+                    </h2>
+                </div>
+                <!-- End Page Title -->
+
+                <div class="row gy-3" id="printableArea">
+                    <div class="col-lg-8">
+                        <!-- Card -->
+                        <div class="card h-100">
+                            <!-- Body -->
+                            <div class="card-body">
+                                <div class="d-flex flex-wrap gap-10 justify-content-between mb-4">
+                                    <div class="d-flex flex-column gap-10">
+                                        <h4 class="text-capitalize">Order ID #
+                                        </h4>
+                                        <div id="created_at">
+                                        </div>
+                                    </div>
+                                    <div class="text-sm-right">
+                                        <div class="d-flex flex-wrap gap-10 justify-content-end">
+                                            <!-- order verificaiton button-->
+                                            <!-- order verificaiton button-->
+                                            <div>
+                                                <button class="btn btn--primary px-4" data-toggle="modal"
+                                                    data-target="#locationModal"><i class="fa-regular fa-map"></i>
+                                                    Show
+                                                    locations on map</button>
+                                            </div>
+
+                                            <a class="btn btn--primary px-4" target="_blank" id="downloadPDF">
+                                                <i class="fa-solid fa-print"></i>
+                                                Print Invoice
+                                            </a>
+                                        </div>
+                                        <div class="d-flex flex-column gap-2 mt-3">
+                                            <!-- Order status -->
+                                            <div
+                                                class="order-status d-flex justify-content-sm-end gap-10 text-capitalize">
+                                                <span class="title-color">Status: </span>
+                                                <span id="delivery_status"
+                                                    class="badge color-caribbean-green-soft font-weight-bold radius-50 d-flex align-items-center py-1 px-2">
+                                                </span>
+                                            </div>
+
+                                            <!-- Payment Method -->
+                                            <div
+                                                class="payment-method d-flex justify-content-sm-end gap-10 text-capitalize">
+                                                <span class="title-color">Payment Method :</span>
+                                                <strong id="payment_method">
+                                                </strong>
+                                            </div>
+
+                                            <!-- reference-code -->
+
+                                            <!-- Payment Status -->
+                                            <div class="payment-status d-flex justify-content-sm-end gap-10">
+                                                <span class="title-color">Payment Status:</span>
+                                                <span id="payment_status"
+                                                    class="text-danger payment-status-span font-weight-bold"></span>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    <!-- Order Note -->
+                                </div>
+
+                                <div class="table-responsive datatable-custom">
+                                    <table id="orderdetailTable"
+                                        class="table fz-12 table-hover table-borderless table-thead-bordered table-nowrap table-align-middle card-table w-100">
+                                        <thead class="thead-light thead-50 text-capitalize">
+                                            <tr>
+                                                <th>SL</th>
+                                                <th>Item details</th>
+                                                <th>Item price</th>
+                                                <th>Tax</th>
+                                                <th>Item discount</th>
+                                                <th>Total price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="orderdetailTbody"></tbody>
+                                    </table>
+                                </div>
+                                <hr>
+                                <div class="row justify-content-md-end mb-3">
+                                    <div class="col-md-9 col-lg-8">
+                                        <dl class="row gy-1 text-sm-right">
+                                            <dt class="col-5">Item price</dt>
+                                            <dd class="col-6 title-color" id="item_price">
+                                                ₹<strong></strong>
+                                            </dd>
+                                            <dt class="col-5 text-capitalize">Item discount</dt>
+                                            <dd class="col-6 title-color">
+                                                - ₹<strong id="discount"></strong>
+                                            </dd>
+                                            <dt class="col-5 text-capitalize">Sub total</dt>
+                                            <dd class="col-6 title-color">
+                                                ₹<strong id="subTotal"></strong>
+                                            </dd>
+                                            <dt class="col-5">Coupon discount</dt>
+                                            <dd class="col-6 title-color">
+                                                - ₹<strong id="coupon_code"></strong>
+                                            </dd>
+                                            <dt class="col-5 text-uppercase">Vat/Tax</dt>
+                                            <dd class="col-6 title-color">
+                                                ₹<strong id="tax"></strong>
+                                            </dd>
+                                            <dt class="col-5 text-capitalize">Delivery fee</dt>
+                                            <dd class="col-6 title-color">
+                                                ₹<strong id="shipping_cost"></strong>
+                                            </dd>
+
+
+
+                                            <dt class="col-5"><strong>Total</strong></dt>
+                                            <dd class="col-6 title-color">
+                                                ₹<strong id="order_amount"></strong>
+                                            </dd>
+                                        </dl>
+                                        <!-- End Row -->
+                                    </div>
+                                </div>
+                                <!-- End Row -->
+                            </div>
+                            <!-- End Body -->
+                        </div>
+                        <!-- End Card -->
+                    </div>
+
+                    <div class="col-lg-4 d-flex flex-column gap-3">
+
+
+                        <!-- Order & Shipping Info Card -->
+                        <div class="card">
+                            <div class="card-body text-capitalize d-flex flex-column gap-4">
+                                <div class="d-flex flex-column align-items-center gap-2">
+                                    <h4 class="mb-0 text-center">Order &amp; Shipping Info</h4>
+                                </div>
+
+                                <div class="">
+                                    <label class="font-weight-bold title-color fz-14">Change order status</label>
+                                    <select name="order_status" id="order_status" onchange="order_status(this.value)"
+                                        class="status form-control">
+                                        <option value="pending" selected=""> Pending</option>
+                                        <option value="confirmed"> Confirmed</option>
+                                        <option value="processing">Packaging </option>
+                                        <option class="text-capitalize" value="out_for_delivery">Out for delivery
+                                        </option>
+                                        <option value="delivered">Delivered </option>
+                                        <option value="returned"> Returned</option>
+                                        <option value="failed">Failed to Deliver </option>
+                                        <option value="canceled">Canceled </option>
+                                    </select>
+                                </div>
+
+                                <!-- Payment Status -->
+                                <div
+                                    class="d-flex justify-content-between align-items-center gap-10 form-control h-auto flex-wrap">
+                                    <span class="title-color">
+                                        Payment status
+                                    </span>
+                                    <div class="d-flex justify-content-end min-w-100 align-items-center gap-2">
+                                        <span class="text--primary font-weight-bold">Unpaid</span>
+                                        <label class="switcher payment-status-text">
+                                            <input class="switcher_input payment_status" type="checkbox" name="status"
+                                                value="unpaid">
+                                            <span class="switcher_control switcher_control_add"></span>
+                                        </label>
+                                    </div>
+
+                                </div>
+
+                                <ul class="list-unstyled list-unstyled-py-4">
+                                    <li>
+                                        <label class="font-weight-bold title-color fz-14">
+                                            Shipping Method
+                                            (Company Vehicle)
+                                        </label>
+
+                                        <select class="form-control text-capitalize" name="delivery_type"
+                                            onchange="choose_delivery_type(this.value)">
+                                            <option value="0">
+                                                Choose delivery type
+                                            </option>
+
+                                            <option value="self_delivery">
+                                                By self delivery man
+                                            </option>
+                                            <option value="third_party_delivery">
+                                                By third party delivery service
+                                            </option>
+                                        </select>
+                                    </li>
+
+                                    <li class="choose_delivery_man" style="display: none;">
+                                        <label class="font-weight-bold title-color fz-14">
+                                            Delivery man
+                                        </label>
+                                        <select
+                                            class="form-control text-capitalize js-select2-custom select2-hidden-accessible"
+                                            name="delivery_man_id" onchange="addDeliveryMan(this.value)"
+                                            data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                            <option value="0" data-select2-id="3">Select</option>
+                                        </select><span class="select2 select2-container select2-container--default"
+                                            dir="ltr" data-select2-id="2" style="width: 100%;"><span
+                                                class="selection"><span class="select2-selection custom-select"
+                                                    role="combobox" aria-haspopup="true" aria-expanded="false"
+                                                    tabindex="0" aria-disabled="false"
+                                                    aria-labelledby="select2-delivery_man_id-7r-container"><span
+                                                        class="select2-selection__rendered"
+                                                        id="select2-delivery_man_id-7r-container" role="textbox"
+                                                        aria-readonly="true"
+                                                        title="Select"><span>Select</span></span><span
+                                                        class="select2-selection__arrow" role="presentation"><b
+                                                            role="presentation"></b></span></span></span><span
+                                                class="dropdown-wrapper" aria-hidden="true"></span></span>
+
+                                        <div class="p-2 bg-light rounded mt-4">
+                                            <div class="media m-1 gap-3">
+                                                <img class="avatar rounded-circle"
+                                                    onerror="this.src='http://192.168.1.180/e_dibo/public/assets/back-end/img/image-place-holder.png'"
+                                                    src="http://192.168.1.180/e_dibo/public/assets/back-end/img/delivery-man.png"
+                                                    alt="Image">
+                                                <div class="media-body">
+                                                    <h5 class="mt-3">No delivery man assigned</h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+
+                                    <li class="mt-1" id="by_third_party_delivery_service_info" style="display: none;">
+                                        <div class="p-2 bg-light rounded">
+                                            <div class="media m-1 gap-3">
+                                                <img class="avatar rounded-circle"
+                                                    onerror="this.src='http://192.168.1.180/e_dibo/public/assets/back-end/img/image-place-holder.png'"
+                                                    src="http://192.168.1.180/e_dibo/public/assets/back-end/img/third-party-delivery.png"
+                                                    alt="Image">
+                                                <div class="media-body">
+                                                    <h5 class="">Not assign yet</h5>
+                                                    <span class="fz-12 title-color">Track ID : </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Customer Info Card -->
+                        <div class="card">
+                            <!-- Body -->
+                            <div class="card-body">
+                                <div class="d-flex gap-2 align-items-center justify-content-between mb-4">
+                                    <h4 class="d-flex gap-2" style="align-items:center">
+                                        <i class="fa-solid fa-user"></i>
+                                        Customer information
+                                    </h4>
+                                </div>
+                                <div class="media flex-wrap gap-3" style="display:flex;align-items: flex-start;">
+                                    <div>
+                                        <img class="avatar rounded-circle avatar-70"
+                                            onerror="this.src='http://192.168.1.180/e_dibo/public/assets/front-end/img/image-place-holder.png'"
+                                            src="http://192.168.1.180/e_dibo/public/assets/front-end/img/image-place-holder.png"
+                                            alt="Image">
+                                    </div>
+                                    <div class="media-body d-flex flex-column gap-1">
+                                        <span class="title-color"><strong id="full_name"></strong></span>
+                                        <span class="title-color"><strong id="orders"></strong>Orders</span>
+                                        <span class="title-color break-all"><strong id="phone"></strong></span>
+                                        <span class="title-color break-all" id="email"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Body -->
+                        </div>
+                        <!-- End Card -->
+
+                        <!-- Shipping Address Card -->
+                        <div class="card">
+                            <!-- Body -->
+                            <div class="card-body">
+                                <div class="d-flex gap-2 align-items-center justify-content-between mb-4">
+                                    <h4 class="d-flex gap-2" style="align-items:center">
+                                        <i class="fa-solid fa-user"></i>
+                                        Shipping address
+                                    </h4>
+
+                                    <button class="btn btn-outline-primary btn-sm square-btn edit-btn-outline-primary"
+                                        title="Edit" data-toggle="modal" data-target="#shippingAddressUpdateModal">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </div>
+
+                                <div class="d-flex flex-column gap-2">
+                                    <div>
+                                        <span>Name :</span>
+                                        <strong>test3</strong>
+                                    </div>
+                                    <div>
+                                        <span>Contact :</span>
+                                        <strong>9235720166</strong>
+                                    </div>
+                                    <div>
+                                        <span>City :</span>
+                                        <strong>ANDHERI</strong>
+                                    </div>
+                                    <div>
+                                        <span>Zip code :</span>
+                                        <strong>400097</strong>
+                                    </div>
+                                    <div class="d-flex align-items-start gap-2">
+                                        <!-- <span>Address :</span> -->
+                                        <img src="http://192.168.1.180/e_dibo/public/assets/back-end/img/location.png"
+                                            alt="">
+                                        Mumbai
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Body -->
+                        </div>
+                        <!-- End Card -->
+
+                        <!-- Billing Address Card -->
+                        <div class="card">
+                            <!-- Body -->
+                            <div class="card-body">
+                                <div class="d-flex gap-2 align-items-center justify-content-between mb-4">
+                                    <h4 class="d-flex gap-2" style="align-items:center">
+                                        <i class="fa-solid fa-user"></i>
+                                        Billing address
+                                    </h4>
+
+                                    <button class="btn btn-outline-primary btn-sm square-btn edit-btn-outline-primary"
+                                        title="Edit" data-toggle="modal" data-target="#billingAddressUpdateModal">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </button>
+                                </div>
+                                <div class="d-flex flex-column gap-2">
+                                    <div>
+                                        <span>Name :</span>
+                                        <strong>test3</strong>
+                                    </div>
+                                    <div>
+                                        <span>Contact :</span>
+                                        <strong>9235720166</strong>
+                                    </div>
+                                    <div>
+                                        <span>City :</span>
+                                        <strong>ANDHERI</strong>
+                                    </div>
+                                    <div>
+                                        <span>Zip code :</span>
+                                        <strong>400097</strong>
+                                    </div>
+                                    <div class="d-flex align-items-start gap-2">
+                                        <!-- <span>Address :</span> -->
+                                        <img src="http://192.168.1.180/e_dibo/public/assets/back-end/img/location.png"
+                                            alt="">
+                                        Mumbai
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Body -->
+                        </div>
+                        <!-- End Card -->
+
+                        <!-- Shop Info Card -->
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="d-flex gap-2 mb-4" style="align-items:center">
+                                    <i class="fa-solid fa-shop"></i>
+                                    Shop Information
+                                </h4>
+
+                                <div class="media">
+                                    <div class="mr-3">
+                                        <img class="avatar rounded avatar-70 img-fit-contain"
+                                            onerror="this.src='http://192.168.1.180/e_dibo/public/assets/front-end/img/image-place-holder.png'"
+                                            src="http://192.168.1.180/e_dibo/storage/app/public/company/2023-11-21-655c517757ddf.webp"
+                                            alt=""
+                                            style="object-fit: contain;width: 70px !important;min-width: 70px !important;height: 70px !important;">
+                                    </div>
+
+                                    <div class="media-body d-flex flex-column gap-2">
+                                        <h5>The dibo</h5>
+                                        <span class="title-color"><strong>5</strong> Orders Served</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Card -->
+                    </div>
+                </div>
+                <!-- End Row -->
+            </div>
+        </div>
+        <%- include('saledetail_script') %>
+            <%- include('../footer') %>

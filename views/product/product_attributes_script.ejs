@@ -1,0 +1,145 @@
+<script>
+  let data = <%- JSON.stringify(data[0]) %>
+  console.log(data)
+
+
+
+//   Attribute Shown in the table start
+  function attributetable(){
+    let table = document.querySelector('#attributeTable');
+    let tbody = document.createElement('tbody');
+    data.map((v,i)=>{
+        tbody.innerHTML += `<tr>
+                                <td>${i+1}</td>
+                                <td>${v.name}</td>
+                                <td>
+                                    <a class="edit-pencil-btn" id='${v.id}' data-bs-target="#editmodal" data-bs-toggle="modal">
+                                        <img src="assets/img/icons/edit.svg" class="me-2" alt="img">
+                                    </a>
+
+                                    <a class="deleteBTN" id='${v.id}' href="javascript:void(0);" data-bs-target="#deleteItem" data-bs-toggle="modal">
+                                        <img src="assets/img/icons/delete.svg" alt="img">
+                                    </a>
+                                </td>
+                            </tr>`
+
+        table.appendChild(tbody)
+    })
+  }
+
+  attributetable()
+
+//   Attribute Shown in the table End
+
+// Attribute added start
+    let btn = document.querySelector('#sumbit_button');
+    let attr = document.querySelector('#attr_name');
+    btn.addEventListener('click', function(){
+        let name = attr.value;
+        fetch(`<%= url %>attribute/insertAttr`,{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                "jwt_token": localStorage.getItem("token"),
+            },
+            body: JSON.stringify({name: name})
+        })
+        .then(res => res.json())
+        .then((data) =>{
+            console.log('Attribute Added SuccessFully!')
+        })
+        .catch((err) =>{
+            console.log(err)
+        })
+    })
+// Attribute Added End
+// Edit Code Start
+function updateAttr(){
+    let editBtn = document.querySelectorAll('.edit-pencil-btn')
+    let attr = document.querySelector('#editAttr')
+        editBtn.forEach((v) =>{
+            v.addEventListener('click', function(e){
+                let inputVal = document.querySelector('#editAttr');
+                let editId = e.target.parentNode.id;
+                let attr_name = attr.value;
+                let updateAttr = document.querySelector('#updateAttr')
+                fetch(`<%= url %>attribute/fetchAttrId?id=${editId}`,{
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "jwt_token": localStorage.getItem("token"),
+                    },
+                })
+                .then(res => res.json())
+                .then((data) =>{
+                    inputVal.value =data.data[0].name
+                    // console.log(data.data[0].name)
+
+                   
+                })
+                .catch((err) =>{
+                    console.log(err, "Something went wrong")
+                })
+                updateAttr.addEventListener('click', function(){
+                    fetch(`<%= url %>attribute/updateAttr?id=${editId}`,{
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "jwt_token": localStorage.getItem("token"),
+                    },
+                    body: JSON.stringify({name: inputVal.value})
+                })
+                .then(res => res.json())
+                .then((data) =>{
+                    // inputVal.value =data.data[0].name
+                    console.log("Attribute Updated SuccessFully!")
+                    window.location.reload()
+                })
+                .catch((err) =>{
+                    console.log(err, "Something went wrong")
+                })
+                    })
+                
+            })
+        })
+    console.log(editBtn)
+}
+updateAttr()
+// Edit Code End
+// Delete Code Start
+let deleteButton = document.querySelectorAll('.deleteBTN')
+let modalDelete = document.querySelector('#deleteAPI')
+// console.log(deleteButton)
+deleteButton.forEach((v) =>{
+   
+    v.addEventListener("click", function(e){
+        // console.log(v.id)
+        let id = e.target.parentNode.id
+        let is_active = 0;
+        modalDelete.addEventListener('click', function(){
+   
+            fetch(`<%= url %>attribute/deleteAttr?id=${id}`, {
+                    method: "POST",
+                    headers: {
+                        "jwt_token": localStorage.getItem("token"),
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ is_active: is_active })
+                })
+                    .then((response) => response.json())
+                    .then((result) => {
+                        // console.log(result);
+                        // window.location.href = '<%=url %>addcategory'
+                        location.reload();
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching order details:", error);
+                    });
+        })
+
+    })
+})
+
+
+// Delete Code End
+</script>

@@ -1,0 +1,35 @@
+<script>
+    let data = <%- JSON.stringify(data) %>
+          console.log(data,"data")
+          data.map((item, index) => {
+            document.getElementById('subcategory').value = item.name;
+            document.getElementById('priority').value = item.priority;
+          })
+
+        const queryParams = new URLSearchParams(window.location.search);
+        const id = queryParams.get('id');
+          $('#sumbit_button').click(function () {
+            let name = $('#subcategory').val();
+            let priority = $('#priority').val();
+            let data = {
+                name:name,
+                priority:priority
+            }
+            fetch(`<%= url %>category/categoryUpdate?id=${id}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "jwt_token": localStorage.getItem("token")
+                },
+                body:JSON.stringify(data) ,
+            })
+                .then((response) => response.json())
+                .then((result) => {
+                    console.log(result);
+                    window.location.replace('<%=url %>subcategory')
+                })
+                .catch((error) => {
+                    console.error("Error fetching order details:", error);
+                });
+        });
+</script>

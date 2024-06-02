@@ -1,0 +1,218 @@
+<script>
+        let tbody = document.createElement('tbody');
+                    let data = <%- JSON.stringify(data) %>
+            // console.log(data.data, "jojo")
+                    data.data.map((item, index) => {
+                            tbody.innerHTML += `<tr class=${index}>
+                                <td>${index + 1}</td>
+                                <td>${item.title}</td>
+                                <td>${item.start_date}-${item.end_date}</td>
+                                <td>
+                                <span class="badge ${item.status == 1 ? 'badge-soft-success' : 'badge-soft-danger'}" id="status${index}">${item.status == 1 ? "Active" : "Expired"}</span>
+                                </td>
+                                <td>${item.active_product}</td>
+                                <td>
+                                    <label class="switcher">
+                                        <input type="checkbox" class="switcher_input" 
+                                             name="status" data-bs-toggle="status" data-bs-target="#status" value="${item.status}" ${item.status === 1 ? 'checked' : ''} data-id="${item.id}">
+                                        <span class="switcher_control"></span>
+                                    </label>
+                                </td>
+
+                                <td class="text-center">
+                                    <div class="d-flex align-items-center justify-content-center gap-10">
+                                        <a href="/flashproduct?id=${item.id}" style="border: 1px solid transparent;background-color: #ff9f43;color: black !important;"
+                                            class="h-30 d-flex gap-2 align-items-center btn">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 9" fill="none" class="svg replaced-svg">
+                                        <path d="M9 3.9375H5.0625V0H3.9375V3.9375H0V5.0625H3.9375V9H5.0625V5.0625H9V3.9375Z"
+                                                                    fill="black"></path>
+                                        </svg>
+                                        Add Product
+                                        </a>
+                                        <a  href="/flashedit?id=${item.id}" class="edit-pencil-btn">
+                                            <img src="assets/img/icons/edit.svg" class="me-2" alt="img">
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            `
+                    })
+
+                    document.querySelector('#flashTable').appendChild(tbody);
+                        
+                    const checkboxes = document.querySelectorAll('.switcher_input');
+
+checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', function(e){
+        const modalId = e.target.getAttribute('data-bs-toggle');
+        const modal = document.getElementById(modalId);
+        const modalBody = modal.querySelector('.modal-body');
+
+        if (e.target.checked) {
+            modalBody.innerHTML = `
+                <div class="d-flex flex-column align-items-center text-center gap-2 mb-2">
+                    <div class="toggle-modal-img-box d-flex flex-column justify-content-center align-items-center mb-3 position-relative">
+                        <img class="status-icon" src="" alt="" width="30">
+                        <img id="toggle-status-image" alt="" src="assets/img/flashicon/flash-deal-status-on.png">
+                    </div>
+                    <h5 class="modal-title" id="toggle-status-title">Want to Turn ON Flash Deal Status</h5>
+                    <div class="text-center" id="toggle-status-message"><p>If enabled this flash sale will be available on the website and customer app</p></div>
+                </div>`;
+        } else {
+            modalBody.innerHTML = `
+                <div class="d-flex flex-column align-items-center text-center gap-2 mb-2">
+                    <div class="toggle-modal-img-box d-flex flex-column justify-content-center align-items-center mb-3 position-relative">
+                        <img class="status-icon" src="" alt="" width="30">
+                        <img id="toggle-status-image" alt="" src="assets/img/flashicon/flash-deal-status-off.png">
+                    </div>
+                    <h5 class="modal-title" id="toggle-status-title">Want to Turn OFF Flash Deal Status</h5>
+                    <div class="text-center" id="toggle-status-message"><p>If disabled this flash sale will be hidden from the user website and customer app</p></div>
+                </div>`;
+        }
+
+        modal.classList.add('show');
+        modal.style.display = 'block';
+    });
+});
+
+const closeButtons = document.querySelectorAll('.modal .closefilter');
+closeButtons.forEach(closeButton => {
+    closeButton.addEventListener('click', function() {
+        const modal = this.closest('.modal');
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+    });
+});
+
+                $('.edit-category').click(function (event) {
+                    event.preventDefault();
+                    const editUrl = $(this).attr('href');
+                    window.location.href = editUrl;
+                });
+
+    $('#sumbit_button').click(function () {
+        var title = $('#title').val();
+        var start_date = $('#start_date').val();
+        var end_date = $('#end_date').val();
+        var customFileUpload = $('#customFileUpload').prop('files')[0];
+        var formData = new FormData();
+        formData.append('title', title);
+        formData.append('start_date', start_date);
+        formData.append('end_date', end_date);
+        formData.append('flash', customFileUpload);
+        
+        fetch('<%= url %>offer/flashDeal', {
+            method: 'POST',
+            headers: {
+                'jwt_token': localStorage.getItem('token')
+            },
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('API call successful:', data);
+            })
+            .catch(error => {
+                // Handle error
+                console.error('Error:', error);
+            });
+    })
+
+    // $(document).ready(function () {
+    //     getFlash();
+    // });
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#viewer').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#customFileUpload").change(function () {
+        readURL(this);
+    });
+    $(".js-example-theme-single").select2({
+        theme: "classic"
+    });
+    $(".js-example-responsive").select2({
+        width: 'resolve'
+    });
+
+//     $(document).on('change', '.switcher_input', function () {
+//         console.log('Checkbox changed');
+//         var isChecked = $(this).prop('checked');
+//         var itemId = $(this).data('item-id');
+//         var apiUrl = '<%= url %>offer/flashDealUpdate/' + itemId;
+//         $.ajax({
+//             url: apiUrl,
+//             method: 'POST',
+//             data: { status: isChecked ? 1 : 0 },
+//             success: function (response) {
+//                 console.log('API call successful');
+//             },
+//             error: function (xhr, status, error) {
+//                 console.error('Error occurred:', error);
+//             }
+//         });
+//     });
+
+// const submitButton = document.getElementById('switch_submit');
+// submitButton.addEventListener('click', function() {
+//     const id = 'your_offer_id_here';
+//     fetch(`http://192.168.1.123/offer/flashDealUpdate/${id}`, {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json'
+//         },
+//     })
+//     .then(response => {
+//         if (!response.ok) {
+//             throw new Error('Network response was not ok');
+//         }
+//         return response.json();
+//     })
+//     .then(data => {
+//         console.log(data);
+//     })
+//     .catch(error => {
+//         console.error('There was a problem with the fetch operation:', error);
+//     });
+// });
+
+const submitButton = document.getElementById('switch_submit');
+submitButton.addEventListener('click', function() {
+    const checkboxes = document.querySelectorAll('.switcher_input');
+    checkboxes.forEach(checkbox => {
+        const id = checkbox.dataset.id;
+        const status = checkbox.checked ? 1 : 0;
+        updateStatus(id, status);
+    });
+});
+
+// Function to update status via POST request
+function updateStatus(id, status) {
+    fetch(`<%= url %>offer/flashDealUpdate/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status: status }) // Send status in request body
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log(data); // Handle response data
+    })
+    .catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+    });
+}
+
+</script>

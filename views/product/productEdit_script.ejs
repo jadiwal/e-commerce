@@ -1,0 +1,926 @@
+<script src="http://192.168.1.180/e_dibo/vendor/ckeditor/ckeditor/ckeditor.js"></script>
+<script src="http://192.168.1.180/e_dibo/vendor/ckeditor/ckeditor/adapters/jquery.js"></script>
+<script>
+    let data0 = <%- JSON.stringify(data0) %>;
+    let data = <%- JSON.stringify(data) %>;
+    let unit_data = data[0]
+    unit_data.forEach(unit => {
+        const selectElement = document.getElementById('unit');
+        const option = document.createElement('option');
+        option.value = unit.name;
+        option.textContent = unit.name;
+        selectElement.appendChild(option);
+    });
+    // const selectElementUnit = document.getElementById('unit');
+    let data1 = <%- JSON.stringify(colors) %>;
+    let category = <%- JSON.stringify(category) %>;
+    let brands = <%- JSON.stringify(brands) %>;
+    console.log(brands,"brandsbrands")
+    let colors = <%- JSON.stringify(brands) %>;
+    document.querySelector('#product_name').value = data0[0].name
+    document.querySelector('#editor1').value = data0[0].details
+    document.addEventListener('DOMContentLoaded', function () {
+        let categoryId = data0[0].category_id;
+        let selectElement = document.querySelector('#category');
+        fetch(`<%= url %>category/categoryDefault?id=${categoryId}`, {
+            method: 'GET'
+        })
+            .then(res => res.json())
+            .then(result => {
+                let categoryName = result.data.name;
+                populateOptions(categoryName);
+                selectElement.value = categoryId;
+            })
+            .catch(err => {
+                // console.error(err);
+            });
+    })
+    document.addEventListener('DOMContentLoaded', function () {
+        let subcategoryId = data0[0].sub_category_id;
+
+        fetch(`<%= url %>category/categoryDefault?id=${subcategoryId}`, {
+            method: 'GET'
+        })
+            .then(res => res.json())
+            .then(result => {
+                let subcategoryName = result.data[0].name;
+                // console.log(subcategoryName);
+                let subcategorySelect = document.getElementById('subCategory');
+                subcategorySelect.innerHTML = '';
+
+                let option = document.createElement('option');
+                option.text = subcategoryName;
+                option.value = subcategoryId;
+
+                subcategorySelect.appendChild(option);
+            })
+            .catch(err => {
+                console.error(err);
+            });
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        let subSubCategoryID = data0[0].sub_sub_category_id;
+        fetch(`<%= url %>category/categoryDefault?id=${subSubCategoryID}`, {
+            method: 'GET'
+        })
+            .then(res => res.json())
+            .then(result => {
+                let subsubcategoryName = result.data[0].name;
+
+                let subsubcategorySelect = document.getElementById('subSubCategory');
+                subsubcategorySelect.innerHTML = '';
+
+                let option = document.createElement('option');
+                option.text = subsubcategoryName;
+                option.value = subSubCategoryID;
+
+                subsubcategorySelect.appendChild(option);
+            })
+            .catch(err => {
+                console.error(err);
+            });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+    let selectElement = document.getElementById('brand'); // Assuming your select element has id 'brand'
+    let brand_name = data0[0].brand_name;
+    let brand_id = data0[0].brand_id;
+    let brands = <%- JSON.stringify(brands) %>; // Retrieve brands array from server-side
+    populateBrandOptions(selectElement, brand_name, brand_id, brands);
+    });
+
+    function populateOptions(name) {
+        let selectElement = document.getElementById('category');
+        // selectElement.innerHTML = '';
+        let defaultOption = document.createElement('option');
+        defaultOption.text = 'Select main category';
+        defaultOption.value = '';
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        selectElement.appendChild(defaultOption);
+        category.forEach(item => {
+            let option = document.createElement('option');
+            option.text = item.name;
+            option.value = item.id;
+            selectElement.appendChild(option);
+        });
+    }
+    function populateSubcategories(subcategories) {
+        let subcategorySelect = document.getElementById('subCategory');
+        // subcategorySelect.innerHTML = ''; // Clear existing options
+        let defaultOption = new Option('Select subcategory', ''); // Create default option
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        subcategorySelect.appendChild(defaultOption);
+        subcategories.forEach(subcategory => {
+            let option = new Option(subcategory.name, subcategory.id); // Create option element
+            subcategorySelect.appendChild(option);
+        });
+    }
+    function populateSubSubcategories(subSubCategory) {
+        let subcategorySelect = document.getElementById('subSubCategory');
+        // subcategorySelect.innerHTML = ''; // Clear existing options
+        let defaultOption = new Option('Select subcategory', ''); // Create default option
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        subcategorySelect.appendChild(defaultOption);
+        subSubCategory.forEach(subcategory => {
+            let option = new Option(subcategory.name, subcategory.id); // Create option element
+            subcategorySelect.appendChild(option);
+        });
+    }
+    $(document).ready(function () {
+        populateOptions(name);
+
+        $('#category').change(function () {
+            let id = $(this).val();
+            fetch(`<%= url %>category/categoryDropdown?id=${id}`, {
+                method: 'GET'
+            })
+                .then(res => res.json())
+                .then(result => {
+                    let subcategories = result.data;
+                    populateSubcategories(subcategories)
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+        });
+        $('#subCategory').change(function () {
+            let id = $(this).val(); // Get the selected value
+            fetch(`<%= url %>category/categoryDropdown?id=${id}`, {
+                method: 'GET'
+            })
+                .then(res => res.json())
+                .then(result => {
+                    let subSubCategory = result.data;
+                    populateSubSubcategories(subSubCategory)
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+        });
+    });
+
+    function populateBrandOptions(selectElement, brand_name, brand_id, brands) {
+    // selectElement.innerHTML = ''; // Clear existing options
+    let defaultOption = document.createElement('option');
+    defaultOption.text = brand_name;
+    defaultOption.value = brand_id;
+    defaultOption.disabled = false;
+    defaultOption.selected = false;
+    selectElement.appendChild(defaultOption);
+    if (brands && brands.length > 0) {
+        brands.forEach(item => {
+            let option = document.createElement('option');
+            option.text = item.name;
+            option.value = item.id;
+            selectElement.appendChild(option);
+        });
+    }
+}
+
+ 
+
+    $(document).ready(function () {
+        let selectUnitElement = document.getElementById('unit');
+        // data.forEach(unit => {
+        //     const option = document.createElement('option');
+        //     option.value = unit.name;
+        //     option.textContent = unit.name;
+        //     selectUnitElement.appendChild(option);
+        // });
+        const defaultUnitName = data0[0].unit 
+        const defaultOption = selectUnitElement.querySelector(`option[value="${defaultUnitName}"]`);
+        if (defaultOption) {
+            defaultOption.selected = true;
+        }
+    });
+
+    $(document).ready(function () {
+        product_type();
+        digital_product_type();
+
+        $('#product_type').change(function () {
+            product_type();
+        });
+
+        $('#digital_product_type').change(function () {
+            digital_product_type();
+        });
+    });
+
+    $('#editor1').ckeditor({
+        contentsLangDirection: 'ltr',
+    });
+
+  $('#colors-selector').change(function() {
+    update_sku();
+    if ($('#color_switcher').prop('checked')) {
+        color_wise_image($('#colors-selector'));
+    }
+    $('.remove_button').click(function() {
+        alert('ok');
+        $(this).parents('.upload_images').find('.color_image').attr('src', 'http://192.168.1.180/e_dibo/public/assets/back-end/img/400x400/img2.jpg')
+    });
+});
+
+$(document).ready(function() {
+    var variationData = JSON.parse(data0[0].variation);
+    function findVariationData(color) {
+        for (var i = 0; i < variationData.length; i++) {
+            if (variationData[i].type === color) {
+                return variationData[i];
+            }
+        }
+        return null;
+    }
+
+    $('#colors-selector').on('change', function() {
+    let selectedColors = $(this).val();
+    let colorImagesArray = JSON.parse(data0[0].color_image);
+        updateSelectedColorsTable(selectedColors);
+        color_wise_image(colorsDataImg, selectedColors); 
+
+    //     let deselectedColors = $(this).find('option:not(:selected)').map(function() {
+    //     return $(this).val();
+    // }).get();
+
+    // deselectedColors.forEach(color => {
+    //     // Find the index of the color in the colorImagesArray
+    //     let index = colorImagesArray.findIndex(item => item.color === color);
+    //     if (index !== -1) {
+    //         console.log(colorImagesArray[index].filename,"colorImagesArray[index].filename")
+    //         // Send the index to delete the color image
+    //         fetch(`<%= url %>product/colorImgDelete?id=${id}`, {
+    //             method: 'POST',
+    //             headers: {
+    //                 "jwt_token": localStorage.getItem("token"),
+    //                 'Content-Type': 'application/json'
+    //             },
+    //             body: JSON.stringify({ index: index ,path:colorImagesArray[index].filename.replace(/\\/g, '')})
+    //         })
+    //         .then(response => {
+    //             if (!response.ok) {
+    //                 throw new Error('Network response was not ok');
+    //             }
+    //             return response.json();
+    //         })
+    //         .then(data => {
+    //             // Handle success response if needed
+    //         })
+    //         .catch(error => {
+    //             console.error('There was a problem with the fetch operation:', error);
+    //         });
+    //     }
+    // });
+});
+
+
+function updateSelectedColorsTable(selectedColors) {
+    var tableBody = $('#selected-colors-table tbody');
+    tableBody.empty(); // Clear the table body first
+
+    if (!selectedColors || selectedColors.length === 0) {
+        $('#selected-colors-table').hide();
+        return;
+    }
+
+    selectedColors.forEach(function(color, index) {
+        var variation = findVariationData(color);
+        if (variation) {
+            tableBody.append(
+                '<tr>' +
+                '<td class="text-center">' + (index + 1) + '</td>' +
+                '<td><label for="" class="control-label">' + color + '</label></td>' +
+                '<td><input type="number" name="price_' + color + '" value="' + variation.price + '" min="0" step="0.01" class="form-control variation-price-input" required="" placeholder="Ex: 535"></td>' +
+                '<td><input type="text" name="sku_' + color + '" value="' + variation.sku + '" class="form-control" required="" placeholder="Ex: MCU47V593M"></td>' +
+                '<td><input type="number" name="qty_' + color + '" value="' + variation.qty + '" min="1" max="1000000" step="1" class="form-control table_qty" required="" placeholder="Ex: 5"></td>' +
+                '</tr>'
+            );
+        } else {
+            tableBody.append(
+                '<tr>' +
+                '<td class="text-center">' + (index + 1) + '</td>' +
+                '<td><label for="" class="control-label">' + color + '</label></td>' +
+                '<td><input type="number" name="price_' + color + '" value="" min="0" step="0.01" class="form-control variation-price-input" required="" placeholder="Ex: 535"></td>' +
+                '<td><input type="text" name="sku_' + color + '" value="-' + color + '" class="form-control" required="" placeholder="Ex: MCU47V593M"></td>' +
+                '<td><input type="number" name="qty_' + color + '"  min="1" max="1000000" step="1" class="form-control table_qty" required="" placeholder="Ex: 5"></td>' +
+                '</tr>'
+            );
+        }
+    });
+
+    $('#selected-colors-table').show();
+}
+
+function update_qty() {
+    var table_qty_inputs = document.querySelectorAll('.table_qty');
+    var total_qty = 0;
+    table_qty_inputs.forEach(function(input) {
+        total_qty += parseInt(input.value) || 0;
+    });
+    // console.log("Total Quantity:", total_qty); // Log total quantity
+    document.getElementById('stock_qty').value = total_qty;
+}
+
+$(document).on('input', '.table_qty', function() {
+    update_qty();
+});
+
+$(document).ready(function() {
+    update_qty();
+});
+
+let colorsDataImg = JSON.parse(data0[0].color_image);
+    initialSelectedColors = $('#colors-selector').val();
+    // console.log(initialSelectedColors,"initialSelectedColors")
+    updateSelectedColorsTable(initialSelectedColors);
+    color_wise_image(colorsDataImg, initialSelectedColors)
+});
+
+              $(document).ready(function() {
+                $('.color-var-select').select2({
+                    templateResult: colorCodeSelect,
+                    templateSelection: colorCodeSelect,
+                    escapeMarkup: function(m) {
+                        return m;
+                    }
+                });
+
+                function colorCodeSelect(state) {
+                    var colorCode = $(state.element).val();
+                    if (!colorCode)
+                        return state.text;
+                    return "<span class='color-preview' style='background-color:" + colorCode + ";'></span>" + state.text;
+                }
+            });
+
+    $('input[name="colors_active"]').on('change', function () {
+        if (!$('input[name="colors_active"]').is(':checked')) {
+            $('#colors-selector').prop('disabled', true);
+            $('#colorDiv').addClass('d-none');
+            // $('#selected-colors-table').addClass('d-none');
+        } else {
+            $('#colors-selector').prop('disabled', false);
+            $('#colorDiv').removeClass('d-none');
+            $('#selected-colors-table').removeClass('d-none');
+        }
+    });
+
+    // $(function () {
+    //     $('#color_switcher').click(function () {
+    //         var checkBoxes = $("#color_switcher");
+    //         if ($('#color_switcher').prop('checked')) {
+    //             $('.color_image_column').removeClass('d-none');
+    //             $('.additional_image_column').removeClass('col-md-9');
+    //             $('.additional_image_column').addClass('col-md-12');
+    //             $('#color_wise_image').show();
+    //             $('#additional_Image_Section .col-md-4').addClass('col-lg-2');
+    //         } else {
+    //             $('.color_image_column').addClass('d-none');
+    //             $('.additional_image_column').addClass('col-md-9');
+    //             $('.additional_image_column').removeClass('col-md-12');
+    //             $('#color_wise_image').hide();
+    //             $('#additional_Image_Section .col-md-4').removeClass('col-lg-2');
+    //         }
+    //     });
+    // });
+
+    function handleFileInputChange(event) {
+    const fileInput = event.target;
+    const previewImage = document.getElementById(fileInput.dataset.imgpreview);
+
+    if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            previewImage.src = e.target.result;
+            previewImage.classList.remove('d-none');
+        };
+
+        reader.readAsDataURL(fileInput.files[0]);
+    } else {
+        previewImage.classList.add('d-none');
+    }
+}
+
+const fileInput = document.getElementById('Product_img');
+fileInput.addEventListener('change', handleFileInputChange);
+
+    let colorImgString = '';
+    let colorImages = [];
+    function uploadColorImage(thisData=null) {
+        if (thisData) {
+            let color = $(thisData).data('imgpreview').split('_').pop();
+            document.getElementById(thisData.dataset.imgpreview).setAttribute("src", window.URL.createObjectURL(thisData.files[0]));
+            colorImages.push(thisData.files[0]);
+            document.getElementById(thisData.dataset.imgpreview).classList.remove('d-none');
+        }
+    }
+
+
+    $('.delete_file_input').click(function () {
+        let $parentDiv = $(this).closest('div');
+        $parentDiv.find('input[type="file"]').val('');
+        $parentDiv.find('.img_area_with_preview img').attr("src", " ");
+        $(this).hide();
+    });
+
+    $('.custom-upload-input-file').on('change', function () {
+        if (parseFloat($(this).prop('files').length) != 0) {
+            let $parentDiv = $(this).closest('div');
+            $parentDiv.find('.delete_file_input').fadeIn();
+        }
+    })
+
+    function product_type() {
+        let product_type = $('#product_type').val();
+        if (product_type === 'physical') {
+            $('#digital_product_type_show').hide();
+            $('#digital_file_ready_show').hide();
+            $('.physical_product_show').show();
+            $('#digital_product_type').val($('#digital_product_type option:first').val());
+            $('#digital_file_ready').val('');
+        } else if (product_type === 'digital') {
+            $('#digital_product_type_show').show();
+            $('.physical_product_show').hide();
+
+        }
+    }
+
+    function digital_product_type() {
+        let digital_product_type = $('#digital_product_type').val();
+        if (digital_product_type === 'ready_product') {
+            $('#digital_file_ready_show').show();
+        } else if (digital_product_type === 'ready_after_sell') {
+            $('#digital_file_ready_show').hide();
+            $("#digital_file_ready").val('');
+        }
+    }
+
+    function getRndInteger() {
+        return Math.floor(Math.random() * 90000) + 100000;
+    }
+
+let colorsSelect = document.getElementById("colors-selector");
+
+colorsSelect.addEventListener("change", function() {
+    let selectedColors = Array.from(this.selectedOptions).map(option => option.value);
+    updateColorDiv(selectedColors);
+});
+
+function updateColorDiv(selectedColors) {
+    let colorDiv = document.getElementById("colorDiv");
+    colorDiv.innerHTML = "";
+    selectedColors.forEach(color => {
+        let div = document.createElement("div");
+        div.textContent = color;
+        colorDiv.appendChild(div);
+    });
+}
+
+let additionalImages = [];
+function addMoreImage(thisData, targetSection) {
+    let $fileInputs = $(targetSection + " input[type='file']");
+    let nonEmptyCount = 0;
+    let maxDatasetIndex = 0;
+
+    additionalImages = [];
+
+    $fileInputs.each(function (index, fileInput) {
+        let datasetIndex = parseInt(fileInput.dataset.index);
+        maxDatasetIndex = Math.max(maxDatasetIndex, datasetIndex);
+        let files = fileInput.files;
+        if (files.length === 0) {
+            nonEmptyCount++;
+        } else {
+            for (let i = 0; i < files.length; i++) {
+                let fileObject = files[i];
+                additionalImages.push(fileObject);
+            }
+        }
+    });
+
+    document.getElementById(thisData.dataset.imgpreview).setAttribute("src", window.URL.createObjectURL(thisData.files[0]));
+    document.getElementById(thisData.dataset.imgpreview).classList.remove('d-none');
+
+    if (nonEmptyCount == 0) {
+        let dataset_index = maxDatasetIndex + 1; 
+
+        let newHtmlData = `<div class="col-sm-12 col-md-4">
+            <div class="custom_upload_input position-relative border-dashed-2">
+                <input type="file" name="${thisData.name}" class="custom-upload-input-file" data-index="${dataset_index}" data-imgpreview="additional_Image_${dataset_index}"
+                    accept=".jpg, .webp, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" onchange="addMoreImage(this, '${targetSection}')">
+
+                <span class="delete_file_input delete_file_input_section btn btn-outline-danger btn-sm square-btn" style="display: none">
+                    <i class="tio-delete"></i>
+                </span>
+
+                <div class="img_area_with_preview position-absolute z-index-2 border-0">
+                    <img id="additional_Image_${dataset_index}" class="h-auto aspect-1 bg-white" src="img" onerror="this.classList.add('d-none')">
+                </div>
+                <div class="position-absolute h-100 top-0 w-100 d-flex align-content-center justify-content-center">
+                    <div class="d-flex flex-column justify-content-center align-items-center">
+                        <img src="http://192.168.1.180/e_dibo/public/assets/back-end/img/icons/product-upload-icon.svg" class="w-50">
+                        <h3 class="text-muted">Upload Image</h3>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+
+        $(targetSection).append(newHtmlData);
+    }
+
+    $('.custom-upload-input-file').on('change', function () {
+        if (parseFloat($(this).prop('files').length) != 0) {
+            let $parentDiv = $(this).closest('div');
+            $parentDiv.find('.delete_file_input').fadeIn();
+        }
+    })
+
+    $('.delete_file_input_section').click(function () {
+        let $parentDiv = $(this).closest('div').parent().remove();
+    });
+
+    if ($('#color_switcher').prop('checked')) {
+        $('#additional_Image_Section .col-md-4').addClass('col-lg-2');
+    } else {
+        $('#additional_Image_Section .col-md-4').removeClass('col-lg-2');
+    }
+}
+
+    console.log(data0,"data0")
+    document.querySelector('#product_type').value = data0[0].product_type;
+    document.querySelector('#generate_number').value = data0[0].code;
+    document.querySelector('#purchase_price').value = data0[0].purchase_price;
+    document.querySelector('#unit_price').value = data0[0].unit_price;
+    document.querySelector('#min_order_qty').value = data0[0].minimum_order_qty;
+    document.querySelector('#stock_qty').value = data0[0].current_stock;
+    document.querySelector('#discount_type').value = data0[0].discount_type;
+    document.querySelector('#discount_amount').value = data0[0].discount;
+    document.querySelector('#tax_amount').value = data0[0].tax;
+    document.querySelector('#tax_calculation').value = data0[0].tax_model;
+    document.querySelector('#shipping_cost').value = data0[0].shipping_cost;
+    document.querySelector('#shipping_cost_multiple').value = data0[0].multiply_qty;
+    document.querySelector('#meta_title').value = data0[0].meta_title;
+    document.querySelector('#meta_description').value = data0[0].meta_description;
+    document.querySelector('#video_link').value = data0[0].video_url;
+
+    // let colorsData = JSON.stringify(data0[0].colors);
+    let colorsData = JSON.parse(data0[0].colors);
+    let selectColorElement = document.getElementById('colors-selector');
+    for (let i = 0; i < selectColorElement.options.length; i++) {
+        let option = selectColorElement.options[i];
+        if (Array.isArray(colorsData) && colorsData.some(color => color === option.value)) {
+            option.selected = true;
+        }
+    }
+ 
+    let colorSwitcher = document.getElementById('color_switcher');
+    let selectedColorsTable = document.getElementById('selected-colors-table');
+
+    if (Array.isArray(colorsData) && colorsData.length > 0) {
+        colorSwitcher.checked = true;
+        $('#colors-selector').prop('disabled', false);
+        // selectedColorsTable.style.display = 'block';
+        $('#selected-colors-table').removeClass('d-none')
+        $('.color_image_column').removeClass('d-none');
+        $('.additional_image_column').removeClass('col-md-9').addClass('col-md-12');
+        $('#color_wise_image').show();
+        $('#additional_Image_Section .col-md-4').addClass('col-lg-2');
+    } else {
+        colorSwitcher.checked = false;
+        $('#colors-selector').prop('disabled', true);
+        $('#selected-colors-table').addClass('d-none')
+        // selectedColorsTable.style.display = 'none';
+        $('.color_image_column').addClass('d-none');
+        $('.additional_image_column').addClass('col-md-9').removeClass('col-md-12');
+        $('#color_wise_image').hide();
+        $('#additional_Image_Section .col-md-4').removeClass('col-lg-2');
+    }
+
+    if (data0 && data0.length > 0 && data0[0].thumbnail) {
+    var dynamicImageSrc = data0[0].thumbnail;
+    document.getElementById('pre_img_viewer').src = dynamicImageSrc;
+    document.getElementById('pre_img_viewer').classList.remove('d-none');
+    } else {
+        document.getElementById('pre_img_viewer').classList.add('d-none');
+    }
+
+    if (data0 && data0.length > 0 && data0[0].meta_image) {
+    var metaImageSrc = data0[0].meta_image;
+    document.getElementById('pre_meta_image_viewer').src = metaImageSrc;
+    document.getElementById('pre_meta_image_viewer').classList.remove('d-none');
+    } else {
+        document.getElementById('pre_meta_image_viewer').classList.add('d-none');
+    }   
+
+    var newName = data0[0].name;
+    var tagSpan = document.querySelector('.bootstrap-tagsinput .tag.label.label-primary');
+    if (tagSpan) {
+        tagSpan.innerHTML = newName + '<span data-role="remove"></span>';
+    }
+
+    let dynamicImageData = JSON.parse(data0[0].images);
+    let imageAdditionalDataArray = [];
+
+function appendDynamicImages(images) {
+    let imageContainer = document.getElementById('dynamicimg');
+    images.forEach(function (imageSrc, index) {
+        let dataset_index = index + 2;
+        let newDatasetIndex = "1".repeat(dataset_index);
+        let newHtmlData = `<div class="col-sm-12 col-md-4 col-lg-2">
+        <div class="custom_upload_input position-relative border-dashed-2">
+            <input type="file" name="images[]" class="custom-upload-input-file" data-index="${newDatasetIndex}" data-imgpreview="additional_Image_${newDatasetIndex}" accept=".jpg, .webp, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" onchange="addMoreImage(this, '#additional_Image_Section')">
+
+            <span class="delete_file_input delete_file_input_section btn btn-outline-danger btn-sm square-btn" onclick="deleteImage(this, ${index})">
+                <a class="deleteBTN"><img src="assets/img/icons/delete.svg" alt="img"></a></span>
+            </span>
+
+            <div class="img_area_with_preview position-absolute z-index-2 border-0">
+                <img id="additional_Image_${newDatasetIndex}" class="h-auto aspect-1 bg-white" src="${imageSrc}" onerror="this.classList.add('d-none')">
+            </div>
+        </div>
+    </div>`;
+        $(newHtmlData).appendTo(imageContainer);
+        imageAdditionalDataArray.push(imageSrc);
+    });
+}
+
+function deleteImage(button, index) {
+    button.closest('.col-sm-12').remove();
+    imageAdditionalDataArray.splice(index, 1); // Remove the corresponding image data from the array
+}
+
+appendDynamicImages(dynamicImageData);
+// console.log(imageAdditionalDataArray);
+
+
+let colorData;
+let imageDataArray = []; // Array to store image data
+
+function color_wise_image(colorsDataImg, selectedColors) {
+    $('#color_wise_image').html('');
+
+    // Filter out colors from selectedColors that are already in colorsDataImg
+    let remainingColors = selectedColors.filter(color => !colorsDataImg.some(data => data.color === color));
+
+    // Iterate over each color in selectedColors
+    selectedColors.forEach(color => {
+        // Check if the color exists in colorsDataImg
+        colorData = colorsDataImg.find(data => data.color === color);
+        if (colorData) {
+            // If color exists in colorsDataImg, display the corresponding image
+            let colorId = color.replace('#', '');
+            let html = `<div class="col-sm-12 col-md-4">
+                            <div class="custom_upload_input position-relative border-dashed-2">
+                                <input type="file" name="color_image_${colorId}" class="custom-upload-input-file" id="color-img-upload-${colorId}" data-index="1" data-imgpreview="additional_Image_${colorId}"
+                                    accept=".jpg, .webp, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" required onchange="uploadColorImage(this)">
+
+                                <div class="position-absolute right-0 top-0 d-flex gap-2">
+                                    <label for="color-img-upload-${colorId}" class="delete_file_input_css btn btn-outline-danger btn-sm square-btn position-relative" style="background: ${color};border-color: ${color};color:#fff">
+                                        <a class="edit-pencil-btn">
+                                            <img src="assets/img/icons/edit.svg" alt="img">
+                                        </a>
+                                    </label>
+
+                                    <span class="delete_file_input btn btn-outline-danger btn-sm square-btn position-relative" id="delete_add_pro_img" data-color="${color}">
+                                        <a class="deleteBTN">
+                                        <img src="assets/img/icons/delete.svg" alt="img">
+                                        </a>
+                                    </span>
+                                </div>
+
+                                <div class="img_area_with_preview position-absolute z-index-2 border-0">
+                                    <img id="additional_Image_${color}" class="h-auto aspect-1 bg-white" src="${colorData.filename}" onerror="this.classList.add('d-none')">
+                                </div>
+                                <div class="position-absolute h-100 top-0 w-100 d-flex align-content-center justify-content-center">
+                                    <div class="d-flex flex-column justify-content-center align-items-center">
+                                        <img src="http://192.168.1.180/e_dibo/public/assets/back-end/img/icons/product-upload-icon.svg" class="w-50">
+                                        <h3 class="text-muted">Upload Image</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+            $('#color_wise_image').append(html);
+
+            let existingDataIndex = imageDataArray.findIndex(data => data.color === color);
+            if (existingDataIndex === -1) {
+                imageDataArray.push(colorData);
+                // console.log(imageDataArray, "imageDataArray");
+            }
+        }
+    });
+
+    // Append file inputs for remaining colors
+    remainingColors.forEach(color => {
+        let colorId = color.replace('#', '');
+        let html = `<div class="col-sm-12 col-md-4">
+                            <div class="custom_upload_input position-relative border-dashed-2">
+                                <input type="file" name="color_image_${colorId}" class="custom-upload-input-file" id="color-img-upload-${colorId}" data-index="1" data-imgpreview="additional_Image_${colorId}"
+                                    accept=".jpg, .webp, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" required onchange="uploadColorImage(this)">
+
+                                <div class="position-absolute right-0 top-0 d-flex gap-2">
+                                    <label for="color-img-upload-${colorId}" class="delete_file_input_css btn btn-outline-danger btn-sm square-btn position-relative" style="background: ${color};border-color: ${color};color:#fff">
+                                        <a class="edit-pencil-btn">
+                                            <img src="assets/img/icons/edit.svg" alt="img">
+                                        </a>
+                                    </label>
+
+                                    <span class="delete_file_input btn btn-outline-danger btn-sm square-btn position-relative" id="delete_add_pro_img" data-color="${color}">
+                                        <a class="deleteBTN">
+                                        <img src="assets/img/icons/delete.svg" alt="img">
+                                        </a>
+                                    </span>
+                                </div>
+
+                                <div class="img_area_with_preview position-absolute z-index-2 border-0">
+                                    <img id="additional_Image_${color}" class="h-auto aspect-1 bg-white" src=" " onerror="this.classList.add('d-none')">
+                                </div>
+                                <div class="position-absolute h-100 top-0 w-100 d-flex align-content-center justify-content-center">
+                                    <div class="d-flex flex-column justify-content-center align-items-center">
+                                        <img src="http://192.168.1.180/e_dibo/public/assets/back-end/img/icons/product-upload-icon.svg" class="w-50">
+                                        <h3 class="text-muted">Upload Image</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
+        $('#color_wise_image').append(html);
+    });
+
+    bindEventListeners();
+}
+
+function bindEventListeners() {
+    $('#color_wise_image').on('click', '.delete_file_input', function() {
+    let $parentDiv = $(this).closest('.custom_upload_input');
+    let colorIndex = $parentDiv.index();
+    $parentDiv.find('input[type="file"]').val('');
+    $parentDiv.find('.img_area_with_preview img').attr("src", "");
+    let color = $(this).data('color');
+    let dataIndex = imageDataArray.findIndex(data => data.color === color); // Find index of the item to remove
+    if (dataIndex !== -1) {
+        imageDataArray.splice(dataIndex, 1); // Remove the item from imageDataArray
+    }
+    // console.log(imageDataArray, "imageDataArrayimageDataArray")
+    $(this).remove();
+});
+
+    $('#color_wise_image').on('change', '.custom-upload-input-file', function() {
+        if ($(this).prop('files').length !== 0) {
+            let $parentDiv = $(this).closest('.custom_upload_input');
+            $parentDiv.find('.delete_file_input').fadeIn();
+        }
+    });
+}
+
+function handleMetaImageInputChange(event) {
+                const fileInput = event.target;
+                const previewImage = document.getElementById(fileInput.dataset.imgpreview);
+                if (fileInput.files && fileInput.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        previewImage.src = e.target.result;
+                        previewImage.classList.remove('d-none');
+                    };
+                    reader.readAsDataURL(fileInput.files[0]);
+                } else {
+                    previewImage.classList.add('d-none');
+                }
+            }
+                const metaFileInput = document.getElementById('meta_image');
+                metaFileInput.addEventListener('change', handleMetaImageInputChange);
+
+const queryParams = new URLSearchParams(window.location.search);
+const id = queryParams.get('id')
+$('#sumbit_button').click(function () {;
+    let name = $('#product_name').val();
+            let category_id = $('#category').val();
+            let sub_category_id = $('#subCategory').val();
+            let sub_sub_category_id = $('#subSubCategory').val()
+            let brand_id = $('#brand').val()
+            let product_type = $('#product_type').val()
+            let digital_product_type = $('#digital_product_type').val()
+            let code = $('#generate_number').val()
+            let unit = $('#unit').val()
+            let tag = $('#tag').val()
+            let purchase_price = $('#purchase_price').val()
+            let unit_price = $('#unit_price').val()
+            let minimum_order_qty = $('#min_order_qty').val()
+            let current_stock = $('#stock_qty').val()
+            let discount_type = $('#discount_type').val()
+            let discount = $('#discount_amount').val()
+            let tax = $('#tax_amount').val()
+            let tax_model = $('#tax_calculation').val()
+            let shipping_cost = $('#shipping_cost').val()
+            let multiply_qty = $('#shipping_cost_multiple').val()
+            let attributes = $('#choice_attributes').val()
+            let video_url = $('#video_link').val()
+            let meta_title = $('#meta_title').val()
+            let meta_description = $('#meta_description').val()
+            let formData = new FormData();
+           formData.append('name', $('#product_name').val());
+            var editorValue = CKEDITOR.instances.editor1.getData();
+            formData.append('details', editorValue);
+            formData.append('category_id', $('#category').val());
+            formData.append('sub_category_id', $('#subCategory').val());
+            formData.append('sub_sub_category_id', $('#subSubCategory').val());
+            formData.append('brand_id', $('#brand').val());
+            formData.append('product_type', $('#product_type').val());
+            formData.append('digital_product_type', $('#digital_product_type').val());
+            formData.append('code', $('#generate_number').val());
+            formData.append('unit', $('#unit').val());
+            formData.append('tag', $('#tag').val());
+            formData.append('purchase_price', $('#purchase_price').val());
+            formData.append('unit_price', $('#unit_price').val());
+            formData.append('minimum_order_qty', $('#min_order_qty').val());
+            formData.append('current_stock', $('#stock_qty').val());
+            formData.append('discount_type', $('#discount_type').val());
+            formData.append('discount', $('#discount_amount').val());
+            formData.append('tax', $('#tax_amount').val());
+            formData.append('tax_model', $('#tax_calculation').val());
+            formData.append('shipping_cost', $('#shipping_cost').val());
+            formData.append('multiply_qty', $('#shipping_cost_multiple').val());
+            let variations = [];
+            let selectedColorsvariations = $('#colors-selector').val();
+            selectedColorsvariations.forEach(function(color, index) {
+                let variation = {
+                    type: color,
+                    price: parseFloat($('input[name="price_' + color + '"]').val()),
+                    sku: $('input[name="sku_' + color + '"]').val(),
+                    qty: parseInt($('input[name="qty_' + color + '"]').val())
+                };
+                variations.push(variation);
+                // console.log(variations,"variations")
+            });
+            formData.append('variation',JSON.stringify(variations));
+
+            let selectedColorsString = $('#colors-selector').val();
+            formData.append('colors', JSON.stringify(selectedColorsString));
+
+            formData.append('attributes', $('#choice_attributes').val());
+
+            for (let i = 0; i < imageDataArray.length; i++) {
+                formData.append('color_image', imageDataArray[i].filename);
+            }
+            for (let i = 0; i < colorImages.length; i++) {
+                formData.append('UpdatecolorImage', colorImages[i]);
+            }
+
+            // console.log(fileInput.files[0],"Updatethumbnail")
+             if (fileInput.length && fileInput){
+                formData.append('Updatethumbnail', fileInput.files[0])
+             } else {
+                formData.append('thumbnail',  data0[0].thumbnail);
+             }
+
+            // formData.append('Updatethumbnail', fileInput.files[0] || data0[0].thumbnail);
+
+            for (let i = 0; i < imageAdditionalDataArray.length; i++) {
+            formData.append('images', imageAdditionalDataArray[i]);
+             }
+
+            for (let i = 0; i < additionalImages.length; i++) {
+            formData.append('Updateimages', additionalImages[i]);
+             }
+
+            formData.append('video_url', $('#video_link').val());
+
+            formData.append('meta_title', $('#meta_title').val());
+
+            formData.append('meta_description', $('#meta_description').val());
+
+            let meta_image_input = $('#meta_image')[0]; 
+            if (meta_image_input.files.length > 0) {
+                let meta_image = meta_image_input.files[0];
+                formData.append('Updatemeta_image', meta_image);
+            } else {
+                // console.log("No file selected");
+                formData.append('meta_image', data0[0].meta_image);
+            }
+            
+            
+            // formData.forEach(function(value, key){
+            //     console.log(key, value);
+            // });
+
+
+            let myHeaders = {
+                    "jwt_token": localStorage.getItem("token")
+                }
+ const requestOptions = {
+  method: "POST",
+  headers: myHeaders,
+  body: formData,
+  redirect: "follow"
+};
+
+fetch(`<%=url%>product/updateProduct?id=${id}`, requestOptions)
+  .then((response) => response.text())
+  .then((result) => {
+    // console.log(result);
+    window.location.reload(); // Reload the page
+  })
+  .catch((error) => alert(error));
+});
+</script>

@@ -1,0 +1,179 @@
+
+<script>
+    let data = <%- JSON.stringify(categoryData) %>
+
+    function populateOptions() {
+        let selectElement = document.getElementById('categorylist');
+        selectElement.innerHTML = '';
+        let defaultOption = document.createElement('option');
+        defaultOption.text = 'Select main category';
+        defaultOption.value = '';
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        selectElement.appendChild(defaultOption);
+        data.forEach(item => {
+            let option = document.createElement('option');
+            option.text = item.name;
+            option.value = item.id;
+            selectElement.appendChild(option);
+        });
+    }
+    populateOptions();
+
+    $('#sumbit_button').click(function () {
+            let name = $('#subcategory').val();
+            let parent_id = $('#categorylist').val();
+            let priority = $('#priority').val();
+            var data ={
+                name:name,
+                parent_id:parent_id,
+                priority:priority
+            }
+            fetch(`<%= url %>category/subCategory`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "jwt_token": localStorage.getItem("token")
+                },
+                body:JSON.stringify(data) ,
+            })
+                .then((response) => response.json())
+                .then((result) => {
+                    console.log(result);
+                    location.reload();
+                })
+                .catch((error) => {
+                    console.error("Error fetching order details:", error);
+                });
+        });
+        let tbody = document.createElement('tbody');
+        let tabledata = <%- JSON.stringify(subCategoryData) %>
+        tabledata.map((item, index) => {
+                            tbody.innerHTML += `<tr class=${index}>
+                                <td>${item.id}</td>
+                                <td>${item.name}</td>
+                                <td>${item.priority}</td>
+                                <td class="text-center">
+                                    <a  href="/subcategoryedit?id=${item.id}" class="edit-pencil-btn">
+                                        <img src="assets/img/icons/edit.svg" class="me-2" alt="img">
+                                    </a>
+
+                                    <a class="deleteBTN" id='${item.id}' href="javascript:void(0);"" data-bs-toggle="modal" data-bs-target="#subDelete">
+                                        <img src="assets/img/icons/delete.svg" alt="img">
+                                    </a>
+                                </td>
+                            </tr>
+                            `
+                    })
+document.querySelector('#subcategoryTable').appendChild(tbody);
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const deleteCategoryButton = document.getElementById("delete_category_button");
+    const activeCategoryButton = document.getElementById("active_category_button");
+    
+    const subcategory_card = document.getElementById("subcategory_card");
+    const delete_category_card = document.getElementById("delete_category_card");
+
+    deleteCategoryButton.addEventListener("click", function () {
+        // Hide categoryTable
+        subcategory_card.style.display = "none";
+        // Show restoreTable
+        delete_category_card.style.display = "block";
+    });
+
+    activeCategoryButton.addEventListener("click", function () {
+        // Hide categoryTable
+        subcategory_card.style.display = "block";
+        // Show restoreTable
+        delete_category_card.style.display = "none";
+    });
+
+});
+
+    const deleteButtons = document.querySelectorAll('.deleteBTN');
+    const modalDeleteButton = document.getElementById('deleteAPI');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function (event) {
+            const itemId = event.target.parentNode.id;
+            const deleteModal = new bootstrap.Modal(document.getElementById('subDelete'));
+            deleteModal.show();
+            let is_active = 0;
+
+            // Modal ke Delete button par click event listener attach kare
+            modalDeleteButton.addEventListener('click', function () {
+                fetch(`<%= url %>category/categoryDelete?id=${itemId}`, {
+                    method: "POST",
+                    headers: {
+                        "jwt_token": localStorage.getItem("token"),
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ is_active: is_active })
+                })
+                    .then((response) => response.json())
+                    .then((result) => {
+                        console.log(result);
+                        // window.location.href = '<%=url %>addcategory'
+                        location.reload();
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching order details:", error);
+                    });
+            });
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+            let tbody_restore = document.createElement('tbody');
+
+            let deleteData = <%- JSON.stringify(deleteData) %>
+
+            deleteData.map((item, index) => {
+                tbody_restore.innerHTML += `<tr class=${index}>
+                                <td>${item.id}</td>
+                        
+                                <td>${item.name}</td>
+
+                                <td class="text-center">
+                                    <a class="restore-data" data-id="${item.id}" data-name="${item.name}">
+                                        <i class="fa-solid fa-trash-can-arrow-up" style="font-size: x-large;"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            `
+        })
+        document.querySelector('#restoreTable').appendChild(tbody_restore);
+        });
+
+        $(document).ready(function () {
+            $('.restore-data').click(function () {
+                let id = $(this).data('id');
+                let name = $(this).data('name');
+                let is_active = 1;
+                let data ={
+                    id:id,
+                    name:name,
+                    is_active:is_active
+                }
+                fetch(`<%= url %>category/categoryDelete?id=${id}`, {
+                    method: "POST",
+                    headers: {
+                        "jwt_token": localStorage.getItem("token"),
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data),
+                })
+                    .then((response) => response.json())
+                    .then((result) => {
+                        console.log(result);
+                        // window.location.href = '<%=url %>addcategory'
+                        location.reload();
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching order details:", error);
+                    });
+            });
+        });
+
+
+</script>

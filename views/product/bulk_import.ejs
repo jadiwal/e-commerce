@@ -1,0 +1,183 @@
+<%- include('../header', { pageTitle: 'Product List' }) %>
+    <%- include('../sidebar') %>
+        <div class="page-wrapper">
+            <div id="content" role="main" class="main pointer-event">
+                <!-- Content -->
+                <div class="content container-fluid">
+                    <!-- Page Title -->
+                    <div class="mb-4">
+                        <h2 class="h1 mb-1 text-capitalize d-flex gap-2">
+                            <img src="https://sassen.in/public/assets/back-end/img/bulk-import.png" alt="">
+                            Bulk Import
+                        </h2>
+                    </div>
+                    <!-- End Page Title -->
+
+                    <!-- Content Row -->
+                    <div class="row" style="text-align: left;">
+                        <div class="col-12">
+                            <div class="card card-body">
+                                <h1 class="display-5">Instructions : </h1>
+                                <p>1. Download the format file and fill it with proper data.</p>
+
+                                <p>2. You can download the example file to understand how the data must be filled.</p>
+
+                                <p>3. Once you have downloaded and filled the format file, Upload it in the form below
+                                    and submit.</p>
+
+                                <p>4. After uploading products you need to edit them and set product images and choices.
+                                </p>
+
+                                <p>5. You can get brand and category id from their list please input the right ids.</p>
+
+                                <p>6. You can upload your product images in product folder from gallery and copy image
+                                    path.</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 mt-2">
+                            <form class="product-form" action=""
+                                method="POST" enctype="multipart/form-data">
+                                <input type="hidden" name="_token" value="meZj6kFIqWkLj2FY1vdWbU2KHxOSEVwYALfijiYR">
+                                <div class="card rest-part">
+                                    <div
+                                        class="px-3 py-4 d-flex flex-wrap align-items-center gap-10 justify-content-center">
+                                        <h4 class="mb-0">Do not have the template ?</h4>
+                                        <a href="https://sassen.in/public/assets/product_bulk_format.xlsx" download=""
+                                            class="btn-link text-capitalize fz-16 font-weight-medium">Download here</a>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <div class="row justify-content-center">
+                                                <div class="col-auto">
+
+                                                    <!-- Drag & Drop Upload -->
+                                                    <div class="uploadDnD">
+
+                                                        <div class="form-group inputDnD input_image input_image_edit"
+                                                            data-title="Drag &amp; drop file or browse file">
+                                                            <input type="file" name="products_file" accept=".xlsx, .xls"
+                                                                class="form-control-file text--primary font-weight-bold"
+                                                                id="inputFile" onchange="readUrl(this)">
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex flex-wrap gap-10 align-items-center justify-content-end">
+                                            <button type="reset" class="btn btn-secondary px-4"
+                                                onclick="resetImg();">Reset</button>
+                                            <button type="submit" class="btn btn--primary px-4">Submit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- End Content -->
+
+            
+
+                <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">Select Logout below if you are ready to end your current session.
+                            </div>
+                            <div class="modal-footer">
+                                <form action="https://sassen.in/admin/auth/logout" method="post">
+                                    <input type="hidden" name="_token" value="meZj6kFIqWkLj2FY1vdWbU2KHxOSEVwYALfijiYR">
+                                    <button class="btn btn-danger" type="button" data-dismiss="modal">Cancel</button>
+                                    <button class="btn btn--primary" type="submit">Logout</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal" id="popup-modal">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <center>
+                                            <h2 class="__color-8a8a8a">
+                                                <i class="tio-shopping-cart-outlined"></i> You have new order, Check
+                                                please.
+                                            </h2>
+                                            <hr>
+                                            <button onclick="check_order()" class="btn btn--primary">Ok, Let me
+                                                check</button>
+                                        </center>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="toggle-modal" tabindex="-1" aria-labelledby="toggle-modal"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content shadow-lg">
+                            <div class="modal-header border-0 pb-0 d-flex justify-content-end">
+                                <button type="button" class="btn-close border-0" data-dismiss="modal"
+                                    aria-label="Close"><i class="tio-clear"></i></button>
+                            </div>
+                            <div class="modal-body px-4 px-sm-5 pt-0">
+                                <div class="d-flex flex-column align-items-center text-center gap-2 mb-2">
+                                    <img width="70" class="mb-3" id="toggle-image" alt="">
+                                    <h5 class="modal-title" id="toggle-title"></h5>
+                                    <div class="text-center" id="toggle-message"></div>
+                                </div>
+                                <div class="d-flex justify-content-center gap-3">
+                                    <button type="button" class="btn btn--primary min-w-120" data-dismiss="modal"
+                                        id="toggle-ok-button" onclick="confirmToggle()">Ok</button>
+                                    <button type="button" class="btn btn-danger-light min-w-120"
+                                        data-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="toggle-status-modal" tabindex="-1" aria-labelledby="toggle-modal"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content shadow-lg">
+                            <div class="modal-header border-0 pb-0 d-flex justify-content-end">
+                                <button type="button" class="btn-close border-0" data-dismiss="modal"
+                                    aria-label="Close"><i class="tio-clear"></i></button>
+                            </div>
+                            <div class="modal-body px-4 px-sm-5 pt-0">
+                                <div class="d-flex flex-column align-items-center text-center gap-2 mb-2">
+                                    <div
+                                        class="toggle-modal-img-box d-flex flex-column justify-content-center align-items-center mb-3 position-relative">
+                                        <img class="status-icon" src="" alt="" width="30">
+                                        <img id="toggle-status-image" alt="">
+                                    </div>
+                                    <h5 class="modal-title" id="toggle-status-title"></h5>
+                                    <div class="text-center" id="toggle-status-message"></div>
+                                </div>
+                                <div class="d-flex justify-content-center gap-3">
+                                    <button type="button" class="btn btn--primary min-w-120" data-dismiss="modal"
+                                        id="toggle-status-ok-button" onclick="confirmStatusToggle()">Ok</button>
+                                    <button type="button" class="btn btn-danger-light min-w-120"
+                                        data-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%- include('../footer') %>

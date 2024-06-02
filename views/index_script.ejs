@@ -1,0 +1,71 @@
+<script>
+    console.log('<%= url %>')
+    const updateDashboardCounts = (data) => {
+        data.forEach(item => {
+            const { source, count } = item;
+            switch (source) {
+                case 'sales':
+                    document.getElementById('salesCount').textContent = count;
+                    break;
+                case 'stores':
+                    document.getElementById('storesCount').textContent = count;
+                    break;
+                case 'products':
+                    document.getElementById('productCount').textContent = count;
+                    break;
+                case 'customers':
+                    document.getElementById('customersCount').textContent = count;
+                    break;
+                case 'pending':
+                    document.getElementById('pendingCount').textContent = count;
+                    break;
+                case 'confirmed':
+                    document.getElementById('confirmedCount').textContent = count;
+                    break;
+                case 'packaging':
+                    document.getElementById('packagingCount').textContent = count;
+                    break;
+                case 'out of delivery':
+                    document.getElementById('outofdeliveryCount').textContent = count;
+                    break;
+                case 'delivered':
+                    document.getElementById('deliveredCount').textContent = count;
+                    break;
+                case 'canceled':
+                    document.getElementById('canceledCount').textContent = count;
+                    break;
+                case 'returned':
+                    document.getElementById('returnedCount').textContent = count;
+                    break;
+                case 'failed to delivery':
+                    document.getElementById('failtodeliveryCount').textContent = count;
+                    break;
+                default:
+                    break;
+            }
+        });
+    };
+
+    const getOrderCount = () => {
+        fetch(`<%= url %>order/orderCount`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                "jwt_token": localStorage.getItem("token")
+            }
+        })
+            .then((response) => response.json())
+            .then((result) => {
+                console.log(result);
+                updateDashboardCounts(result.data);
+            })
+            .catch((error) => {
+                console.error("Error fetching order details:", error);
+                res.status(500).send("Internal Server Error");
+            });
+    }
+
+    $(document).ready(function () {
+        getOrderCount();
+    });
+</script>

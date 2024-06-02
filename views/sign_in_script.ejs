@@ -1,0 +1,45 @@
+<script>
+
+
+    if (localStorage.getItem('token')) {
+        window.location.href = '<%= url %>index';
+    }
+    // window.onload = ()=>{
+    //     localStorage.clear();
+    // }
+    console.log('<%= url %>')
+    document.getElementById('loginForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        fetch('<%= url %>login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        })
+            .then(res => res.json())
+            .then(response => {
+                // console.log(response)
+                if (response.statusCode == 200) {
+                    $("#emailforget").hide()
+                    $("#passwordforget").hide()
+                    localStorage.setItem('adminId', response.data.adminId)
+                    localStorage.setItem('email', response.data.email)
+                    localStorage.setItem('token', response.data.token)
+                    window.location.href = '<%= url %>index';
+                } else {
+                    $("#emailforget").show()
+                    $("#passwordforget").show()
+                    $("#eye").css("align-items", "flex-start");
+                    console.error('Login failed');
+                }
+            })
+            .catch(error => {
+                console.error('Errorsdfdsfsdf:', error);
+            });
+    });
+</script>

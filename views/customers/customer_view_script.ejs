@@ -1,0 +1,26 @@
+<script>
+    console.log(<%- JSON.stringify(id) %>)
+
+    console.log(<%- JSON.stringify(data) %>, "fgdfg")
+
+    let data = <%- JSON.stringify(data) %>;
+    let tbody = document.createElement('tbody');
+    data.map((v, i) => {
+
+tbody.innerHTML += `
+                <tr class='${i}'>
+                    <td>${i+1}</td>
+                    <td>${v.id}</td>
+                    <td>${v.order_amount}</td>
+                    <td>
+                        <a class="me-3" href="/salesdetails?id=${v.id}" id="${v.id}">
+                            <img src="assets/img/icons/eye.svg" alt="img">
+                        </a>
+                        <a class="" href="javascript:void(0);">
+                            <img src="assets/img/icons/delete.svg" alt="img">
+                        </a>
+                    </td>
+                    </tr>`
+})
+document.querySelector('#orderdetailTable').appendChild(tbody);
+</script>

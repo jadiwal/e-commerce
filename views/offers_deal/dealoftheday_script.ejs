@@ -1,0 +1,54 @@
+<script>
+    console.log()
+    const getDealsOfTheDay = () => {
+        fetch(`<%= url %>offer/dealOfTheDayTable`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                "jwt_token": localStorage.getItem("token")
+            }
+        })
+            .then((response) => response.json())
+            .then((result) => {
+                console.log(result);
+                $(document).ready(function () {
+                    $('#dealsOfTheDayTable tbody').empty();
+                    result.data.map((item, index) => {
+                        $("#dealsofthedaytbody").append(
+                            `
+                            <tr>
+                                <td>${item.id}</td>
+                                <td><img src="<%= url %>${item.icon}"/></td>
+                                <td>${item.name}</td>
+                                <td>${item.priority}</td>
+                                <td>${item.home_status}</td>
+                                <td>
+                                 <a class="me-3 edit-category" href="/categorylistedit?id=${item.id}">
+                                    <img src="assets/img/icons/edit.svg" alt="Edit">
+                                </a>
+                                <a class="me-3 confirm-text" href="javascript:void(0);">
+                                <img src="assets/img/icons/delete.svg" alt="img">
+                                </a>
+                                </td>
+                            </tr>
+                            `)
+                    })
+
+                })
+                $('.edit-category').click(function (event) {
+                    event.preventDefault(); // Prevent default link behavior
+                    const editUrl = $(this).attr('href');
+                    window.location.href = editUrl; // Redirect to the edit page
+                });
+            })
+            .catch((error) => {
+                console.error("Error fetching order details:", error);
+                res.status(500).send("Internal Server Error");
+            });
+    }
+
+
+    $(document).ready(function () {
+        getDealsOfTheDay()
+    });
+</script>

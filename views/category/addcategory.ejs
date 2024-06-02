@@ -1,0 +1,229 @@
+<%- include('../header', { pageTitle: 'Category List' }) %>
+    <%- include('../sidebar') %>
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h4>Category Setup</h4>
+                        <!-- <h6>Create new product Category</h6> -->
+                    </div>
+
+                    <div class="modal fade" id="status" tabindex="-1" aria-labelledby="status" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Edit Payment</h5>
+                                    <button type="button" class="close closefilter" data-bs-dismiss="modal" aria-label="Close"><span
+                                            aria-hidden="true">×</span></button>
+                                </div>
+                                <div class="modal-body">
+                                    
+                                        <!-- <div class="d-flex flex-column align-items-center text-center gap-2 mb-2">
+                                            <div class="toggle-modal-img-box d-flex flex-column justify-content-center align-items-center mb-3 position-relative">
+                                                <img class="status-icon" src="" alt="" width="30">
+                                                <img id="toggle-status-image" alt="" src="assets/img/flashicon/flash-deal-status-on.png">
+                                            </div>
+                                            <h5 class="modal-title" id="toggle-status-title">Want to Turn ON Flash Deal Status</h5>
+                                            <div class="text-center" id="toggle-status-message"><p>If enabled this flash sale will be available on the website and customer app</p></div>
+                                        </div> -->
+                                        <!-- <div class="d-flex justify-content-center gap-3">
+                                            <button type="button" class="btn btn--primary min-w-120" data-dismiss="modal" id="toggle-status-ok-button" onclick="confirmStatusToggle()" toggle-ok-button="flash_deal_status6">Ok</button>
+                                            <button type="button" class="btn btn-danger-light min-w-120" data-dismiss="modal">Cancel</button> -->
+                                </div>
+                                <div class="modal-footer" id="modal_footer_button">
+                                    <button type="submit" class="btn btn-submit" id="switch_submit">Submit</button>
+                                    <button type="button" class="btn btn-cancel closefilter" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <form>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Category Name</label>
+                                    <input type="text" id="categoryName" name="name">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Priority</label>
+                                    <select id="prioritySelect" class="select" name="priority">
+                                        <!-- Populate select options with priority values from 1 to 10 -->
+                                        <option value="">Select Priority</option>
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Product Image</label>
+                                    <div class="text-center">
+                                        <div class="image-uploads">
+                                            <img  src="assets/img/placeholder_img.png" id="imagePreview" class="border radius-10 ratio-4:1 form-control mb-3">
+                                            <input type="file" class="form-control" id="productImage" onchange="previewImage(event)">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mt-5 form-btn">
+                                <div class="form-group mt-5">
+                                    <div class="d-flex justify-content-end gap-3">
+                                        <button type="reset" id="reset" class="btn btn-cancel">Reset</button>
+                                        <button type="submit" id="sumbit_button" class="btn btn-submit">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+
+                <div class="row mt-20">
+                    <div class="col-md-12" id="category_card">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-top">
+                                    <div class="page-title">
+                                        <h4>Category List</h4>
+                                     </div>
+                                    <div class="search-set">
+                                        <div class="search-path" style="display: none;">
+                                            <a class="btn btn-filter" id="filter_search">
+                                                <img src="assets/img/icons/filter.svg" alt="img">
+                                                <span><img src="assets/img/icons/closes.svg" alt="img"></span>
+                                            </a>
+                                        </div>
+                                        <div class="search-input">
+                                            <a class="btn btn-searchset"><img src="assets/img/icons/search-white.svg"
+                                                    alt="img"></a>
+                                        </div>
+                                    </div>  
+                                </div>
+                                <div class="card mb-0" style="display: none;" id="filter_inputs">
+                                    <div class="card-body pb-0">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-sm-12">
+                                                <div class="row">
+                                                    <div class="col-lg-1 col-sm-6 col-12">
+                                                        <div class="form-group">
+                                                            <a class="btn btn-filters ms-auto"><img
+                                                                    src="assets/img/icons/search-whites.svg"
+                                                                    alt="img"></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" id="delete_category_button" class="btn btn-show">Deleted Category</button>
+                                </div>
+    
+                                <div class="table-responsive">
+                                    <table class="table datanew" id="categoryTable">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Category Image</th>
+                                                <th>Name</th>
+                                                <th>Priority</th>
+                                                <th>Home Category Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Deleted Category table Start -->           
+                           
+                    <div class="col-md-12" id="delete_category_card" style="display: none;">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-top">
+                                    <div class="page-title">
+                                        <h4>Deleted Category List</h4>
+                                     </div>
+                                    <div class="search-set">
+                                        <div class="search-path" style="display: none;">
+                                            <a class="btn btn-filter" id="filter_search">
+                                                <img src="assets/img/icons/filter.svg" alt="img">
+                                                <span><img src="assets/img/icons/closes.svg" alt="img"></span>
+                                            </a>
+                                        </div>
+                                        <div class="search-input">
+                                            <a class="btn btn-searchset"><img src="assets/img/icons/search-white.svg"
+                                                    alt="img"></a>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+
+                                <div class="form-group">
+                                    <button type="submit" id="active_category_button" class="btn btn-show">Active Category</button>
+                                </div>
+    
+                                <div class="table-responsive">
+                                    <table class="table datanew" id="restoreTable">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th>ID</th>
+                                                <th>Name</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Deleted Category table End -->
+                </div>
+            </div>
+        </div>
+      <!-- Modal Start -->
+      <div class="modal fade" id="deleteItem" tabindex="-1" aria-labelledby="deleteItem" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered delete-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Warning !</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                   <div class="delete-header swal2-header">
+                        <h2 class="swal2-title">Are you sure?</h2>
+                   </div>
+                   <div class="delete-content swal2-content">
+                        <div id="content">You won't be able to revert this!</div>
+                   </div>
+                   <div class="delete-actions swal2-actions">
+                    <button type="button" class="btn btn-primary" id="deleteAPI">Yes, delete it!</button>
+                    <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
+                   </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <%- include('addcategory_script') %>
+            <%- include('../footer') %>
+

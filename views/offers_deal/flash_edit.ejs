@@ -1,0 +1,98 @@
+<%- include('../header', { pageTitle: 'Flash List' }) %>
+    <%- include('../sidebar') %>
+
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h4> Flash Deals Update</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <form>
+                                    <input type="hidden" name="_token" value="k4IVt5A3ARQYWdn2vJQezNJecwqM2ic1b99J6tAv">
+                                    <ul class="nav nav-tabs w-fit-content mb-4">
+                                        <li class="nav-item text-capitalize font-weight-medium">
+                                            <a class="active" href="#" id="en-link">english(EN)</a>
+                                        </li>
+                                    </ul>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label for="name"
+                                                    class="title-color font-weight-medium text-capitalize">Title
+                                                    (EN)</label>
+                                                <input type="text" name="title[]" class="form-control" id="title"
+                                                    placeholder="Ex : LUX" required="">
+                                            </div>
+                                            <input type="hidden" name="lang[]" class="form-control" value="en"
+                                                id="lang">
+                                            <div class="form-group">
+                                                <label>Start date</label>
+                                                <input type="date" value="2024-12-12" name="start_date" required=""
+                                                    class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label>End date</label>
+                                                <input type="date" value="2024-12-12" name="end_date" required=""
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-6">
+                                            <div>
+                                                <div class="form-group">
+                                                    <center>
+                                                        <img class="border radius-10 ratio-4:1 max-w-655px img-fit"
+                                                            id="viewer"
+                                                            src="http://192.168.1.180/e_dibo/public/assets/front-end/img/placeholder.png"
+                                                            alt="banner image">
+                                                    </center>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="name" class="title-color">Upload Image</label>
+                                                    <span class="text-info ml-0">( Ratio 5:1 )</span>
+                                                    <div class="custom-file text-left">
+                                                        <input type="file" name="image" id="customFileUpload"
+                                                            class="custom-file-input"
+                                                            accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
+                                                        <label class="custom-file-label" for="customFileUpload">Choose
+                                                            File</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-end gap-3">
+                                        <button type="reset" id="reset" class="btn btn-cancel">Reset</button>
+                                        <button type="submit" class="btn  btn-submit">Update</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--modal-->
+                <style>
+                    input[type="file"] {
+                        display: none;
+                    }
+
+                    .custom-file-upload {
+                        margin-left: 38%;
+                        border: 1px solid #ccc;
+                        display: inline-block;
+                        padding: 6px 12px;
+                        cursor: pointer;
+                    }
+                </style>
+            </div>
+        </div>
+
+        <%- include('flash_edit_script') %>
+            <%- include('../footer') %>

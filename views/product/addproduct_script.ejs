@@ -1,0 +1,861 @@
+<script src="http://192.168.1.180/e_dibo/vendor/ckeditor/ckeditor/ckeditor.js"></script>
+<script src="http://192.168.1.180/e_dibo/vendor/ckeditor/ckeditor/adapters/jquery.js"></script>
+<script>
+
+    let data = <%- JSON.stringify(data) %>;
+    console.log(data[0], "units")
+    let unit_data = data[0]
+
+    let data1 = <%- JSON.stringify(colors) %>;
+    //  console.log(data1)
+    let category = <%- JSON.stringify(category) %>;
+    //  console.log(category)
+    let brands = <%- JSON.stringify(brands) %>;
+
+    let colors = <%- JSON.stringify(brands) %>;
+
+
+    unit_data.forEach(unit => {
+        console.log(data)
+        const selectElement = document.getElementById('unit');
+        const option = document.createElement('option');
+        option.value = unit.name;
+        option.textContent = unit.name;
+        selectElement.appendChild(option);
+    });
+    // function populateUnitOptions() {
+    //     let selectElement = document.getElementById('unit');
+    //     selectElement.innerHTML = '';
+    //     let defaultOption = document.createElement('option');
+    //     defaultOption.text = 'Select Unit';
+    //     defaultOption.value = '';
+    //     selectElement.appendChild(defaultOption);
+    //     data.forEach(item => {
+    //         let option = document.createElement('option');
+    //         option.text = item.name;
+    //         option.value = item.id;
+    //         selectElement.appendChild(option);
+    //     });
+    // }
+    // populateUnitOptions()
+    function populateBrandOptions() {
+        let selectElement = document.getElementById('brand');
+        selectElement.innerHTML = '';
+        let defaultOption = document.createElement('option');
+        defaultOption.text = 'Select Brand';
+        defaultOption.value = '';
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        selectElement.appendChild(defaultOption);
+        brands.forEach(item => {
+            let option = document.createElement('option');
+            option.text = item.name;
+            option.value = item.id;
+            selectElement.appendChild(option);
+        });
+    }
+    function populateOptions() {
+        let selectElement = document.getElementById('category');
+        selectElement.innerHTML = '';
+        let defaultOption = document.createElement('option');
+        defaultOption.text = 'Select main category';
+        defaultOption.value = '';
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        selectElement.appendChild(defaultOption);
+        category.forEach(item => {
+            let option = document.createElement('option');
+            option.text = item.name;
+            option.value = item.id;
+            selectElement.appendChild(option);
+        });
+    }
+
+    function populateSubcategories(subcategories) {
+        let subcategorySelect = document.getElementById('subCategory');
+        subcategorySelect.innerHTML = ''; // Clear existing options
+        let defaultOption = new Option('Select subcategory', ''); // Create default option
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        subcategorySelect.appendChild(defaultOption);
+        subcategories.forEach(subcategory => {
+            let option = new Option(subcategory.name, subcategory.id); // Create option element
+            subcategorySelect.appendChild(option);
+        });
+    }
+    function populateSubSubcategories(subSubCategory) {
+        let subcategorySelect = document.getElementById('subSubCategory');
+        subcategorySelect.innerHTML = '';
+        let defaultOption = new Option('Select subcategory', '');
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        subcategorySelect.appendChild(defaultOption);
+        subSubCategory.forEach(subcategory => {
+            let option = new Option(subcategory.name, subcategory.id);
+            subcategorySelect.appendChild(option);
+        });
+    }
+
+    $(document).ready(function () {
+        populateOptions();
+
+        $('#category').change(function () {
+            let id = $(this).val();
+            fetch(`<%= url %>category/categoryDropdown?id=${id}`, {
+                method: 'GET'
+            })
+                .then(res => res.json())
+                .then(result => {
+                    let subcategories = result.data;
+                    // console.log(subcategories);
+                    populateSubcategories(subcategories)
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+        });
+        $('#subCategory').change(function () {
+            let id = $(this).val();
+            fetch(`<%= url %>category/categoryDropdown?id=${id}`, {
+                method: 'GET'
+            })
+                .then(res => res.json())
+                .then(result => {
+                    let subSubCategory = result.data;
+                    // console.log(subSubCategory);
+                    populateSubSubcategories(subSubCategory)
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+        });
+    });
+
+    $(document).ready(function () {
+        populateBrandOptions()
+    })
+
+
+
+
+    $(document).ready(function () {
+        product_type();
+        digital_product_type();
+
+        $('#product_type').change(function () {
+            product_type();
+        });
+
+        $('#digital_product_type').change(function () {
+            digital_product_type();
+        });
+
+        $('#color_wise_image').hide();
+
+    });
+
+
+    // fetch(`<%=url%>category/get`, {
+    //     method: "GET",
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //         "jwt_token": localStorage.getItem("token")
+    //     }
+    // })
+    //     .then((response) => response.json())
+    //     .then((result) => {
+    //         console.log(result);
+    //     })
+    //     .catch((error) => {
+    //         console.error("Error fetching order details:", error);
+    //         res.status(500).send("Internal Server Error");
+    //     });
+
+    $('#editor1').ckeditor({
+        contentsLangDirection: 'ltr',
+    });
+
+    $('#colors-selector').change(function () {
+        update_sku();
+        if ($('#color_switcher').prop('checked')) {
+            $('#stock_qty').prop('readonly', true);
+            color_wise_image($('#colors-selector'));
+        }
+        $('.remove_button').click(function () {
+            alert('ok');
+            $(this).parents('.upload_images').find('.color_image').attr('src', 'http://192.168.1.180/e_dibo/public/assets/back-end/img/400x400/img2.jpg')
+        });
+    });
+
+    $(document).ready(function () {
+        $('#colors-selector').change(function () {
+            $('#selected-colors-table').show();
+            $('#selected-colors-table tbody').empty();
+            let selectedColors = $(this).val();
+            // console.log(selectedColors,"selectedColors")
+            if (selectedColors && selectedColors.length > 0) {
+                selectedColors.forEach(function (color) {
+                    color_wise_image($('#colors-selector'));
+                    $('#selected-colors-table tbody').append(
+                        '<tr>' +
+                        '<td class="text-center">1</td>' +
+                        '<td><label for="" class="control-label">' + color + '</label></td>' +
+                        '<td><input type="number" name="price_' + color + '" value="" min="0" step="0.01" class="form-control variation-price-input" required="" placeholder="Ex: 535"></td>' +
+                        '<td><input type="text" name="sku_' + color + '" value="-' + color + '" class="form-control" required="" placeholder="Ex: MCU47V593M"></td>' +
+                        '<td><input type="number" onkeyup="update_qty()" name="qty_' + color + '" value="" min="1" max="1000000" step="1" class="qty-input form-control" required="" placeholder="Ex: 5"></td>' +
+                        '</tr>'
+                    );
+                });
+            } else {
+                $('#selected-colors-table').hide();
+                $('#color_wise_image').hide()
+            }
+        });
+    })
+    $(document).ready(function () {
+        $('.color-var-select').select2({
+            templateResult: colorCodeSelect,
+            templateSelection: colorCodeSelect,
+            escapeMarkup: function (m) {
+                return m;
+            }
+        });
+
+        function colorCodeSelect(state) {
+            var colorCode = $(state.element).val();
+            if (!colorCode)
+                return state.text;
+            return "<span class='color-preview' style='background-color:" + colorCode + ";'></span>" + state.text;
+        }
+    });
+
+    $('input[name="colors_active"]').on('change', function () {
+        if (!$('input[name="colors_active"]').is(':checked')) {
+            $('#colors-selector').prop('disabled', true);
+            $('#colorDiv').addClass('d-none');
+        } else {
+            $('#colors-selector').prop('disabled', false);
+            $('#colorDiv').removeClass('d-none');
+        }
+    });
+
+    $(function () {
+        $('#color_switcher').click(function () {
+            var checkBoxes = $("#color_switcher");
+            if ($('#color_switcher').prop('checked')) {
+                $('#stock_qty').val(0).prop('readonly', true);
+                $('.color_image_column').removeClass('d-none');
+                $('.additional_image_column').removeClass('col-md-9');
+                $('.additional_image_column').addClass('col-md-12');
+                $('#color_wise_image').show();
+                $('#additional_Image_Section .col-md-4').addClass('col-lg-2');
+            } else {
+                $('#stock_qty').prop('readonly', false);
+                $('.color_image_column').addClass('d-none');
+                $('.additional_image_column').addClass('col-md-9');
+                $('.additional_image_column').removeClass('col-md-12');
+                $('#color_wise_image').hide();
+                $('#additional_Image_Section .col-md-4').removeClass('col-lg-2');
+            }
+        });
+    });
+
+    function handleFileInputChange(event) {
+        const fileInput = event.target;
+        const previewImage = document.getElementById(fileInput.dataset.imgpreview);
+        if (fileInput.files && fileInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                previewImage.src = e.target.result;
+                previewImage.classList.remove('d-none'); // Show the preview image
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+        } else {
+            previewImage.classList.add('d-none');
+        }
+    }
+
+    let colorCode = [];
+
+    function handleColorSelection() {
+        colorCode = [];
+        let selectElement = document.getElementById('colors-selector');
+        // console.log(selectElement,"hhhyyyy")
+        for (let option of selectElement.selectedOptions) {
+            let code = option.getAttribute('data-color');
+            if (code && code !== '[]') { // Check if data-color attribute exists and is not empty array
+                let codes = code.split(',').map(c => c.trim()).filter(Boolean); // Trim spaces and filter out empty strings
+                colorCode = colorCode.concat(codes);
+            }
+        }
+        // console.log(colorCode);
+    }
+
+    document.getElementById('colors-selector').addEventListener('change', handleColorSelection);
+
+    // Add event listener to the file input for change event
+    const fileInput = document.getElementById('Product_img');
+    fileInput.addEventListener('change', handleFileInputChange);
+
+    // let colorImgString = '';// Array to store color codes and image names
+    // let colorImages = [];
+    // let col;
+    // function color_wise_image(t) {
+    //     let colors = t.val();
+    //     $('#color_wise_image').html('');
+
+    //     $.each(colors, function (key, value) {
+    //         let value_id = value.replace('#', '');
+    //         let color = "color_image_" + value_id;
+    //         let imageName = $('#additional_Image_' + value_id).attr('src');
+    //         let img = $('#color-img-upload-').val();
+    //         let col = value_id;
+
+    //         html = `<div class="col-sm-12 col-md-4">
+    //                 <div class="custom_upload_input position-relative border-dashed-2">
+    //                     <input type="file" name="` + color + `" class="custom-upload-input-file" id="color-img-upload-` + value_id + `" data-index="1" data-imgpreview="additional_Image_${value_id}"
+    //                         accept=".jpg, .webp, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" required onchange="uploadColorImage(this)">
+
+    //                     <div class="position-absolute right-0 top-0 d-flex gap-2">
+    //                         <label for="color-img-upload-` + value_id + `" class="delete_file_input_css btn btn-outline-danger btn-sm square-btn position-relative" style="background: ${value};border-color: ${value};color:#fff">
+    //                             <a class="edit-pencil-btn">
+    //                                 <img src="assets/img/icons/edit.svg" alt="img">
+    //                             </a>
+    //                         </label>
+
+    //                         <span class="delete_file_input btn btn-outline-danger btn-sm square-btn position-relative" id="delete_add_pro_img" style="display: none">
+    //                             <a class="deleteBTN">
+    //                             <img src="assets/img/icons/delete.svg" alt="img">
+    //                             </a>
+    //                         </span>
+    //                     </div>
+
+    //                     <div class="img_area_with_preview position-absolute z-index-2 border-0">
+    //                         <img id="additional_Image_${value_id}" class="h-auto aspect-1 bg-white" src="img" onerror="this.classList.add('d-none')">
+    //                     </div>
+    //                     <div class="position-absolute h-100 top-0 w-100 d-flex align-content-center justify-content-center">
+    //                         <div class="d-flex flex-column justify-content-center align-items-center">
+    //                             <img src="http://192.168.1.180/e_dibo/public/assets/back-end/img/icons/product-upload-icon.svg" class="w-50">
+    //                             <h3 class="text-muted">Upload Image</h3>
+    //                         </div>
+    //                     </div>
+    //                 </div>
+    //             </div>`;
+
+    //         $('#color_wise_image').append(html);
+
+    //         $('.delete_file_input').click(function () {
+    //             let $parentDiv = $(this).parent().parent();
+    //             $parentDiv.find('input[type="file"]').val('');
+    //             $parentDiv.find('.img_area_with_preview img').attr("src", " ");
+    //             $(this).remove();
+    //         });
+
+    //         $('.custom-upload-input-file').on('change', function () {
+    //             if (parseFloat($(this).prop('files').length) != 0) {
+    //                 let $parentDiv = $(this).closest('div');
+    //                 $parentDiv.find('.delete_file_input').fadeIn();
+    //             }
+    //         });
+
+    //         uploadColorImage();
+    //     });
+
+    // }
+    // function uploadColorImage(thisData = null) {
+    //     if (thisData) {
+    //         let color = $(thisData).data('imgpreview').split('_').pop();
+    //         document.getElementById(thisData.dataset.imgpreview).setAttribute("src", window.URL.createObjectURL(thisData.files[0]));
+    //         colorImages.push(thisData.files[0]);
+    //         document.getElementById(thisData.dataset.imgpreview).classList.remove('d-none');
+    //     }
+    // }
+
+    // $('.delete_file_input').click(function () {
+    //     let $parentDiv = $(this).closest('div');
+    //     $parentDiv.find('input[type="file"]').val('');
+    //     $parentDiv.find('.img_area_with_preview img').attr("src", " ");
+    //     $(this).remove();
+    // });
+
+    // $('.custom-upload-input-file').on('change', function () {
+    //     if (parseFloat($(this).prop('files').length) != 0) {
+    //         let $parentDiv = $(this).closest('div');
+    //         $parentDiv.find('.delete_file_input').fadeIn();
+    //     }
+    // })
+
+    let colorImages = [];
+
+function color_wise_image(t) {
+    let colors = t.val();
+    $('#color_wise_image').html('');
+    colorImages = []; // Clear the colorImages array before adding new images
+
+    $.each(colors, function (key, value) {
+        let value_id = value.replace('#', '');
+        let color = "color_image_" + value_id;
+
+        html = `<div class="col-sm-12 col-md-4">
+                <div class="custom_upload_input position-relative border-dashed-2">
+                    <input type="file" name="${color}" class="custom-upload-input-file" id="color-img-upload-${value_id}" data-index="${key}" data-imgpreview="additional_Image_${value_id}"
+                        accept=".jpg, .webp, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" required onchange="uploadColorImage(this)">
+
+                    <div class="position-absolute right-0 top-0 d-flex gap-2">
+                        <label for="color-img-upload-${value_id}" class="delete_file_input_css btn btn-outline-danger btn-sm square-btn position-relative" style="background: ${value};border-color: ${value};color:#fff">
+                            <a class="edit-pencil-btn">
+                                <img src="assets/img/icons/edit.svg" alt="img">
+                            </a>
+                        </label>
+
+                        <span class="delete_file_input btn btn-outline-danger btn-sm square-btn position-relative" >
+                            <a class="deleteBTN">
+                                <img src="assets/img/icons/delete.svg" alt="img">
+                            </a>
+                        </span>
+                    </div>
+
+                    <div class="img_area_with_preview position-absolute z-index-2 border-0">
+                        <img id="additional_Image_${value_id}" class="h-auto aspect-1 bg-white" src="img" onerror="this.classList.add('d-none')">
+                    </div>
+                    <div class="position-absolute h-100 top-0 w-100 d-flex align-content-center justify-content-center">
+                        <div class="d-flex flex-column justify-content-center align-items-center">
+                            <img src="http://192.168.1.180/e_dibo/public/assets/back-end/img/icons/product-upload-icon.svg" class="w-50">
+                            <h3 class="text-muted">Upload Image</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+
+        $('#color_wise_image').append(html);
+    });
+
+    // Event handler for deleting color images
+            $('#color_wise_image').on('click', '.delete_file_input', function () {
+            let $parentDiv = $(this).closest('.custom_upload_input');
+            let index = parseInt($parentDiv.find('.custom-upload-input-file').data('index'));
+            
+            // Remove the image from the colorImages array
+            colorImages.splice(index, 1);
+            
+            // Remove the corresponding file from the FormData
+            formData.delete('color_image_' + index);
+            
+            // Reset the input file element and image preview
+            $parentDiv.find('input[type="file"]').val('');
+            $parentDiv.find('.img_area_with_preview img').attr("src", "").addClass('d-none');
+            $(this).hide();
+        });
+}
+
+function uploadColorImage(thisData) {
+    let colorIndex = parseInt($(thisData).data('index'));
+    let file = thisData.files[0];
+    
+    if (colorImages[colorIndex]) {
+        // If there's already an image at this index, replace it
+        colorImages[colorIndex] = file;
+    } else {
+        // Otherwise, add the new image to the array
+        colorImages.splice(colorIndex, 0, file);
+    }
+
+    let colorId = $(thisData).data('imgpreview');
+    document.getElementById(colorId).setAttribute("src", window.URL.createObjectURL(file));
+    document.getElementById(colorId).classList.remove('d-none');
+}
+
+    function product_type() {
+        let product_type = $('#product_type').val();
+        if (product_type === 'physical') {
+            $('#digital_product_type_show').hide();
+            $('#digital_file_ready_show').hide();
+            $('.physical_product_show').show();
+            $('#digital_product_type').val($('#digital_product_type option:first').val());
+            $('#digital_file_ready').val('');
+        } else if (product_type === 'digital') {
+            $('#digital_product_type_show').show();
+            $('.physical_product_show').hide();
+
+        }
+    }
+
+    function digital_product_type() {
+        let digital_product_type = $('#digital_product_type').val();
+        if (digital_product_type === 'ready_product') {
+            $('#digital_file_ready_show').show();
+        } else if (digital_product_type === 'ready_after_sell') {
+            $('#digital_file_ready_show').hide();
+            $("#digital_file_ready").val('');
+        }
+    }
+
+    function getRndInteger() {
+        return Math.floor(Math.random() * 90000) + 100000;
+    }
+
+    let colorsSelect = document.getElementById("colors-selector");
+
+    colorsSelect.addEventListener("change", function () {
+        let selectedColors = Array.from(this.selectedOptions).map(option => option.value);
+        updateColorDiv(selectedColors);
+    });
+
+    function updateColorDiv(selectedColors) {
+        let colorDiv = document.getElementById("colorDiv");
+        colorDiv.innerHTML = "";
+        selectedColors.forEach(color => {
+            let div = document.createElement("div");
+            div.textContent = color;
+            colorDiv.appendChild(div);
+        });
+    }
+    // let additionalImages = [];
+    // function addMoreImage(thisData, targetSection) {
+    //     let $fileInputs = $(targetSection + " input[type='file']");
+    //     let nonEmptyCount = 0;
+
+    //     additionalImages = [];
+
+    //     $fileInputs.each(function (index, fileInput) {
+    //         let files = fileInput.files;
+    //         if (files.length === 0) {
+    //             nonEmptyCount++;
+    //         } else {
+    //             for (let i = 0; i < files.length; i++) {
+    //                 let fileObject = files[i];
+    //                 additionalImages.push(fileObject);
+    //             }
+    //         }
+    //     });
+
+    //     document.getElementById(thisData.dataset.imgpreview).setAttribute("src", window.URL.createObjectURL(thisData.files[0]));
+    //     document.getElementById(thisData.dataset.imgpreview).classList.remove('d-none');
+
+    //     if (nonEmptyCount == 0) {
+    //         let dataset_index = thisData.dataset.index + 1;
+
+    //         let newHtmlData = `<div class="col-sm-12 col-md-4">
+    //                 <div class="custom_upload_input position-relative border-dashed-2">
+    //                     <input type="file" name="${thisData.name}" class="custom-upload-input-file" data-index="${dataset_index}" data-imgpreview="additional_Image_${dataset_index}"
+    //                         accept=".jpg, .webp, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" onchange="addMoreImage(this, '${targetSection}')">
+
+    //                     <span class="delete_file_input delete_file_input_section btn btn-outline-danger btn-sm square-btn" style="display: none">
+    //                         <i class="tio-delete"></i>
+    //                     </span>
+
+    //                     <div class="img_area_with_preview position-absolute z-index-2 border-0">
+    //                         <img id="additional_Image_${dataset_index}" class="h-auto aspect-1 bg-white" src="img" onerror="this.classList.add('d-none')">
+    //                     </div>
+    //                     <div class="position-absolute h-100 top-0 w-100 d-flex align-content-center justify-content-center">
+    //                         <div class="d-flex flex-column justify-content-center align-items-center">
+    //                             <img src="http://192.168.1.180/e_dibo/public/assets/back-end/img/icons/product-upload-icon.svg" class="w-50">
+    //                             <h3 class="text-muted">Upload Image</h3>
+    //                         </div>
+    //                     </div>
+    //                 </div>
+    //             </div>`;
+
+    //         $(targetSection).append(newHtmlData);
+    //     }
+
+    //     $('.custom-upload-input-file').on('change', function () {
+    //         if (parseFloat($(this).prop('files').length) != 0) {
+    //             let $parentDiv = $(this).closest('div');
+    //             $parentDiv.find('.delete_file_input').fadeIn();
+    //         }
+    //     })
+
+    //     $('.delete_file_input_section').click(function () {
+    //         let $parentDiv = $(this).closest('div').parent().remove();
+    //     });
+
+    //     if ($('#color_switcher').prop('checked')) {
+    //         $('#stock_qty').prop('readonly', true);
+    //         $('#additional_Image_Section .col-md-4').addClass('col-lg-2');
+    //     } else {
+    //         $('#additional_Image_Section .col-md-4').removeClass('col-lg-2');
+    //         $('#stock_qty').prop('readonly', false);
+    //     }
+    // }
+
+    let additionalImages = [];
+
+function addMoreImage(thisData, targetSection) {
+    let $fileInputs = $(targetSection + " input[type='file']");
+    let nonEmptyCount = 0;
+
+    additionalImages = [];
+
+    $fileInputs.each(function (index, fileInput) {
+        let files = fileInput.files;
+        if (files.length === 0) {
+            nonEmptyCount++;
+        } else {
+            for (let i = 0; i < files.length; i++) {
+                let fileObject = files[i];
+                additionalImages.push(fileObject);
+            }
+        }
+    });
+
+    document.getElementById(thisData.dataset.imgpreview).setAttribute("src", window.URL.createObjectURL(thisData.files[0]));
+    document.getElementById(thisData.dataset.imgpreview).classList.remove('d-none');
+
+    if (nonEmptyCount == 0) {
+        let dataset_index = thisData.dataset.index + 1;
+
+        let newHtmlData = `<div class="col-sm-12 col-md-4">
+                <div class="custom_upload_input position-relative border-dashed-2">
+                    <input type="file" name="${thisData.name}" class="custom-upload-input-file" data-index="${dataset_index}" data-imgpreview="additional_Image_${dataset_index}"
+                        accept=".jpg, .webp, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*" onchange="addMoreImage(this, '${targetSection}')">
+
+                    <span class="delete_file_input delete_file_input_section btn btn-outline-danger btn-sm square-btn">
+                        <i class="tio-delete"></i>
+                    </span>
+
+                    <div class="img_area_with_preview position-absolute z-index-2 border-0">
+                        <img id="additional_Image_${dataset_index}" class="h-auto aspect-1 bg-white" src="img" onerror="this.classList.add('d-none')">
+                    </div>
+                    <div class="position-absolute h-100 top-0 w-100 d-flex align-content-center justify-content-center">
+                        <div class="d-flex flex-column justify-content-center align-items-center">
+                            <img src="http://192.168.1.180/e_dibo/public/assets/back-end/img/icons/product-upload-icon.svg" class="w-50">
+                            <h3 class="text-muted">Upload Image</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+
+        $(targetSection).append(newHtmlData);
+    }
+
+    $('.custom-upload-input-file').on('change', function () {
+        if (parseFloat($(this).prop('files').length) != 0) {
+            let $parentDiv = $(this).closest('div');
+            $parentDiv.find('.delete_file_input').fadeIn();
+        }
+    })
+
+    $(document).on('click', '.delete_file_input_section', function () {
+        $(this).closest('.col-sm-12').remove();
+        updateAdditionalImages();
+    });
+
+    updateAdditionalImages();
+
+    if ($('#color_switcher').prop('checked')) {
+        $('#stock_qty').prop('readonly', true);
+        $('#additional_Image_Section .col-md-4').addClass('col-lg-2');
+    } else {
+        $('#additional_Image_Section .col-md-4').removeClass('col-lg-2');
+        $('#stock_qty').prop('readonly', false);
+    }
+}
+
+function updateAdditionalImages() {
+    additionalImages = [];
+    $('.custom-upload-input-file').each(function (index, fileInput) {
+        let files = fileInput.files;
+        if (files.length !== 0) {
+            additionalImages.push(files[0]); // Push only the first file if multiple files are selected
+        }
+    });
+}
+
+    function handleMetaImageInputChange(event) {
+        const fileInput = event.target;
+        const previewImage = document.getElementById(fileInput.dataset.imgpreview);
+        if (fileInput.files && fileInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                previewImage.src = e.target.result;
+                previewImage.classList.remove('d-none');
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+        } else {
+            previewImage.classList.add('d-none');
+        }
+    }
+
+    // Add event listener to the file input for change event for meta image
+    const metaFileInput = document.getElementById('meta_image');
+    metaFileInput.addEventListener('change', handleMetaImageInputChange);
+
+    $(document).on('click', '.delete_file_input', function () {
+    let $parentDiv = $(this).parent().parent();
+    let imgPreviewId = $parentDiv.find('.custom-upload-input-file').data('imgpreview');
+    let colorIndex = imgPreviewId.split('_').pop();
+    additionalImages[colorIndex - 1] = undefined;
+    $parentDiv.remove();
+});
+
+    $('#sumbit_button').click(function () {
+        let name = $('#product_name').val();
+        let category_id = $('#category').val();
+        let sub_category_id = $('#subCategory').val();
+        let sub_sub_category_id = $('#subSubCategory').val()
+        let brand_id = $('#brand').val()
+        let product_type = $('#product_type').val()
+        let digital_product_type = $('#digital_product_type').val()
+        let code = $('#generate_number').val()
+        let unit = $('#unit').val()
+        let tag = $('#tag').val()
+        let purchase_price = $('#purchase_price').val()
+        let unit_price = $('#unit_price').val()
+        let minimum_order_qty = $('#min_order_qty').val()
+        let current_stock = $('#stock_qty').val()
+        let discount_type = $('#discount_type').val()
+        let discount = $('#discount_amount').val()
+        let tax = $('#tax_amount').val()
+        let tax_model = $('#tax_calculation').val()
+        let shipping_cost = $('#shipping_cost').val()
+        let multiply_qty = $('#shipping_cost_multiple').val()
+        let attributes = $('#choice_attributes').val()
+        let video_url = $('#video_link').val()
+        let meta_title = $('#meta_title').val()
+        let meta_description = $('#meta_description').val()
+        let formData = new FormData();
+
+        formData.append('name', $('#product_name').val());
+        var editorValue = CKEDITOR.instances.editor1.getData();
+        formData.append('details', editorValue);
+        formData.append('category_id', $('#category').val());
+        formData.append('sub_category_id', $('#subCategory').val());
+        formData.append('sub_sub_category_id', $('#subSubCategory').val());
+        formData.append('brand_id', $('#brand').val());
+        formData.append('product_type', $('#product_type').val());
+        formData.append('digital_product_type', $('#digital_product_type').val());
+        formData.append('code', $('#generate_number').val());
+        formData.append('unit', $('#unit').val());
+        formData.append('tag', $('#tag').val());
+        formData.append('purchase_price', $('#purchase_price').val());
+        formData.append('unit_price', $('#unit_price').val());
+        formData.append('minimum_order_qty', $('#min_order_qty').val());
+        formData.append('current_stock', $('#stock_qty').val());
+        formData.append('discount_type', $('#discount_type').val());
+        formData.append('discount', $('#discount_amount').val());
+        formData.append('tax', $('#tax_amount').val());
+        formData.append('tax_model', $('#tax_calculation').val());
+        formData.append('shipping_cost', $('#shipping_cost').val());
+        formData.append('multiply_qty', $('#shipping_cost_multiple').val());
+
+        let variations = [];
+        let selectedColorsvariations = $('#colors-selector').val();
+        selectedColorsvariations.forEach(function (color, index) {
+            let variation = {
+                type: color,
+                price: parseFloat($('input[name="price_' + color + '"]').val()),
+                sku: $('input[name="sku_' + color + '"]').val(),
+                qty: parseInt($('input[name="qty_' + color + '"]').val())
+            };
+            variations.push(variation);
+        });
+        formData.append('variation', JSON.stringify(variations));
+
+        let selectedColorsString = $('#colors-selector').val();
+        formData.append('colors', JSON.stringify(selectedColorsString));
+
+        formData.append('attributes', $('#choice_attributes').val());
+
+        // for (let i = 0; i < colorImages.length; i++) {
+        //     formData.append('color_image', colorImages[i]);
+        // }
+
+        for (let i = 0; i < colorImages.length; i++) {
+        formData.append('color_image', colorImages[i], `color_image_${i + 1}.jpg`);
+        }
+
+    //     colorImages.forEach(function (colorimage, index) {
+    //     if (colorimage) {
+    //         formData.append('color_image', colorimage);
+    //     }
+    //    });
+
+        formData.append('thumbnail', fileInput.files[0]);
+
+
+        for (let i = 0; i < additionalImages.length; i++) {
+            formData.append('images', additionalImages[i]);
+        }
+
+        // additionalImages.forEach(function (image, index) {
+        // if (image) {
+        //     formData.append('images', image);
+        // }
+        // });
+
+
+        formData.append('video_url', $('#video_link').val());
+        formData.append('meta_title', $('#meta_title').val());
+        formData.append('meta_description', $('#meta_description').val());
+        let meta_image_input = $('#meta_image')[0];
+        if (meta_image_input.files.length > 0) {
+            let meta_image = meta_image_input.files[0];
+            formData.append('meta_image', meta_image);
+        } else {
+            console.log("No file selected");
+        }
+
+        formData.forEach(function (value, key) {
+            // console.log(key, value);
+        });
+        //     fetch(`<%=url%>/product/addProduct`, {
+        //         method: "POST",
+        //         headers: {
+        //             "jwt_token": localStorage.getItem("token")
+        //         },
+        //         body: formData,
+        //     })
+        //         .then((response) => response.json())
+        //         .then((result) => {
+        //             console.log(result);
+        //         })
+        //         .catch((error) => {
+        //             console.error("Error fetching order details:", error);
+        //         });
+        // });
+        let myHeaders = {
+            "jwt_token": localStorage.getItem("token")
+        }
+        let userId = localStorage.getItem('adminId')
+        formData.append('user_id', userId)
+        const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: formData,
+            redirect: "follow"
+        };
+
+        fetch(`<%=url%>product/addProduct`, requestOptions)
+            .then((response) => response.text())
+            .then((result) => {
+                // console.log(result);
+                window.location.reload(); // Reload the page
+            })
+            .catch((error) => alert(error));
+    });
+
+
+
+
+
+
+
+
+    function updateTotalQuantity() {
+        let total = 0;
+        $('.qty-input').each(function () {
+            var qty = parseInt($(this).val()) || 0;
+            total += qty;
+        });
+        $('#stock_qty').val(total);
+    }
+
+    // Function to update the total quantity when quantity inputs are changed
+    function update_qty() {
+        updateTotalQuantity();
+    }
+
+    // Call updateTotalQuantity initially to calculate the initial total
+    updateTotalQuantity();
+</script>

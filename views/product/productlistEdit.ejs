@@ -1,0 +1,469 @@
+<%- include('../header', { pageTitle: 'Add New Seller' }) %>
+    <%- include('../sidebar') %>
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h4>Product Edit</h4>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label>Product Name</label>
+                                    <input class="form-control" id="product_name" type="text">
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <textarea name="editor1" id="editor1" class="form-control"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <select class="select" id="category">
+                                        <option value="" selected="" disabled="">Select main category</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Sub Category</label>
+                                    <select class="select" id="subCategory">
+                                        <option>Choose Sub Category</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Sub Sub Category</label>
+                                    <select class="select" id="subSubCategory">
+                                        <option>Choose Sub Category</option>
+                                        <option>Fruits</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Brand</label>
+                                    <select class="select" id="brand">
+                                        <option>Choose Brand</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 col-xl-3">
+                                <div class="form-group">
+                                    <label>Product type</label>
+                                    <select name="product_type" id="product_type" class="select" required="">
+                                        <option value="physical" selected="">Physical</option>
+                                        <option value="digital">Digital</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 col-xl-3" id="digital_product_type_show">
+                                <div class="form-group">
+                                    <label for="digital_product_type">Delivery type</label>
+                                    <span class="cursor-pointer" data-toggle="tooltip" title=""
+                                        data-original-title="For “Ready Product” deliveries  customers can pay &amp; instantly download pre-uploaded digital products. For “Ready After Sale” deliveries  customers pay first  then admin uploads the digital products that become available to customers for download">
+                                    </span>
+                                    <select name="digital_product_type" id="digital_product_type" class="select"
+                                        required="">
+                                        <option value="" selected="" disabled="">---Select---</option>
+                                        <option value="ready_after_sell">Ready After Sell</option>
+                                        <option value="ready_product">Ready Product</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label class="d-flex justify-content-between gap-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            Product SKU
+                                            <span class="cursor-pointer"
+                                                title="Create a unique product code by clicking on the “Generate Code” button">
+                                            </span>
+                                        </div>
+                                        <a class="cursor-pointer" style="color:#ff9f43;"
+                                            onclick="document.getElementById('generate_number').value = getRndInteger()">Generate
+                                            code
+                                        </a>
+                                    </label>
+                                    <input type="text" minlength="6" id="generate_number" name="code"
+                                        class="form-control" value="" placeholder="Code" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-lg-4 col-xl-3 physical_product_show">
+                                <div class="form-group">
+                                    <label>Unit</label>
+                                    <select class="select" id="unit" name="unit">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="d-flex align-items-center gap-2">
+                                        Search tags
+                                        <span class="cursor-pointer"
+                                            title="Add the product search tag for this product that customers can use to search quickly">
+                                        </span>
+                                    </label>
+                                    <div class="bootstrap-tagsinput"><span class="tag label label-primary"> Spoon &amp; Fork Set<span data-role="remove">  
+                                    </span>
+                                    </span> 
+                                    <input type="text" id="tag" style="height: 32px" placeholder=""></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Purchase Price (₹)</label>
+                                    <input id="purchase_price" type="text" placeholder="Purchase Price">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Unit Price (₹)</label>
+                                    <input id="unit_price" type="text" placeholder="Unit Price">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Minimum Order Qty</label>
+                                    <input id="min_order_qty" type="number" min="1" value="1" step="1">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Current Stock Qty</label>
+                                    <input id="stock_qty" type="number" min="0" value="0" step="1">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Discount Type</label>
+                                    <select class="select" id="discount_type">
+                                        <option value="Flat">Flat</option>
+                                        <option value="Percent">Percent</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Discount Amount (₹)</label>
+                                    <input id="discount_amount" type="number" min="0" value="0" step="0.01">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Tax Amount(%)</label>
+                                    <input id="tax_amount" type="number" min="0" value="0" step="0.01">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Tax Calculation</label>
+                                    <select class="select" id="tax_calculation">
+                                        <option value="include">Include with product</option>
+                                        <option value="exclude">Exclude with product</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Shipping Cost (₹)</label>
+                                    <input id="shipping_cost" type="number" min="0" value="0" step="1">
+                                </div>
+                            </div>
+                            <div class="col-md-6 ">
+                                <div class="form-group">
+                                    <div class="form-control d-flex align-items-center flex-wrap justify-content-between gap-2"
+                                        style="margin-top: 25px;">
+                                        <div class="d-flex gap-2">
+                                            <label>Shipping cost
+                                                multiply with quantity</label>
+                                            <span class="cursor-pointer"
+                                                title="If enabled  the shipping charge will increase with the product quantity">
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <label class="switcher">
+                                                <input type="checkbox" class="switcher_input"
+                                                    id="shipping_cost_multiple" name="multiplyQTY">
+                                                <span class="switcher_control"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card mt-3 rest-part physical_product_show" data-select2-id="305">
+                                <div class="card-header">
+                                    <div class="d-flex gap-2">
+                                        <i class="tio-user-big"></i>
+                                        <h4 class="mb-0">Product variation setup</h4>
+                                    </div>
+                                </div>
+                                <div class="card-body" data-select2-id="162">
+                                    <div class="row align-items-end" data-select2-id="161">
+                
+                            <div class="col-md-6">
+                                <div class="mb-3 d-flex align-items-center gap-2">
+                                    <label for="colors" class="title-color mb-0">Select colors :
+                                    </label>
+                                    <label class="switcher">
+                                        <input type="checkbox" class="switcher_input" id="color_switcher" value=""
+                                            name="colors_active">
+                                        <span class="switcher_control"></span>
+                                    </label>
+                                </div>
+                                <select
+                                    class="js-example-basic-multiple js-states js-example-responsive form-control color-var-select"
+                                    name="colors[]" multiple="multiple" id="colors-selector" disabled>
+                                    <% colors.map((v, i) => { %>
+                                        <option value="<%= v.name %>" ><%= v.name %></option>
+                                    <% }) %>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="choice_attributes" style="margin-top: 15px;" class="title-color">Select
+                                    attributes :
+                                </label>
+                                <select class="form-control" id="choice_attributes"></select>
+                            </div>
+                            <div class="col-md-12 mt-2 mb-2">
+                                <div class="row customer_choice_options mt-2" id="customer_choice_options">
+                                </div>
+                                <div class="form-group sku_combination" id="sku_combination"></div>
+                            </div>
+                            <div id="colorDiv" style="display: none;">
+                                Content to be displayed when a color is selected
+                            </div>
+                            <table class="table" id="selected-colors-table">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">
+                                            <label>SL</label>
+                                        </th>
+                                        <th class="text-center">
+                                            <label>Attribute Variation</label>
+                                        </th>
+                                        <th class="text-center">
+                                            <label>Variation Wise Price (₹)</label>
+                                        </th>
+                                        <th class="text-center">
+                                            <label>SKU</label>
+                                        </th>
+                                        <th class="text-center">
+                                            <label>Variation Wise Stock</label>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                    </div>
+                    </div>
+                    </div>
+                            
+                            <div class="mt-3 rest-part">
+                                <div class="row g-2">
+                                    <div class="col-md-3">
+                                        <div class="card h-100">
+                                            <div class="card-body">
+                                                <div class="form-group">
+                                                    <div
+                                                        class="d-flex align-items-center justify-content-between gap-2 mb-3">
+                                                        <div>
+                                                            <label for="name"
+                                                                class="title-color text-capitalize font-weight-bold mb-0">Product thumbnail</label>
+                                                            <span class="badge" style="color: aqua;">Ratio 1:1 (500 x
+                                                                500
+                                                                px)</span>
+                                                            <span class="input-label-secondary cursor-pointer"
+                                                                data-toggle="tooltip" title=""
+                                                                data-original-title="Add your product’s thumbnail in JPG, PNG or JPEG Format within 2MB">
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div>
+                                                        <div class="custom_upload_input">
+                                                            <input type="file" name="image" class="custom-upload-input-file" id="Product_img" data-imgpreview="pre_img_viewer" accept=".jpg, .webp, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
+                                                            <span class="delete_file_input btn btn-outline-danger btn-sm square-btn" style="display: none">
+                                                                <i class="tio-delete"></i>
+                                                            </span>
+                                                            <div class="img_area_with_preview position-absolute z-index-2">
+                                                                <img id="pre_img_viewer" class="h-auto aspect-1 bg-white d-none" src="img" onerror="this.classList.add('d-none')">
+                                                            </div>
+                                                            <div class="position-absolute h-100 top-0 w-100 d-flex align-content-center justify-content-center">
+                                                                <div class="d-flex flex-column justify-content-center align-items-center">
+                                                                    <h3 class="text-muted">Upload Image</h3>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <p class="text-muted mt-2">Image format : Jpg, png, jpeg, webp, <br> Image size : Max 2 MB </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- color wise image -->
+                                    <div class="color_image_column col-md-9 d-none">
+                                        <div class="card h-100">
+                                            <div class="card-body">
+                                                <div class="form-group">
+                                                    <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
+                                                        <div>
+                                                            <label for="name" class="title-color text-capitalize font-weight-bold mb-0">Colour wise product image</label>
+                                                            <span class="badge badge-soft-info">Ratio 1:1 (500 x 500 px)</span>
+                                                            <span class="input-label-secondary cursor-pointer" data-toggle="tooltip" title="Add color-wise product images here.">
+                                                                <img src="http://192.168.1.180/e_dibo/public/assets/back-end/img/info-circle.svg" alt="">
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <p class="text-muted">Must upload colour wise images first. Colour is shown in the image section top right. </p>
+                                                    <div id="color_wise_image" class="row g-2"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- End color wise image -->
+                                    <!--other image -->
+                                    <div class="additional_image_column col-md-9">
+                                        <div class="card h-100">
+                                            <div class="card-body">
+                                                <div class="d-flex align-items-center justify-content-between gap-2 mb-2">
+                                                    <div>
+                                                        <label for="name" class="title-color text-capitalize font-weight-bold mb-0">Upload additional image</label>
+                                                        <span class="badge badge-soft-info">Ratio 1:1 (500 x 500 px)</span>
+                                                        <span class="input-label-secondary cursor-pointer" data-toggle="tooltip" title="Upload any additional images for this product from here.">
+                                                            <img src="http://192.168.1.180/e_dibo/public/assets/back-end/img/info-circle.svg" alt="">
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <p class="text-muted">Upload additional product images</p>
+                                                <div id="dynamicimg"></div>
+                                                <div class="row g-2" id="additional_Image_Section">
+                                                    <div class="col-sm-12 col-md-4">
+                                                        <div class="custom_upload_input position-relative border-dashed-2">
+                                                            <input type="file" name="images[]" class="custom-upload-input-file" data-index="1" data-imgpreview="additional_Image_1" accept=".jpg, .png, .webp, .jpeg, .gif, .bmp, .tif, .tiff|image/*" onchange="addMoreImage(this, '#additional_Image_Section')">
+                                                            <span class="delete_file_input delete_file_input_section btn btn-outline-danger btn-sm square-btn" style="display: none">
+                                                                <i class="tio-delete"></i>
+                                                            </span>
+                                                            <div class="img_area_with_preview position-absolute z-index-2 border-0">
+                                                                <img id="additional_Image_1" class="h-auto aspect-1 bg-white" src="img" onerror="this.classList.add('d-none')">
+                                                            </div>
+                                                            <div class="position-absolute h-100 top-0 w-100 d-flex align-content-center justify-content-center">
+                                                                <div class="d-flex flex-column justify-content-center align-items-center">
+                                                                    <img src="http://192.168.1.180/e_dibo/public/assets/back-end/img/icons/product-upload-icon.svg" class="w-50">
+                                                                    <h3 class="text-muted">Upload Image</h3>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--End other image -->
+                                </div>
+                            </div>
+
+                            <div class="mt-2">
+                                <div class="mb-3">
+                                    <label class="title-color mb-0">Youtube video link</label>
+                                    <span class="text-info"> (Optional please provide embed link not direct
+                                        link.)</span>
+                                </div>
+                                <input type="text" name="video_link" id="video_link"
+                                    placeholder="Ex : https://www.youtube.com/embed/5R06LRdUCSE" class="form-control"
+                                    required="">
+                            </div>
+
+                            <div class="card mt-3 rest-part">
+                                <div class="card-header">
+                                    <div class="d-flex gap-2">
+                                        <i class="tio-user-big"></i>
+                                        <h4 class="mb-0">
+                                            Seo section
+                                            <span class="input-label-secondary cursor-pointer" data-toggle="tooltip" data-placement="right" title="" data-original-title="Add meta titles descriptions and images for products, This will help more people to find them on search engines and see the right details while sharing on other social platforms">
+                                                <img src="http://192.168.1.180/e_dibo/public/assets/back-end/img/info-circle.svg" alt="">
+                                            </span>
+                                        </h4>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label class="title-color">
+                                                    Meta Title
+                                                    <span class="input-label-secondary cursor-pointer" data-toggle="tooltip" data-placement="right" title="" data-original-title="Add the products title name taglines etc here This title will be seen on Search Engine Results Pages and while sharing the products link on social platforms [ Character Limit : 100 ]">
+                                                        <img src="http://192.168.1.180/e_dibo/public/assets/back-end/img/info-circle.svg" alt="">
+                                                    </span>
+                                                </label>
+                                                <input type="text" name="meta_title" placeholder="Meta Title" id="meta_title" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="title-color">
+                                                    Meta Description
+                                                    <span class="input-label-secondary cursor-pointer" data-toggle="tooltip" data-placement="right" title="" data-original-title="Write a short description of the InHouse shops product This description will be seen on Search Engine Results Pages and while sharing the products link on social platforms [ Character Limit : 100 ]">
+                                                        <img src="http://192.168.1.180/e_dibo/public/assets/back-end/img/info-circle.svg" alt="">
+                                                    </span>
+                                                </label>
+                                                <textarea rows="4" type="text" name="meta_description" id="meta_description" class="form-control"></textarea>
+                                            </div>
+                                        </div>
+                
+                                        <div class="col-md-4">
+                                            <div class="d-flex justify-content-center">
+                                                <div class="form-group w-100">
+                                                    <div class="d-flex align-items-center justify-content-between gap-2">
+                                                        <div>
+                                                            <label class="title-color" for="meta_Image">Meta Image
+                                                    </label>
+                                                            <span class="badge badge-soft-info">(Ratio 2:1)</span>
+                                                            <span class="input-label-secondary cursor-pointer" data-toggle="tooltip" title="Add Meta Image in JPG, PNG or JPEG Format within 2MB, Which will be shown in search engine results.">
+                                                                <img src="http://192.168.1.180/e_dibo/public/assets/back-end/img/info-circle.svg" alt="">
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div class="custom_upload_input">
+                                                            <input type="file" name="meta_image" class="custom-upload-input-file meta-img" id="meta_image" data-imgpreview="pre_meta_image_viewer" accept=".jpg, .webp, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
+                                                            <span class="delete_file_input btn btn-outline-danger btn-sm square-btn" style="display: none">
+                                                                <i class="tio-delete"></i>
+                                                            </span>
+                                                            <div class="img_area_with_preview position-absolute z-index-2">
+                                                                <img id="pre_meta_image_viewer" class="h-auto bg-white" src="img" onerror="this.classList.add('d-none')">
+                                                            </div>
+                                                            <div class="position-absolute h-100 top-0 w-100 d-flex align-content-center justify-content-center">
+                                                                <div class="d-flex flex-column justify-content-center align-items-center">
+                                                                    <img src="http://192.168.1.180/e_dibo/public/assets/back-end/img/icons/product-upload-icon.svg" class="w-50">
+                                                                    <h3 class="text-muted">Upload Image</h3>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <a href="javascript:void(0);" class="btn btn-submit me-2" id="sumbit_button">Submit</a>
+                                <a href="productlist.html" class="btn btn-cancel">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%- include('productEdit_script') %>
+            <%- include('../footer') %>

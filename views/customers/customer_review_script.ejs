@@ -1,0 +1,62 @@
+<script>
+ let tbody = document.createElement('tbody');
+            let data = <%- JSON.stringify(data) %>
+                    data.map((v, i) => {
+        
+                        tbody.innerHTML += `
+                        <tr class='${i}'>
+                            <td>${i + 1}</td>
+                            <td>${v.name}</td>
+                            <td>${v.name}</td>
+                            <td style="color:#00c9db">${v.rating}<i class="fa-solid fa-star"></i></td>
+                            <td>${v.comment}</td>
+                            <td>${v.created_at}</td>
+                            <td>
+                                <label class="switcher">
+                                    <input type="checkbox" class="switcher_input" 
+                                       name="status" data-bs-toggle="status" data-bs-target="#status" value="${v.status}" ${v.status === 1 ? 'checked' : ''}>
+                                     <span class="switcher_control"></span>
+                                </label>
+                            </td>
+                        </tr>`
+                    })
+            document.querySelector('#customer_review_table').appendChild(tbody);
+
+            const checkboxes = document.querySelectorAll('.switcher_input');
+
+    checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', function(e){
+        const isChecked = e.target.checked;
+        const modalId = e.target.getAttribute('data-bs-toggle');
+        
+        if (isChecked) {
+            // Open the modal
+            const modal = document.getElementById(modalId);
+            modal.classList.add('show');
+            modal.style.display = 'block'; // For Bootstrap 5
+            // Additional actions to handle when checkbox is checked
+        } else {
+            // Close the modal
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('show');
+            modal.style.display = 'none'; // For Bootstrap 5
+            // Additional actions to handle when checkbox is unchecked
+        }
+    });
+});
+
+const closeButtons = document.querySelectorAll('.modal .closefilter');
+closeButtons.forEach(closeButton => {
+    closeButton.addEventListener('click', function() {
+        // Find the parent modal of the clicked close button
+        const modal = this.closest('.modal');
+        
+        // Remove 'show' class from modal to close it
+        modal.classList.remove('show');
+        
+        // For Bootstrap 5, you might also want to set 'display' to 'none'
+        modal.style.display = 'none';
+    });
+});
+
+</script>

@@ -1,0 +1,181 @@
+<script>
+
+    let tbody = document.createElement('tbody');
+    let data = <%- JSON.stringify(data) %>
+        console.log(data)
+    data.map((v, i) => {
+
+        tbody.innerHTML += `
+                                <tr class='${i}'>
+                                    <td>
+                                        <label class="checkboxs">
+                                            <input type="checkbox">
+                                            <span class="checkmarks"></span>
+                                        </label>
+                                    </td>
+                                    <td class="productimgname">
+                                        <a href="javascript:void(0);" class="product-img">
+                                            <img src="assets/img/product/product1.jpg" alt="product">
+                                        </a>
+                                        <a href="javascript:void(0);">${v.full_name}</a>
+                                    </td>
+                                    <td>
+                                        <div class='d-flex flex-column'>
+                                            <a href='mailto:cableguy.in' class='mb-2'>${v.email}</a>
+                                            <a href='tel:8596898589'>${v.phone}</a>
+                                        </div>
+                                    </td>
+                                    <td>${v.orderCount}</td>
+                                    <td>
+                                        <label class="switcher">
+                                        <input type="checkbox" class="switcher_input" 
+                                             name="status" data-bs-toggle="status" data-bs-target="#status" value="${v.status}" ${v.status == 1 ? 'checked' : ''} data-id="${v.id}">
+                                        <span class="switcher_control"></span>
+                                    </label>
+                                    </td>
+                                    
+                                    <td>
+                                        <a class="me-3" href="/customer-view?id=${v.id}" id="${v.id}">
+                                            <img src="assets/img/icons/eye.svg" alt="img">
+                                        </a>
+                                        <a class="" href="javascript:void(0);" data-bs-target='#deleteCustomer' data-bs-modal="modal">
+                                            <img src="assets/img/icons/delete.svg" alt="img">
+                                        </a>
+                                    </td>
+                                    </tr>`
+
+
+
+    })
+    document.querySelector('#customer_table').appendChild(tbody);
+
+    // Status code start
+
+    // const checkboxes = document.querySelectorAll('.switcher_input');
+
+    const statusCheckboxes = document.querySelectorAll('.switcher_input[name="status"]');
+
+    statusCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function (e) {
+            const modalId = e.target.getAttribute('data-bs-toggle');
+            const modal = document.getElementById(modalId);
+            const modalBody = modal.querySelector('.modal-body');
+
+            if (e.target.checked) {
+                modalBody.innerHTML = `
+            <div class="d-flex flex-column align-items-center text-center gap-2 mb-2">
+                <div class="toggle-modal-img-box d-flex flex-column justify-content-center align-items-center mb-3 position-relative">
+                    <img class="status-icon" src="" alt="" width="30">
+                    <img id="toggle-status-image" alt="" src="assets/img/product/product-status-on.png">
+                </div>
+                <h5 class="modal-title" id="toggle-status-title">Want to Turn ON old product Status</h5>
+                <div class="text-center" id="toggle-status-message"><p>If enabled this product will be available on the website and customer app</p></div>
+            </div>`;
+            } else {
+                modalBody.innerHTML = `
+            <div class="d-flex flex-column align-items-center text-center gap-2 mb-2">
+                <div class="toggle-modal-img-box d-flex flex-column justify-content-center align-items-center mb-3 position-relative">
+                    <img class="status-icon" src="" alt="" width="30">
+                    <img id="toggle-status-image" alt="" src="assets/img/product/product-status-off.png">
+                </div>
+                <h5 class="modal-title" id="toggle-status-title">Want to Turn OFF old product Status</h5>
+                <div class="text-center" id="toggle-status-message"><p>If disabled this product will be hidden from the website and customer app</p></div>
+            </div>`;
+            }
+
+            modal.classList.add('show');
+            modal.style.display = 'block';
+            const submitButton = modal.querySelector('#switch_submit');
+            submitButton.addEventListener('click', function () {
+                const id = e.target.dataset.id;
+                if (id) {
+                    const status = e.target.checked ? 1 : 0;
+                    updateStatus(id, status);
+                } else {
+                    console.error('Checkbox ID not found');
+                }
+            });
+        });
+    });
+
+    const closeButtons = document.querySelectorAll('.modal .closefilter');
+    closeButtons.forEach(closeButton => {
+        closeButton.addEventListener('click', function () {
+            const modal = this.closest('.modal');
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+            window.location.reload();
+        });
+    });
+
+    function updateStatus(id, status) {
+        fetch(`<%= url %>customers/customerStatus?id=${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: status }) // Send status in request body
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data.data, "Api Call Successfully!")
+                window.location.reload()
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+    };
+
+
+
+        // document.getElementById('updateStaus').addEventListener('click', function(event) {
+        //     event.preventDefault(); 
+        //     // Make your API call here
+        //     // Example:
+        //     fetch(`<%= url %>customers/customerStatus?id=${id}`, {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             "jwt_token": localStorage.getItem("token"),
+        //         },
+        //         body: JSON.stringify({
+        //             status : isChecked ? 1 : 0
+        //         }),
+        //     })
+        //    .then(res => res.json())
+        //    .then((data) =>{
+        //     console.log(data.data, "Api Call Successfully!")
+        //     window.location.reload()
+        //    })
+        //     .catch(error => {
+        //         console.error('Error:', error);
+        //     });
+        // });
+
+   
+
+
+
+
+// Status code end
+    // const closeButtons = document.querySelectorAll('.modal .closefilter');
+    // closeButtons.forEach(closeButton => {
+    //     closeButton.addEventListener('click', function () {
+    //         // Find the parent modal of the clicked close button
+    //         const modal = this.closest('.modal');
+
+    //         // Remove 'show' class from modal to close it
+    //         modal.classList.remove('show');
+
+    //         // For Bootstrap 5, you might also want to set 'display' to 'none'
+    //         modal.style.display = 'none';
+    //     });
+    // });
+
+
+</script>

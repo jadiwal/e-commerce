@@ -1,0 +1,228 @@
+<%- include('../header', { pageTitle: 'Seller List' }) %>
+    <%- include('../sidebar') %>
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h2 class="h1 mb-0" style="display: flex;">
+                            <img src="http://192.168.1.180/e_dibo/public/assets/back-end/img/all-orders.png"
+                                class="mb-1 mr-1" alt="">
+                            <span class="page-header-title">
+                                Pending
+                            </span>
+                            Orders
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <form action="http://192.168.1.180/e_dibo/admin/orders/list/all" id="form-data" method="GET">
+                            <div class="row gx-2">
+                                <div class="col-12">
+                                    <h4 class="mb-3 text-capitalize">Filter order</h4>
+                                </div>
+
+                                <div class="col-sm-6 col-lg-4 col-xl-3">
+                                    <div class="form-group">
+                                        <label class="title-color text-capitalize" for="filter">Order type</label>
+                                        <select name="filter" id="filter" class="form-control">
+                                            <option value="all">All</option>
+                                            <option value="admin">In House Order</option>
+                                            <option value="seller">Seller Order</option>
+                                            <option value="POS">POS Order</option>
+                                            <option value="payment_method_type">Payment Method Type</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 col-lg-4 col-xl-3" id="seller_id_area">
+                                    <div class="form-group">
+                                        <label class="title-color" for="store">Payment By</label>
+                                        <select name="type" id="cash" class="form-control">
+                                            <option value="cash payment" selected="">cash payment</option>
+                                            <option value="Credit Card">Credit Card</option>
+                                            <option value="Debit Card">Debit Card</option>
+                                            <option value="Paytail">Paytail</option>
+                                            <option value="UPI">UPI</option>
+                                            <option value="Cashe">Cashe</option>
+                                            <option value="Kreditbee">Kreditbee</option>
+                                            <option value="Kotak EMI">Kotak EMI</option>
+                                            <option value="Bajaj Finserv">Bajaj Finserv</option>
+                                            <option value="HDFC Easy EMI">HDFC Easy EMI</option>
+                                            <option value="TVS Credit">TVS Credit</option>
+                                            <option value="Simpl">Simpl</option>
+                                            <option value="Lazypay">Lazypay</option>
+                                            <option value="Ring">Ring</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-lg-4 col-xl-3">
+                                    <div class="form-group">
+                                        <label class="title-color" for="customer">Customer</label>
+
+                                        <input type="hidden" id="customer_id" name="customer_id" value="all">
+                                        <select onchange="customer_id_value(this.value)" data-placeholder="                                                        All customer
+                                                    "
+                                            class="js-data-example-ajax form-control form-ellipsis select2-hidden-accessible"
+                                            data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                            <option value="all" data-select2-id="3">All customer</option>
+                                            <option value="" disabled="" data-select2-id="4">Select your option
+                                            </option>
+                                        </select><span
+                                            class="select2 select2-container select2-container--default form-control p-0"
+                                            dir="ltr" data-select2-id="2" style="width: 251.25px;"><span
+                                                class="selection"><span
+                                                    class="select2-selection select2-selection--single border-0"
+                                                    role="combobox" aria-haspopup="true" aria-expanded="false"
+                                                    tabindex="0" aria-disabled="false"
+                                                    aria-labelledby="select2-ct4n-container"><span
+                                                        class="select2-selection__rendered" id="select2-ct4n-container"
+                                                        role="textbox" aria-readonly="true"><span
+                                                            class="select2-selection__placeholder"> All customer
+                                                        </span></span><span class="select2-selection__arrow"
+                                                        role="presentation"><b
+                                                            role="presentation"></b></span></span></span><span
+                                                class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                    </div>
+                                </div>
+                                <!-- week, month, year -->
+
+                                <div class="col-sm-6 col-lg-4 col-xl-3">
+                                    <label class="title-color" for="date_type">Date type</label>
+                                    <div class="form-group">
+                                        <select class="form-control __form-control" name="date_type" id="date_type">
+                                            <option value="" selected="" disabled="">Select Date Type</option>
+                                            <option value="this_year">This Year</option>
+                                            <option value="this_month">This Month</option>
+                                            <option value="this_week">This Week</option>
+                                            <option value="custom_date">Custom Date</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-lg-4 col-xl-3" id="from_div" style="display: none;">
+                                    <label class="title-color" for="customer">Start date</label>
+                                    <div class="form-group">
+                                        <input type="date" name="from" value="" id="from_date" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-lg-4 col-xl-3" id="to_div" style="display: none;">
+                                    <label class="title-color" for="customer">End date</label>
+                                    <div class="form-group">
+                                        <input type="date" value="" name="to" id="to_date" class="form-control">
+                                    </div>
+                                </div>
+                                <!-- End week, month, year -->
+                                <div class="d-flex">
+                                    <div class="d-flex gap-3 justify-content-end">
+                                        <a href="http://192.168.1.180/e_dibo/admin/orders/list/all"
+                                            class="btn btn-secondary px-5">
+                                            Reset
+                                        </a>
+                                        <button type="submit" class="btn btn-submit" onclick="formUrlChange(this)"
+                                            data-action="http://192.168.1.180/e_dibo/admin/orders/list/all">
+                                            Show data
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-top">
+                            <div class="search-set">
+                                <div class="search-path">
+                                    <a class="btn btn-filter" id="filter_search">
+                                        <img src="assets/img/icons/filter.svg" alt="img">
+                                        <span><img src="assets/img/icons/closes.svg" alt="img"></span>
+                                    </a>
+                                </div>
+                                <div class="search-input">
+                                    <a class="btn btn-searchset"><img src="assets/img/icons/search-white.svg"
+                                            alt="img"></a>
+                                </div>
+                            </div>
+                            <div class="wordset">
+                                <ul>
+                                    <li>
+                                        <a data-bs-toggle="tooltip" data-bs-placement="top" title="pdf"><img
+                                                src="assets/img/icons/pdf.svg" alt="img"></a>
+                                    </li>
+                                    <li>
+                                        <a data-bs-toggle="tooltip" data-bs-placement="top" title="excel"><img
+                                                src="assets/img/icons/excel.svg" alt="img"></a>
+                                    </li>
+                                    <li>
+                                        <a data-bs-toggle="tooltip" data-bs-placement="top" title="print"><img
+                                                src="assets/img/icons/printer.svg" alt="img"></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="card" id="filter_inputs">
+                            <div class="card-body pb-0">
+                                <div class="row">
+                                    <div class="col-lg-3 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <input type="text" placeholder="Enter Name">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <input type="text" placeholder="Enter Reference No">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <select class="select">
+                                                <option>Completed</option>
+                                                <option>Paid</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-sm-6 col-12">
+                                        <div class="form-group">
+                                            <a class="btn btn-filters ms-auto"><img
+                                                    src="assets/img/icons/search-whites.svg" alt="img"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table  datanew" id="orderTable">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <label class="checkboxs">
+                                                <input type="checkbox" id="select-all">
+                                                <span class="checkmarks"></span>
+                                            </label>
+                                        </th>
+                                        <th>SL</th>
+                                        <th>Order ID</th>
+                                        <th>Order Date</th>
+                                        <th>Customer Info</th>
+                                        <th>Store</th>
+                                        <th>Total Amount</th>
+                                        <th>Order Status</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="orderTbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <%- include('saleslist_script_pending') %>
+            <%- include('../footer') %>

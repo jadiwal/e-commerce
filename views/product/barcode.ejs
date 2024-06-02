@@ -1,0 +1,71 @@
+<%- include('../header', { pageTitle: 'Generate Barcode' }) %>
+    <%- include('../sidebar') %>
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h4>Generate Barcode</h4>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="p-4">
+                        <div class="table-responsive">
+                            <table style="text-align: left;"
+                                class="table table-hover table-borderless table-thead-bordered table-nowrap table-align-middle card-table w-100">
+                                <thead class="thead-light thead-50 text-capitalize">
+                                    <tr>
+                                        <th>Code</th>
+                                        <th>Name</th>
+                                        <th>Quantity</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% data.map((v,i) =>{ %>
+                                        <tr>
+                                            <th>
+                                                <span>
+                                                   <%= v.code %>
+                                                </span>
+    
+                                            </th>
+                                            <th><%= v.name %></th>
+                                            <th>
+                                                <input id="limit" class="form-control" type="number" name="limit" min="1"
+                                                    value="4">
+                                                <span class="text-danger mt-1 d-block">Maximum quantity 217</span>
+                                            </th>
+    
+                                            <th>
+                                                <div class="d-flex justify-content-center gap-2">
+                                                    <button class="btn btn-outline-info" type="submit" id="barcodeGen">Generate
+                                                        barcode</button>
+                                                    <a href="#"
+                                                        class="btn btn-outline-danger" id="resetBarcode">Reset</a>
+                                                    <button type="button" id="print_bar"
+                                                        class="btn btn-outline--primary ">Print</button>
+                                                </div>
+                                            </th>
+    
+                                        </tr>
+                                   <% }) %>
+                                   
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div id="printarea" class="show-div pb-5">
+                    <div class="barcodea4 d-flex" id="barcode_parent">
+                       
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%- include('barcode_script') %>
+            <%- include('../footer') %>

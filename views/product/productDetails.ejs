@@ -1,0 +1,259 @@
+<%- include('../header', { pageTitle: 'Product Details' }) %>
+    <%- include('../sidebar') %>
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h4>Product Details</h4>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap flex-lg-nowrap gap-3 justify-content-between">
+                            <div class="media flex-wrap flex-sm-nowrap gap-3 d-flex">
+                                <a class="aspect-1 float-left overflow-hidden"
+                                    href="<%= url %><%= data[0].thumbnail %>"
+                                    data-lightbox="mygallery">
+                                    <img class="avatar avatar-170 rounded-0"
+                                        onerror="this.src='http://192.168.1.180/e_dibo/public/assets/front-end/img/image-place-holder.png'"
+                                        src="<%= url %><%= data[0].thumbnail %>"
+                                        alt="Image Description">
+                                </a>
+                                <div class="d-block">
+                                    <div class="d-flex flex-wrap flex-sm-nowrap align-items-start gap-2 mb-2 min-h-50" id="dynamic_images">
+
+                                        <!-- <a class="aspect-1 float-left overflow-hidden"
+                                            href="<%= url %><%= JSON.parse(data[0].images)[0] %>"
+                                            data-lightbox="mygallery">
+
+                                            <img width="50"
+                                                onerror="this.src='http://192.168.1.180/e_dibo/public/assets/front-end/img/image-place-holder.png'"
+                                                src="<%= url %><%= JSON.parse(data[0].images)[0] %>"
+                                                alt="Product image">
+                                        </a> -->
+                                        <!-- <a class="aspect-1 float-left overflow-hidden"
+                                            href="<%= url %><%= JSON.parse(data[0].images)[1] %>"
+                                            data-lightbox="mygallery">
+
+                                            <img width="50"
+                                                onerror="this.src='http://192.168.1.180/e_dibo/public/assets/front-end/img/image-place-holder.png'"
+                                                src="<%= url %><%= JSON.parse(data[0].images)[1] %>"
+                                                alt="Product image">
+                                        </a> -->
+
+                                    </div>
+
+                                    <div class="d-block">
+                                        <div class="d-flex">
+                                            <h2 class="mb-2 pb-1 text-gulf-blue"><%= data[0].name %></h2>
+                                            <a class="btn btn-outline--primary btn-sm square-btn mx-2 w-auto h-25"
+                                                title="Edit" href="http://192.168.1.180/e_dibo/admin/product/edit/49">
+                                                <i class="tio-edit"></i>
+                                            </a>
+                                        </div>
+                                        <div class="d-flex gap-3 flex-wrap mb-3 lh-1">
+                                            <a href="#" class="text-dark"><%= data[0].order_count %> Orders</a>
+                                            <span class="border-left"></span>
+                                            <div
+                                                class="review-hover position-relative cursor-pointer d-flex gap-2 align-items-center">
+                                                <i class="tio-star"></i>
+                                                <span>0</span>
+
+                                                <div class="review-details-popup">
+                                                    <h6 class="mb-2">Rating</h6>
+                                                    <div class="">
+                                                        <ul class="list-unstyled list-unstyled-py-2 mb-0">
+                                                            <!-- Review Ratings -->
+                                                            <li class="d-flex align-items-center font-size-sm">
+                                                                <span class="mr-3">5 Star</span>
+                                                                <div class="progress flex-grow-1">
+                                                                    <div class="progress-bar" role="progressbar"
+                                                                        style="width: 0%;" aria-valuenow="0"
+                                                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                                                </div>
+                                                                <span class="ml-3">0</span>
+                                                            </li>
+                                                            <!-- End Review Ratings -->
+
+                                                            <!-- Review Ratings -->
+                                                            <li class="d-flex align-items-center font-size-sm">
+                                                                <span class="mr-3">4 Star</span>
+                                                                <div class="progress flex-grow-1">
+                                                                    <div class="progress-bar" role="progressbar"
+                                                                        style="width: 0%;" aria-valuenow="0"
+                                                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                                                </div>
+                                                                <span class="ml-3">0</span>
+                                                            </li>
+                                                            <!-- End Review Ratings -->
+
+                                                            <!-- Review Ratings -->
+                                                            <li class="d-flex align-items-center font-size-sm">
+                                                                <span class="mr-3">3 Star</span>
+                                                                <div class="progress flex-grow-1">
+                                                                    <div class="progress-bar" role="progressbar"
+                                                                        style="width: 0%;" aria-valuenow="0"
+                                                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                                                </div>
+                                                                <span class="ml-3">0</span>
+                                                            </li>
+                                                            <!-- End Review Ratings -->
+
+                                                            <!-- Review Ratings -->
+                                                            <li class="d-flex align-items-center font-size-sm">
+                                                                <span class="mr-3">2 Star</span>
+                                                                <div class="progress flex-grow-1">
+                                                                    <div class="progress-bar" role="progressbar"
+                                                                        style="width: 0%;" aria-valuenow="0"
+                                                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                                                </div>
+                                                                <span class="ml-3">0</span>
+                                                            </li>
+                                                            <!-- End Review Ratings -->
+
+                                                            <!-- Review Ratings -->
+                                                            <li class="d-flex align-items-center font-size-sm">
+                                                                <span class="mr-3">1 Star</span>
+                                                                <div class="progress flex-grow-1">
+                                                                    <div class="progress-bar" role="progressbar"
+                                                                        style="width: 0%;" aria-valuenow="0"
+                                                                        aria-valuemin="0" aria-valuemax="100"></div>
+                                                                </div>
+                                                                <span class="ml-3">0</span>
+                                                            </li>
+                                                            <!-- End Review Ratings -->
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <span class="border-left"></span>
+                                            <a href="javascript:" class="text-dark">0 Ratings</a>
+                                            <span class="border-left"></span>
+                                            <a href="javascript:" class="text-dark">0 Reviews</a>
+                                        </div>
+
+                                        <a href="http://192.168.1.180/e_dibo/product/shhhh-53cvVR"
+                                            class="btn btn-outline--primary mr-1" target="_blank">
+                                            <i class="tio-globe"></i>
+                                            View live
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <hr>
+
+                        <div class="d-flex gap-3 flex-wrap">
+                            <div class="border p-3 w-170">
+                                <div class="d-flex flex-column mb-1">
+                                    <h6 class="font-weight-normal">Total sold :</h6>
+                                    <h3 class="text-primary fs-18"><%= data[0].minimum_order_qty %></h3>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <h6 class="font-weight-normal">Total sold amount :</h6>
+                                    <h3 class="text-primary fs-18">₹<%= data[0].purchase_price %></h3>
+                                </div>
+                            </div>
+
+                            <div class="row gy-3 flex-grow-1">
+                                <div class="col-sm-6 col-xl-4">
+                                    <h4 class="mb-3">General information</h4>
+
+                                    <div class="pair-list">
+                                        <div>
+                                            <span class="key text-nowrap">Brand</span>
+                                            <span>:</span>
+                                            <span class="value">
+                                                <%= data[0].brand_name %>
+                                            </span>
+                                        </div>
+
+                                        <div>
+                                            <span class="key text-nowrap">Category</span>
+                                            <span>:</span>
+                                            <span class="value">
+                                             <%= data[0].category_name %>
+                                            </span>
+                                        </div>
+
+                                        <div>
+                                            <span class="key text-nowrap">Product type</span>
+                                            <span>:</span>
+                                            <span class="value"><%= data[0].product_type %></span>
+                                        </div>
+                                        <div>
+                                            <span class="key text-nowrap">Current Stock</span>
+                                            <span>:</span>
+                                            <span class="value"><%= data[0].current_stock %></span>
+                                        </div>
+                                        <div>
+                                            <span class="key text-nowrap">SKU</span>
+                                            <span>:</span>
+                                            <span class="value"><%= data[0].code %></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-xl-4">
+                                    <h4 class="mb-3">Price information</h4>
+
+                                    <div class="pair-list">
+                                        <div>
+                                            <span class="key text-nowrap">Purchase price</span>
+                                            <span>:</span>
+                                            <span class="value">₹<%= data[0].purchase_price %></span>
+                                        </div>
+
+                                        <div>
+                                            <span class="key text-nowrap">Unit price</span>
+                                            <span>:</span>
+                                            <span class="value">₹<%= data[0].unit_price %></span>
+                                        </div>
+
+                                        <div>
+                                            <span class="key text-nowrap">Tax</span>
+                                            <span>:</span>
+                                            <span class="value"><%= data[0].tax %>% (<%= data[0].tax_model %>)</span>
+                                        </div>
+                                        <div>
+                                            <span class="key text-nowrap">Shipping cost</span>
+                                            <span>:</span>
+                                            <span class="value">
+                                                ₹<%= data[0].shipping_cost %>
+                                                (Multiply with quantity)
+
+                                                <span>
+                                                </span></span>
+                                        </div>
+                                        <div>
+                                            <span class="key text-nowrap">Discount</span>
+                                            <span>:</span>
+                                            <span class="value"><%= data[0].discount %></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-xl-4">
+                                    <h4 class="mb-3">Available variations</h4>
+
+                                    <div class="pair-list">
+
+                                        <div>
+                                            <span class="key text-nowrap">Color</span>
+                                            <span>:</span>
+                                            <span class="value">
+                                                <%= data[0].variations %>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+        <%- include('productDetails_script') %>
+        <%- include('../footer') %>

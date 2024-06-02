@@ -1,0 +1,359 @@
+<script>
+    let tbody = document.createElement('tbody');
+    let productListData = <%- JSON.stringify(limitedStockData) %>
+        // console.log(productListData, "main")
+    productListData.map((item, index) => {
+        tbody.innerHTML += `<tr class=${index}>
+                                <td>${index + 1}</td>
+                                <td>
+                                    <a href="#" style="display:flex;width:50px" class="align-items-center">
+                                        <span>${item.name}</span>
+                                    </a>
+                                </td>
+                                <td>${item.purchase_price}</td>
+                                <td>${item.unit_price}</td>
+                                <td class='category-stock-img'>
+                                    ${item.current_stock} 
+                                    <i class="fa-solid fa-plus" data-bs-toggle="modal" data-bs-target="#stockModal" data-item-id=${item.id}></i>
+                                </td>
+                                <td>
+                                    <label class="switcher">
+                                        <input type="checkbox" class="switcher_input" 
+                                             name="status" data-bs-toggle="status" data-bs-target="#status" value="${item.status}" ${item.status === 1 ? 'checked' : ''} data-id="${item.id}" >
+                                        <span class="switcher_control"></span>
+                                    </label>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/barcode?id=${item.id}" class="edit-pencil-btn">
+                                        <i class="fa-solid fa-barcode me-2"  style="font-size: x-large;"></i>
+                                    </a>
+                                    <a  href="/productDetails?id=${item.id}">
+                                        <img src="assets/img/icons/eye1.svg" class="me-2" alt="img">
+                                    </a>
+                                    <a  href="/productlistEdit?id=${item.id}" class="edit-pencil-btn">
+                                        <img src="assets/img/icons/edit.svg" class="me-2" alt="img">
+                                    </a>
+
+                                    <a class="deleteBTN" id='${item.id}' href="javascript:void(0);"" data-bs-toggle="modal" data-bs-target="#proDelete">
+                                        <img src="assets/img/icons/delete.svg" alt="img">
+                                    </a>
+                                </td>
+                            </tr>
+                            `
+    })
+    document.querySelector('#productTable').appendChild(tbody);
+    // Delete Logic Start
+    let deleteBtn = document.querySelectorAll('.deleteBTN')
+    // console.log(deleteBtn)
+
+    deleteBtn.forEach((btn) => {
+        // console.log(btn)
+        btn.addEventListener('click', function (e) {
+            // console.log(e.target.parentNode.id)
+            let modalDeleteBtn = document.querySelector('#deletePro')
+            let itemId = e.target.parentNode.id;
+            let is_active = 0;
+
+            modalDeleteBtn.addEventListener('click', function () {
+                // console.log("eje")
+                fetch(`<%= url %>product/productDelete?id=${itemId}`, {
+                    method: "POST",
+                    headers: {
+                        "jwt_token": localStorage.getItem("token"),
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ is_active: is_active })
+                })
+                    .then((response) => response.json())
+                    .then((result) => {
+                        // console.log(result);
+                        // window.location.href = '<%=url %>addcategory'
+                        location.reload();
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching order details:", error);
+                    });
+            })
+        })
+    })
+    // Delete Logic End
+    $(document).ready(function () {
+        // Event listener to handle modal show event
+        $('#stockModal').on('show.bs.modal', function (event) {
+            var icon = $(event.relatedTarget); // Icon that triggered the modal
+            var itemId = icon.data('item-id'); // Extract ID from data-item-id attribute
+            // Assuming you want to do something with the ID, for example, updating the modal content
+            updateModalContent(itemId);
+            UpdateStockData(itemId)
+            // console.log(itemId)
+            $('#stock_table tbody').remove();
+        });
+        function updateModalContent(itemId) {
+
+            // Here you can perform actions based on the item ID, for example:
+            // Fetch data related to the item ID and update the modal content
+            fetch(`<%=url%>product/limitedStockDataByID?id=${itemId}`, {
+                method: 'GET',
+            })
+                .then(res => res.json())
+                .then((result) => {
+
+                    let data = result.data
+                    // console.log(data)
+                    // console.log(data[0].current_stock, "cs")
+                    let variationData = JSON.parse(data[0].variation)
+                    // console.log(variationData, "variavtion")
+
+                    // document.querySelector('#stock_table').removeChild('tbody');
+                    let tbody = document.createElement('tbody');
+
+                    if (variationData.length > 0) {
+                        document.querySelector('#stock_table').style.display = 'block'
+                        variationData.map((v, i) => {
+                            tbody.innerHTML += `<tr>
+                                                <td class="text-center">
+                                                    1
+                                                </td>
+                                                <td>
+                                                    <label for="" class="control-label type">${v.type}</label>
+                                                    <input value="Amethyst" name="type[]" class="d-none">
+                                                </td>
+                                                <td>
+                                                   
+                                                    <input type="text" name="price" value="${v.price}" min="0" step="0.01" class="form-control price" required="" placeholder="Ex: 535">
+                                                </td>
+                                                <td>
+                                               
+                                                    <input type="text" name="sku_Amethyst" value="${v.sku}" class="form-control sku" placeholder="Ex: MCU47V593M">
+                                                </td>
+                                                <td>
+                                                    <input type="number" onkeyup="update_qty()" name="qty_Amethyst" value="${v.qty}"  class="form-control qty-input" placeholder="Ex: 5" required="">
+                                                </td>
+                                            </tr>`
+                        })
+                        // console.log(tbody)
+                        document.querySelector('#stock_table').appendChild(tbody);
+                        let q = 0;
+
+                        for (let i = 0; i < variationData.length; i++) {
+                            q += variationData[i].qty;
+                        }
+
+
+                        $('#stock_table').append(tbody);
+                        // q = variationData.reduce((acc, curr) => acc + curr.qty, 0);
+                        $('#totalQuantity').val(q).prop('readonly', true);
+                    } else {
+                        $('#stock_table').css('display', 'none');
+                        $('#totalQuantity').val(data[0].current_stock).prop('readonly', false);
+                    }
+
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+
+
+
+
+        // Function to update modal content based on the item ID
+     
+
+
+
+
+        let proID = ''
+        // Stock update Start
+        let stockUpdate = document.querySelector('#stockUpdate');
+        let proUpdateModal = new bootstrap.Modal(document.getElementById('proUpdate'));
+        let stockModal = new bootstrap.Modal(document.getElementById('stockModal'));
+        stockUpdate.addEventListener("click", function () {
+            let variationFinal = [];
+            let typeC = [];
+            let variationP = [];
+            let skuC = [];
+            let qt = [];
+            let totalQty = 0;
+
+            let qtyinput = document.querySelectorAll('.qty-input');
+            let type = document.querySelectorAll('.type');
+            let price = document.querySelectorAll('.price');
+            let sku = document.querySelectorAll('.sku');
+            let q = document.querySelectorAll('.qty-input');
+
+            // Collecting values from arrays
+            qtyinput.forEach((v) => qt.push(v.value));
+            type.forEach((v) => typeC.push(v.innerText));
+            price.forEach((v) => variationP.push(v.value));
+            sku.forEach((v) => skuC.push(v.value));
+
+            // Creating array of objects
+            for (let i = 0; i < typeC.length; i++) {
+                let obj = {
+                    type: typeC[i],
+                    price: variationP[i],
+                    sku: skuC[i],
+                    qty: qt[i]
+                };
+                variationFinal.push(obj);
+            }
+
+            // console.log(variationFinal);
+
+
+            q.forEach((v) => {
+                totalQty += parseInt(v.value)
+            })
+            // console.log(totalQty)
+
+           
+            fetch(`<%= url %>product/limitedStockDataUpdate?id=${proID}`,{
+                    method: "POST",
+                    headers: {
+                        "jwt_token": localStorage.getItem("token"),
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({variation: variationFinal, current_stock: totalQty })
+                })
+                .then(res => res.json())
+                .then((data) =>{
+                    console.log("Data Update SuccessFully!")
+                    stockModal.hide()
+                    proUpdateModal.show();
+                })
+                .catch((err) =>{
+                    console.log("Error Occured " + err)
+                })
+        });
+       
+        function UpdateStockData(itemId){
+                // console.log(itemId, "item")
+                proID = itemId
+            }
+
+        // Stock update End
+    });
+
+
+
+    // Function to update total quantity
+    function updateTotalQuantity() {
+        let total = 0;
+        $('.qty-input').each(function () {
+            console.log($(this).val())
+            let qty = parseInt($(this).val());
+            total += qty;
+
+        });
+        $('#totalQuantity').val(total);
+
+    }
+
+    // Function to update the total quantity when quantity inputs are changed
+    function update_qty() {
+        // $('#stock_table tbody').empty();
+        updateTotalQuantity();
+    }
+
+    // Call updateTotalQuantity initially to calculate the initial total
+    $(document).ready(function(){
+
+        updateTotalQuantity();
+    })
+
+    // Add an event listener for modal close event
+    // Add an event listener for modal close event
+    $('#stockModal').on('hidden.bs.modal', function () {
+        // Set the total quantity value to 0
+        // $('#totalQuantity').val(0);
+
+        // Empty the tbody element to remove all its child elements
+        $('#stock_table tbody').empty();
+
+        // Remove the tbody element itself
+        $('#stock_table tbody').remove();
+    });
+
+
+
+    // Active Status Modal Start
+    const statusCheckboxes = document.querySelectorAll('.switcher_input[name="status"]');
+    statusCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function (e) {
+            const modalId = e.target.getAttribute('data-bs-toggle');
+            const modal = document.getElementById(modalId);
+            const modalBody = modal.querySelector('.modal-body');
+
+            if (e.target.checked) {
+                modalBody.innerHTML = `
+            <div class="d-flex flex-column align-items-center text-center gap-2 mb-2">
+                <div class="toggle-modal-img-box d-flex flex-column justify-content-center align-items-center mb-3 position-relative">
+                    <img class="status-icon" src="" alt="" width="30">
+                    <img id="toggle-status-image" alt="" src="assets/img/product/product-status-on.png">
+                </div>
+                <h5 class="modal-title" id="toggle-status-title">Want to Turn ON Product Status</h5>
+                <div class="text-center" id="toggle-status-message"><p>If enabled this product will be available on the website and customer app</p></div>
+            </div>`;
+            } else {
+                modalBody.innerHTML = `
+            <div class="d-flex flex-column align-items-center text-center gap-2 mb-2">
+                <div class="toggle-modal-img-box d-flex flex-column justify-content-center align-items-center mb-3 position-relative">
+                    <img class="status-icon" src="" alt="" width="30">
+                    <img id="toggle-status-image" alt="" src="assets/img/product/product-status-off.png">
+                </div>
+                <h5 class="modal-title" id="toggle-status-title">Want to Turn OFF Product Status</h5>
+                <div class="text-center" id="toggle-status-message"><p>If disabled this product will be hidden from the website and customer app</p></div>
+            </div>`;
+            }
+
+            modal.classList.add('show');
+            modal.style.display = 'block';
+            const submitButton = modal.querySelector('#switch_submit');
+            submitButton.addEventListener('click', function () {
+                const id = e.target.dataset.id;
+                if (id) {
+                    const status = e.target.checked ? 1 : 0;
+                    updateStatus(id, status);
+                } else {
+                    console.error('Checkbox ID not found');
+                }
+            });
+        });
+    });
+
+    const closeButtons = document.querySelectorAll('.modal .closefilter');
+    closeButtons.forEach(closeButton => {
+        closeButton.addEventListener('click', function () {
+            const modal = this.closest('.modal');
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+            window.location.reload();
+        });
+    });
+
+    function updateStatus(id, status) {
+        fetch(`<%= url %>product/activeStatusUpdate?id=${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: status }) // Send status in request body
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // console.log(data);
+                location.reload()
+                // You can add further handling here if needed
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+    };
+    // Active Status Modal End
+</script>

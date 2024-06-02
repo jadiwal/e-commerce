@@ -1,0 +1,120 @@
+<%- include('../header', { pageTitle: 'Add New Seller' }) %>
+    <%- include('../sidebar') %>
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h4>Customers List</h4>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-top">
+                            <div class="search-set">
+                                <div class="search-path">
+                                    <a class="btn btn-filter" id="filter_search">
+                                        <img src="assets/img/icons/filter.svg" alt="img">
+                                        <span><img src="assets/img/icons/closes.svg" alt="img"></span>
+                                    </a>
+                                </div>
+                                <div class="search-input">
+                                    <a class="btn btn-searchset"><img src="assets/img/icons/search-white.svg"
+                                            alt="img"></a>
+                                </div>
+                            </div>
+                            <div class="wordset">
+                                <ul>
+                                    <li>
+                                        <a data-bs-toggle="tooltip" data-bs-placement="top" title="pdf"><img
+                                                src="assets/img/icons/pdf.svg" alt="img"></a>
+                                    </li>
+                                    <li>
+                                        <a data-bs-toggle="tooltip" data-bs-placement="top" title="excel"><img
+                                                src="assets/img/icons/excel.svg" alt="img"></a>
+                                    </li>
+                                    <li>
+                                        <a data-bs-toggle="tooltip" data-bs-placement="top" title="print"><img
+                                                src="assets/img/icons/printer.svg" alt="img"></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table datanew" id="customer_table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <label class="checkboxs">
+                                                <input type="checkbox" id="select-all">
+                                                <span class="checkmarks"></span>
+                                            </label>
+                                        </th>
+                                        <th>Customer Name</th>
+                                        <th>Customer Info</th>
+                                        <th>Total Order </th>
+                                        <th>Block/Unblock</th>
+                                        <th>Action</th>
+
+                                    </tr>
+                                </thead>
+                                <!-- <tbody id="tbody"> 
+                            </tbody> -->
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- Status Modal Start -->
+            <div class="modal fade" id="status" tabindex="-1" aria-labelledby="status" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"></h5>
+                            <button type="button" class="close closefilter" data-bs-dismiss="modal"
+                                aria-label="Close"><span aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body"></div>
+                        <div class="modal-footer" id="modal_footer_button">
+                            <button type="submit" class="btn btn-submit" id="switch_submit">Submit</button>
+                            <button type="button" class="btn btn-cancel closefilter"
+                                data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Status Modal End -->
+
+            <!-- Delete Modal Start -->
+            <div class="modal fade" id="deleteCustomer" tabindex="-1" aria-labelledby="deleteCustomer" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered delete-modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Warning !</h5>
+                            <button type="button" id="closeModalBtn" class="close" data-bs-dismiss="modal"
+                                aria-label="Close"><span aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="delete-header swal2-header">
+                                <h2 class="swal2-title">Are you sure?</h2>
+                            </div>
+                            <div class="delete-content swal2-content">
+                                <div id="">You won't be able to revert this!</div>
+                            </div>
+                            <div class="delete-actions swal2-actions">
+                                <button type="button" class="btn btn-primary" id="updateStaus">Yes, Delete it!</button>
+                                <!-- <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Delete Modal End -->
+
+        </div>
+            <%- include('customer_list_script') %>
+                <%- include('../footer') %>

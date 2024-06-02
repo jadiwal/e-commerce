@@ -1,0 +1,86 @@
+<%- include('../header', { pageTitle: 'Seller List' }) %>
+    <%- include('../sidebar') %>
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h4>Category Update</h4>
+                        <!-- <h6>Edit a product Category</h6> -->
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Category Name</label>
+                                    <input type="text" class="form-control" name="name" id="categoryname">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label>Priority</label>
+                                    <select id="categorycode" class="select" name="priority">
+                                    <option value="">Select Priority</option>
+                                    <option value="0">0</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label>Product Image</label>
+                                    <div class="text-center">
+                                       
+                                        <div class="image-uploads">
+                                            <img  src="/public/assets/img/placeholder_img.png" id="imagePreview" class="border radius-10 ratio-4:1 form-control mb-3">
+                                            <input type="file" class="form-control" id="productImage" onchange="previewImage(event)">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mt-5 form-btn">
+                                <div class="form-group mt-5">
+                                    <div class="d-flex justify-content-end gap-3">
+                                        <button type="reset" id="reset" class="btn btn-cancel">Reset</button>
+                                        <button type="submit" id="sumbit_button" class="btn btn-submit">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        </div>
+        <%- include('categorylistedit_script') %>
+            <%- include('../footer') %>
+
+                <!-- <script src="assets/js/jquery-3.6.0.min.js"></script>
+
+<script src="assets/js/feather.min.js"></script>
+
+<script src="assets/js/jquery.slimscroll.min.js"></script>
+
+<script src="assets/js/jquery.dataTables.min.js"></script>
+<script src="assets/js/dataTables.bootstrap4.min.js"></script>
+
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+
+<script src="assets/plugins/select2/js/select2.min.js"></script>
+
+<script src="assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+<script src="assets/plugins/sweetalert/sweetalerts.min.js"></script>
+
+<script src="assets/js/script.js"></script> -->

@@ -1,0 +1,276 @@
+<script>
+    let tbody = document.createElement('tbody');
+    let data = <%- JSON.stringify(data) %>
+        data.map((item, index) => {
+            tbody.innerHTML += `<tr class=${index}>
+                                <td>${item.id}</td>
+                                <td><img src="${item.icon}"></td>
+                                <td>${item.name}</td>
+                                <td>${item.priority}</td>
+                                <td>
+                                    <label class="switcher">
+                                        <input type="checkbox" class="switcher_input" 
+                                             name="status" data-bs-toggle="status" data-bs-target="#status" value="${item.home_status}" ${item.home_status === 1 ? 'checked' : ''} data-id="${item.id}">
+                                        <span class="switcher_control"></span>
+                                    </label>
+                                </td>
+                                <td class="text-center">
+                                    <a  href="/categoryedit?id=${item.id}" class="edit-pencil-btn">
+                                        <img src="assets/img/icons/edit.svg" class="me-2" alt="img">
+                                    </a>
+
+                                    <a class="deleteBTN" id='${item.id}' href="javascript:void(0);" data-bs-target="#deleteItem" data-bs-toggle="modal">
+                                        <img src="assets/img/icons/delete.svg" alt="img">
+                                    </a>
+                                </td>
+                            </tr>
+                            `
+        })
+    document.querySelector('#categoryTable').appendChild(tbody);
+
+  
+    const checkboxes = document.querySelectorAll('.switcher_input');
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function (e) {
+            const modalId = e.target.getAttribute('data-bs-toggle');
+            const modal = document.getElementById(modalId);
+            const modalBody = modal.querySelector('.modal-body');
+
+            if (e.target.checked) {
+                modalBody.innerHTML = `
+                <div class="d-flex flex-column align-items-center text-center gap-2 mb-2">
+                    <div class="toggle-modal-img-box d-flex flex-column justify-content-center align-items-center mb-3 position-relative">
+                        <img class="status-icon" src="" alt="" width="30">
+                        <img id="toggle-status-image" alt="" src="assets/img/categoryimg/category-status-on.png">
+                    </div>
+                    <h5 class="modal-title" id="toggle-status-title">Want to Turn ON Personal Care Category status</h5>
+                    <div class="text-center" id="toggle-status-message"><p>If enabled this category it will be visible from the category wise product section in the website and customer app in the homepage</p></div>
+                </div>`;
+            } else {
+                modalBody.innerHTML = `
+                <div class="d-flex flex-column align-items-center text-center gap-2 mb-2">
+                    <div class="toggle-modal-img-box d-flex flex-column justify-content-center align-items-center mb-3 position-relative">
+                        <img class="status-icon" src="" alt="" width="30">
+                        <img id="toggle-status-image" alt="" src="assets/img/categoryimg/category-status-off.png">
+                    </div>
+                    <h5 class="modal-title" id="toggle-status-title">Want to Turn OFF Personal Care Category status</h5>
+                    <div class="text-center" id="toggle-status-message"><p>If disabled this category it will be hidden from the category wise product section in the website and customer app in the homepage</p></div>
+                </div>`;
+            }
+
+            modal.classList.add('show');
+            modal.style.display = 'block';
+        });
+    });
+
+    const closeButtons = document.querySelectorAll('.modal .closefilter');
+    closeButtons.forEach(closeButton => {
+        closeButton.addEventListener('click', function () {
+            const modal = this.closest('.modal');
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+        });
+    });
+
+    const submitButton = document.getElementById('switch_submit');
+ 
+    let toggledCheckboxId; // Define a variable to store the ID of the toggled checkbox
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function (e) {
+            toggledCheckboxId = e.target.dataset.id; // Store the ID of the toggled checkbox
+
+            // Rest of your code...
+        });
+    });
+
+    submitButton.addEventListener('click', function () {
+        // Access the stored ID value
+        const id = toggledCheckboxId;
+        if (id) {
+            const checkbox = document.querySelector(`[data-id="${id}"]`); // Get the checkbox element
+            if (checkbox) {
+                let status = checkbox.checked ? 0 : 1;
+                status = status === 1 ? 0 : 1;// Toggle the status between 0 and 1
+                updateStatus(id, status);
+            } else {
+                console.error('Checkbox not found');
+            }
+        } else {
+            console.error('Checkbox ID not found');
+        }
+    });
+
+    // Function to update status via POST request
+    function updateStatus(id, status) {
+        fetch(`<%= url %>category/categoryHomeStatusUpdate?id=${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: status }) // Send status in request body
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                window.location.href = '<%= url %>addcategory';
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+    }
+
+
+    function previewImage(event) {
+        var input = event.target;
+        var reader = new FileReader();
+
+        reader.onload = function () {
+            var dataURL = reader.result;
+            var image = document.getElementById('imagePreview');
+            image.src = dataURL; // Set the src attribute of the image tag to the data URL
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    }
+
+    $('#sumbit_button').click(function () {
+        let name = $('#categoryName').val();
+        let priority = $('#prioritySelect').val();
+        let img = $('#productImage').prop('files')[0];
+        let formData = new FormData();
+        formData.append('name', name);
+        formData.append('priority', priority);
+        formData.append('category_image', img);
+        console.log(formData, "formData")
+        fetch(`<%= url %>category/categoryAdd`, {
+            method: "POST",
+            headers: {
+                "jwt_token": localStorage.getItem("token")
+            },
+            body: formData // Pass formData as the body of the request
+        })
+            .then((response) => response.json())
+            .then((result) => {
+                console.log(result);
+            })
+            .catch((error) => {
+                console.error("Error fetching order details:", error);
+            });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const deleteCategoryButton = document.getElementById("delete_category_button");
+        const activeCategoryButton = document.getElementById("active_category_button");
+        
+        const category_card = document.getElementById("category_card");
+        const delete_category_card = document.getElementById("delete_category_card");
+
+        deleteCategoryButton.addEventListener("click", function () {
+            // Hide categoryTable
+            category_card.style.display = "none";
+            // Show restoreTable
+            delete_category_card.style.display = "block";
+        });
+
+        activeCategoryButton.addEventListener("click", function () {
+            // Hide categoryTable
+            category_card.style.display = "block";
+            // Show restoreTable
+            delete_category_card.style.display = "none";
+        });
+
+    });
+
+    const deleteButtons = document.querySelectorAll('.deleteBTN');
+    const modalDeleteButton = document.getElementById('deleteAPI');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function (event) {
+            const itemId = event.target.parentNode.id;
+            const deleteModal = new bootstrap.Modal(document.getElementById('deleteItem'));
+            deleteModal.show();
+            let is_active = 0;
+
+            // Modal ke Delete button par click event listener attach kare
+            modalDeleteButton.addEventListener('click', function () {
+                fetch(`<%= url %>category/categoryDelete?id=${itemId}`, {
+                    method: "POST",
+                    headers: {
+                        "jwt_token": localStorage.getItem("token"),
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ is_active: is_active })
+                })
+                    .then((response) => response.json())
+                    .then((result) => {
+                        console.log(result);
+                        // window.location.href = '<%=url %>addcategory'
+                        location.reload();
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching order details:", error);
+                    });
+            });
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+            let tbody_restore = document.createElement('tbody');
+
+            let deleteData = <%- JSON.stringify(deleteData) %>
+
+            deleteData.map((item, index) => {
+                tbody_restore.innerHTML += `<tr class=${index}>
+                                <td>${item.id}</td>
+                        
+                                <td>${item.name}</td>
+
+                                <td class="text-center">
+                                    <a class="restore-data" data-id="${item.id}" data-name="${item.name}">
+                                        <i class="fa-solid fa-trash-can-arrow-up" style="font-size: x-large;"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            `
+        })
+        document.querySelector('#restoreTable').appendChild(tbody_restore);
+        });
+
+        $(document).ready(function () {
+            $('.restore-data').click(function () {
+                let id = $(this).data('id');
+                let name = $(this).data('name');
+                let is_active = 1;
+                let data ={
+                    id:id,
+                    name:name,
+                    is_active:is_active
+                }
+                fetch(`<%= url %>category/categoryDelete?id=${id}`, {
+                    method: "POST",
+                    headers: {
+                        "jwt_token": localStorage.getItem("token"),
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data),
+                })
+                    .then((response) => response.json())
+                    .then((result) => {
+                        console.log(result);
+                        // window.location.href = '<%=url %>addcategory'
+                        location.reload();
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching order details:", error);
+                    });
+            });
+        });
+
+
+</script>

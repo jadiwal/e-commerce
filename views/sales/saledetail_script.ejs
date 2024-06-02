@@ -1,0 +1,107 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script>
+    document.getElementById('downloadPDF').addEventListener('click', function () {
+        const invoice = document.getElementById('invoice');
+        const pdf = new jsPDF();
+        pdf.html(invoice, {
+            callback: function (pdf) {
+                pdf.save("invoice.pdf");
+            }
+        });
+    });
+
+    const currentUrl = window.location.href;
+    function getParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+    const orderId = getParameterByName('id', currentUrl);
+    console.log("Order ID:", orderId);
+    // fetch(`url/order/orderDetails/${orderId}`)
+    //     .then((response) => {
+    //         if (!response.ok) {
+    //             throw new Error("Failed to fetch order details");
+    //         }
+    //         return response.json();
+    //     })
+    //     .then((data) => {
+    //         if (!Array.isArray(data.data)) {
+    //             throw new Error("Invalid data format: not an array");
+    //         }
+    //         const orderDetailsStrings = data.data.map((obj) => JSON.stringify(obj));
+    //         const orderDetails = orderDetailsStrings.join(", ");
+    //         console.log(orderDetails)
+    //         res.render("salesdetails", { data: orderDetails });
+    //     })
+    //     .catch((error) => {
+    //         console.error("Error fetching order details:", error);
+    //         res.status(500).send("Internal Server Error");
+    //     });
+
+
+    fetch(`<%= url %>order/orderDetails/${orderId}`, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+            "jwt_token": localStorage.getItem("token")
+        }
+    })
+        .then((response) => response.json())
+        .then((result) => {
+            console.log(result);
+            $(document).ready(function () {
+                $('#orderdetailTable tbody').empty();
+                result.data.map((item, index) => {
+                    $("#orderdetailTbody").append(
+                        `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>
+                                    <div class="media align-items-center gap-10">
+                                       <img class="avatar avatar-60 rounded"
+                                        src="${index.images}" alt="Image Description">
+                                    <div>
+                                    <h6 class="title-color">${item.name}</h6>
+                                    <div><strong>Qty:${item.qty}</strong></div>
+                                    <div><strong>Unit price : ${item.unit_price}</strong>
+                                        (Tax incl.)</div>
+                                    </div>
+                                    </div>
+                                </td>
+                                <td>₹${item.price * item.qty}</td>
+                                <td>₹${item.tax}</td>
+                                <td>₹${item.discount}</td>
+                                <td>₹${item.price * item.qty}</td>
+                            </tr>
+                            `)
+                    document.getElementById('delivery_status').innerHTML = item.delivery_status
+                    document.getElementById('payment_method').innerHTML = item.payment_method
+                    document.getElementById('payment_status').innerHTML = item.payment_status
+                    document.getElementById('item_price').innerHTML = item.order_amount - item.shipping_cost
+                    // shipping_cost  order_amount
+                    document.getElementById('discount').innerHTML = item.discount
+                    document.getElementById('subTotal').innerHTML = item.order_amount - item.shipping_cost
+                    document.getElementById('coupon_code').innerHTML = item.coupon_code
+                    document.getElementById('tax').innerHTML = item.tax
+                    document.getElementById('shipping_cost').innerHTML = item.shipping_cost
+                    document.getElementById('order_amount').innerHTML = item.order_amount
+                    document.getElementById('order_status').value = item.delivery_status
+                    document.getElementById('full_name').innerHTML = item.full_name
+                    document.getElementById('orders').innerHTML = item.orders
+                    document.getElementById('phone').innerHTML = item.phone
+                    document.getElementById('email').innerHTML = item.email
+                })
+
+            })
+
+        })
+        .catch((error) => {
+            console.error("Error fetching order details:", error);
+            res.status(500).send("Internal Server Error");
+        });
+</script>

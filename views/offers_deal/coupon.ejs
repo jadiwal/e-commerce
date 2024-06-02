@@ -1,0 +1,277 @@
+<%- include('../header', { pageTitle: 'coupon' }) %>
+    <%- include('../sidebar') %>
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h4>Product Edit Category</h4>
+                        <h6>Edit a product Category</h6>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <form>
+                            <div class="row">
+                                <div class="col-md-6 col-lg-4 form-group">
+                                    <label>Coupon type</label>
+                                    <select class="select" id="coupon_type" name="coupon_type" required="">
+                                        <option disabled="" selected="">Select coupon type</option>
+                                        <option value="discount_on_purchase">Discount on Purchase</option>
+                                        <option value="free_delivery">Free Delivery</option>
+                                        <option value="first_order">First Order</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 col-lg-4 form-group">
+                                    <label>Coupon title</label>
+                                    <input type="text" name="title" class="form-control" value="" id="title"
+                                        placeholder="Title" required="">
+                                </div>
+                                <div class="col-md-6 col-lg-4 form-group">
+                                    <div class="d-flex justify-content-between">
+                                        <label>Coupon code</label>
+                                        <a href="javascript:void(0)" style="color:#ff9f43;"
+                                            onclick="generateCode()">Generate code</a>
+                                    </div>
+                                    <input type="text" name="code" value="" class="form-control" id="code"
+                                        placeholder="Ex: EID100" required="">
+                                </div>
+                                <div class="col-md-6 col-lg-4 form-group first_order">
+                                    <label>Coupon bearer</label>
+                                    <select class="select" name="coupon_bearer" id="coupon_bearer">
+                                        <option disabled="" selected="">Select coupon bearer</option>
+                                        <option value="seller">Seller</option>
+                                        <option value="inhouse">Admin</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 col-lg-4 form-group coupon_by first_order">
+                                    <label>Seller</label>
+                                    <select
+                                        class="js-example-basic-multiple js-states js-example-responsive form-control select2-hidden-accessible"
+                                        name="seller_wise_coupon" id="seller_wise_coupon"
+                                        data-select2-id="seller_wise_coupon" tabindex="-1" aria-hidden="true">
+                                        <option disabled="" selected="" data-select2-id="2">Select seller
+                                        </option>
+                                    </select><span class="select2 select2-container select2-container--default"
+                                        dir="ltr" data-select2-id="1" style="width: 331.656px;"><span
+                                            class="selection"><span class="select2-selection select2-selection--single"
+                                                role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0"
+                                                aria-disabled="false"
+                                                aria-labelledby="select2-seller_wise_coupon-container"><span
+                                                    class="select2-selection__rendered"
+                                                    id="select2-seller_wise_coupon-container" role="textbox"
+                                                    aria-readonly="true" title="Select seller">Select
+                                                    seller</span><span class="select2-selection__arrow"
+                                                    role="presentation"><b
+                                                        role="presentation"></b></span></span></span><span
+                                            class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                </div>
+                                <div class="col-md-6 col-lg-4 form-group coupon_type first_order">
+                                    <label for="name" class="title-color font-weight-medium d-flex">Customer</label>
+                                    <select
+                                        class="js-example-basic-multiple js-states js-example-responsive form-control select2-hidden-accessible"
+                                        name="customer_select" data-select2-id="3" tabindex="-1" aria-hidden="true"
+                                        id="customer_select">
+                                        <option disabled="" selected="" data-select2-id="5">Select customer
+                                        </option>
+                                        <option value="0">All customer</option>
+                                        <option value="1">walking customer</option>
+                                        <option value="2">test test</option>
+                                        <option value="3">dfd fgd</option>
+                                        <option value="4">dfd fgd</option>
+                                        <option value="5">dfd fgd</option>
+                                        <option value="6">deepak customer</option>
+                                    </select><span class="select2 select2-container select2-container--default"
+                                        dir="ltr" data-select2-id="4" style="width: 331.656px;"><span
+                                            class="selection"><span class="select2-selection select2-selection--single"
+                                                role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0"
+                                                aria-disabled="false"
+                                                aria-labelledby="select2-customer_id-oc-container"><span
+                                                    class="select2-selection__rendered"
+                                                    id="select2-customer_id-oc-container" role="textbox"
+                                                    aria-readonly="true" title="Select customer">Select
+                                                    customer</span><span class="select2-selection__arrow"
+                                                    role="presentation"><b
+                                                        role="presentation"></b></span></span></span><span
+                                            class="dropdown-wrapper" aria-hidden="true"></span></span>
+                                </div>
+                                <div class="col-md-6 col-lg-4 form-group first_order">
+                                    <label for="exampleFormControlInput1"
+                                        class="title-color font-weight-medium d-flex">Limit
+                                        for same user</label>
+                                    <input type="number" name="coupon_limit" value="" min="0" id="coupon_limit"
+                                        class="form-control" placeholder="Ex: 10">
+                                </div>
+                                <div class="col-md-6 col-lg-4 form-group free_delivery">
+                                    <label>Discount type</label>
+                                    <select id="discount_type" class="select" name="discount_type">
+                                        <option value="amount">Amount</option>
+                                        <option value="percentage">Percentage (%)</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 col-lg-4 form-group free_delivery">
+                                    <label>Discount Amount
+                                        <span id="discount_percent" style="display: none;"> (%)</span></label>
+                                    <input type="number" min="1" max="1000000" name="discount" value=""
+                                        class="form-control" id="discount" placeholder="Ex : 500">
+                                </div>
+                                <div class="col-md-6 col-lg-4 form-group">
+                                    <label>Minimum purchase ($)</label>
+                                    <input type="number" min="1" max="1000000" name="minimum_purchase" value=""
+                                        class="form-control" id="minimum_purchase" placeholder="Ex : 100">
+                                </div>
+                                <div class="col-md-6 col-lg-4 form-group free_delivery" id="max-discount"
+                                    style="display: none;">
+                                    <label>Maximum discount ($)</label>
+                                    <input type="number" min="1" max="1000000" name="maximum_discount" value=""
+                                        class="form-control" id="maximum_discount" placeholder="Ex : 5000">
+                                </div>
+                                <div class="col-md-6 col-lg-4 form-group">
+                                    <label>Start date</label>
+                                    <input id="start_date" type="date" name="start_date" value="" class="form-control"
+                                        placeholder="Start date" required="" min="2024-03-01">
+                                </div>
+                                <div class="col-md-6 col-lg-4 form-group">
+                                    <label>Expire date</label>
+                                    <input type="date" name="expire_date" value="" class="form-control"
+                                        placeholder="Expire date" required="" min="2024-03-01">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12" style="display: flex;justify-content: flex-end;">
+                                <div style="display: flex;">
+                                    <button type="reset" class="btn btn-cancel"
+                                        style="margin-right: 20px;">Reset</button>
+                                    <button type="submit" id="submitBtn" class="btn btn-submit">Submit</button>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h4>Coupon List</h4>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-top">
+                            <div class="search-set">
+                                <div class="search-path" style="display: none;">
+                                    <a class="btn btn-filter" id="filter_search">
+                                        <img src="assets/img/icons/filter.svg" alt="img">
+                                        <span><img src="assets/img/icons/closes.svg" alt="img"></span>
+                                    </a>
+                                </div>
+                                <div class="search-input">
+                                    <a class="btn btn-searchset"><img src="assets/img/icons/search-white.svg"
+                                            alt="img"></a>
+                                </div>
+                            </div>
+                            <div class="wordset">
+                                <ul>
+                                    <li>
+                                        <a data-bs-toggle="tooltip" data-bs-placement="top" title="pdf"><img
+                                                src="assets/img/icons/pdf.svg" alt="img"></a>
+                                    </li>
+                                    <li>
+                                        <a data-bs-toggle="tooltip" data-bs-placement="top" title="excel"><img
+                                                src="assets/img/icons/excel.svg" alt="img"></a>
+                                    </li>
+                                    <li>
+                                        <a data-bs-toggle="tooltip" data-bs-placement="top" title="print"><img
+                                                src="assets/img/icons/printer.svg" alt="img"></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="card mb-0" style="display: none;" id="filter_inputs">
+                            <div class="card-body pb-0">
+                                <div class="row">
+                                    <div class="col-lg-12 col-sm-12">
+                                        <div class="row">
+                                            <div class="col-lg-1 col-sm-6 col-12">
+                                                <div class="form-group">
+                                                    <a class="btn btn-filters ms-auto"><img
+                                                            src="assets/img/icons/search-whites.svg" alt="img"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table datanew" id="product_table">
+                                <thead>
+                                    <tr>
+                                        <th>SL</th>
+                                        <th>Coupon</th>
+                                        <th>Coupon Type </th>
+                                        <th>Duration</th>
+                                        <th>User Limit</th>
+                                        <th>Discount Bearer </th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>FIRST ORDER
+                                            Code: FIRST ORDER
+                                        </td>
+                                        <td>First Order</td>
+                                        <td>04 Dec, 23 -
+                                            30 Dec, 23</td>
+                                        <td>Limit: 0, Used: 0</td>
+                                        <td>admin</td>
+                                        <td>
+                                            <label class="switcher">
+                                                <input type="checkbox" class="switcher_input" id="coupon_status1"
+                                                    name="status" value="1" checked="">
+                                                <span class="switcher_control"></span>
+                                            </label>
+                                        </td>
+                                        <td class="text-center">
+                                            <a class="action-set" href="javascript:void(0);" data-bs-toggle="dropdown"
+                                                aria-expanded="true">
+                                                <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a class="dropdown-item"><img src="assets/img/icons/eye1.svg"
+                                                            class="me-2" alt="img">Sale Detail</a>
+                                                </li>
+                                                <li>
+                                                    <a href="edit-sales.html" class="dropdown-item"><img
+                                                            src="assets/img/icons/edit.svg" class="me-2" alt="img">Edit
+                                                        Sale</a>
+                                                </li>
+                                                <li>
+                                                    <a href="javascript:void(0);"
+                                                        class="dropdown-item confirm-text"><img
+                                                            src="assets/img/icons/delete1.svg" class="me-2"
+                                                            alt="img">Delete Sale</a>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%- include('coupon_script') %>
+            <%- include('../footer') %>

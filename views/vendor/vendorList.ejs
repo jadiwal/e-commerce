@@ -1,0 +1,119 @@
+<%- include('../header', { pageTitle: 'Seller List' }) %>
+    <%- include('../sidebar') %>
+        <div class="page-wrapper">
+            <div class="content vendor-list">
+                <div class="mb-4">
+                    <h2 class="h1 mb-0 text-capitalize d-flex align-items-center gap-2">
+                        <img src="#" alt="">
+                        Vendor List
+                        <span class="badge badge-soft-dark radius-50 fz-12">2</span>
+                        <img width="50" src="https://pixabay.com/photos/fence-chain-link-bokeh-lights-1869401/" alt="">
+                    </h2>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="px-3 py-4">
+                                <div class="d-flex justify-content-between gap-10 flex-wrap align-items-center">
+                                    <div class="">
+                                        <form action="#"
+                                            method="GET">
+                                            <div class="input-group input-group-merge input-group-custom search-box">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text">
+                                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                                    </div>
+                                                </div>
+                                                <input id="datatableSearch_" type="search" name="search"
+                                                    class="form-control" placeholder="Search by Name or Phone or Email"
+                                                    aria-label="Search orders" value="">
+                                                <button type="submit" class="btn btn--primary">Search</button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <div class="dropdown text-nowrap">
+                                            <button type="button" class="btn btn-outline--primary"
+                                                data-toggle="dropdown">
+                                                <i class="fa-solid fa-download"></i>
+                                                Export
+                                                <i class="fa-solid fa-chevron-down"></i>
+                                            </button>
+
+                                            <ul class="dropdown-menu dropdown-menu-right">
+                                                <li>
+                                                    <a type="submit"
+                                                        class="dropdown-item d-flex align-items-center gap-2 "
+                                                        href="#">
+                                                        <img width="14"
+                                                            src="#"
+                                                            alt="">
+                                                        Excel
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <a href="/vendorAdd" type="button"
+                                            class="btn btn--primary text-nowrap">
+                                            <i class="tio-add"></i>
+                                            Add new vendor
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table style="text-align: left;"
+                                    class="table table-hover table-borderless table-thead-bordered table-nowrap table-align-middle card-table w-100">
+                                    <thead class="thead-light thead-50 text-capitalize">
+                                        <tr>
+                                            <th>SL</th>
+                                            <th>Certificate</th>
+                                            <th>Vendor name</th>
+                                            <th>Business Owner name</th>
+                                            <th>Contact info</th>
+                                            <th>Status</th>
+                                            <th>Email</th>
+                                            <th class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td> 1</td>
+                                            <td>
+                                                <div class="d-flex align-items-center gap-10 w-max-content">
+                                                    <i class="fa-regular fa-eye"></i>
+
+                                                </div>
+                                            </td>
+                                            <td>Plate Supplier</td>
+                                            <td>Owner Name</td>
+                                            <td>09876543210</td>
+                                            <td><label class="badge badge-success">Active</label></td>
+                                            <td>abcd@gmail.com</td>
+                                            <td>
+                                                <div class="d-flex justify-content-center gap-2">
+                                                    <a title="View" class="btn btn-outline-info btn-sm square-btn"
+                                                        href="#">
+                                                        <i class="fa-regular fa-eye"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="table-responsive mt-4">
+                                <div class="px-4 d-flex justify-content-center justify-content-md-end">
+                                    <!-- Pagination -->
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%- include('../footer') %>

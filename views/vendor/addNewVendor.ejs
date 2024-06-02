@@ -1,0 +1,209 @@
+<%- include('../header', { pageTitle: 'Add New Seller' }) %>
+    <%- include('../sidebar') %>
+
+       <div class="page-wrapper vendor">
+        <div class="content">
+            <div class="mb-4">
+                <h2 class="h1 mb-0 text-capitalize d-flex align-items-center gap-2">Add New Vendor</h2>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <input type="hidden" name="status" value="approved">
+                    <h5 class="mb-0 text-capitalize d-flex align-items-center gap-2 border-bottom pb-3 mb-4 pl-4">
+                        <img src="http://192.168.1.180/e_dibo/public/assets/back-end/img/seller-information.png"
+                            class="mb-1" alt="">
+                        Vendor information
+                    </h5>
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 mb-4 mb-lg-0">
+                            <div class="form-group">
+                                <label for="exampleFirstName"
+                                    class="title-color d-flex gap-1 align-items-center">Business Owner First
+                                    Name</label>
+                                <input type="text" class="form-control form-control-user" id="exampleFirstName"
+                                    name="f_name" value="" placeholder="First Name" required="">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 mb-4 mb-lg-0">
+                            <div class="form-group">
+                                <label for="exampleLastName"
+                                    class="title-color d-flex gap-1 align-items-center">Business Owner Last Name</label>
+                                <input type="text" class="form-control form-control-user" id="exampleLastName"
+                                    name="l_name" value="" placeholder="Last Name" required="">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 mb-4 mb-lg-0">
+                            <div class="form-group">
+                                <label for="exampleInputPhone"
+                                    class="title-color d-flex gap-1 align-items-center">Business Name</label>
+                                <input type="text" class="form-control form-control-user" id="business_name"
+                                    name="business_name" value="" placeholder="Business Name" required="">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mb-4 mb-lg-0">
+                            <div class="form-group">
+                                <label for="exampleInputPhone"
+                                    class="title-color d-flex gap-1 align-items-center">Registration No.</label>
+                                <input type="text" class="form-control form-control-user" id="registration_no"
+                                    name="registration_no" value="" placeholder="Business Registration No." required="">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mb-4 mb-lg-0">
+                            <div class="form-group">
+                                <label for="exampleInputPhone" class="title-color d-flex gap-1 align-items-center">GST
+                                    Number</label>
+                                <input type="text" class="form-control form-control-user" id="gst_number"
+                                    name="gst_number" value="" placeholder="GST Number" required="">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mb-4 mb-lg-0">
+                            <div class="form-group">
+                                <label for="exampleInputPhone" class="title-color d-flex gap-1 align-items-center">Type
+                                    of Business</label>
+
+                                <input type="text" class="form-control form-control-user" id="business_type"
+                                    name="business_type" value="" placeholder="Type of Business" required="">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mb-4 mb-lg-0">
+                            <div class="form-group">
+                                <label for="exampleInputPhone" class="title-color d-flex gap-1 align-items-center">Phone
+                                    Number</label>
+                                <input type="number" class="form-control form-control-user" id="exampleInputPhone"
+                                    name="phone" value="" placeholder="Ex: +09587498" required="">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mb-4 mb-lg-0">
+                            <div class="form-group">
+                                <label for="exampleInputPhone" class="title-color d-flex gap-1 align-items-center">Email
+                                    ID</label>
+
+                                <input type="email" class="form-control form-control-user" id="exampleInputEmail"
+                                    name="email" value="" placeholder="Ex: Jhone@company.com" required="">
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+
+                </div>
+            </div>
+
+
+            <div class="card mt-3">
+                <div class="card-body">
+                    <input type="hidden" name="status" value="approved">
+                    <h5 class="mb-0 text-capitalize d-flex align-items-center gap-2 border-bottom pb-3 mb-4 pl-4">
+                        <img src="http://192.168.1.180/e_dibo/public/assets/back-end/img/seller-information.png" class="mb-1" alt="">
+                        Bank Account Information
+                    </h5>
+                    <div class="row">
+                        <div class="col-lg-6 form-group">
+                            <label for="exampleInputEmail" class="title-color d-flex gap-1 align-items-center">Bank Name</label>
+                            <input type="text" class="form-control form-control-user" id="bank_name" name="bank_name" value="" placeholder="Ex: Bank Of India" required="">
+                        </div>
+                        <div class="col-lg-6 form-group">
+                            <label for="exampleInputEmail" class="title-color d-flex gap-1 align-items-center">Account Number</label>
+                            <input type="text" class="form-control form-control-user" id="account_number" name="account_number" value="" placeholder="Account Number" required="">
+                        </div>
+                        <div class="col-lg-6 form-group">
+                            <label for="exampleInputEmail" class="title-color d-flex gap-1 align-items-center">IFSC Code</label>
+                            <input type="text" class="form-control form-control-user" id="ifsc_code" name="ifsc_code" value="" placeholder="IFSC Code" required="">
+                        </div>
+                        
+                        <!-- <div class="col-lg-4 form-group">
+                            <label for="exampleInputPassword" class="title-color d-flex gap-1 align-items-center">Password</label>
+                            <input type="password" class="form-control form-control-user" minlength="8" id="exampleInputPassword" name="password" placeholder="Ex : 8+ Character" required>
+                        </div> -->
+                        <!-- <div class="col-lg-4 form-group">
+                            <label for="exampleRepeatPassword" class="title-color d-flex gap-1 align-items-center">Confirm password</label>
+                            <input type="password" class="form-control form-control-user" minlength="8" id="exampleRepeatPassword" placeholder="Ex : 8+ Character" required>
+                            <div class="pass invalid-feedback">Repeat  Password Not match .</div>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="mb-0 text-capitalize d-flex align-items-center gap-2 border-bottom pb-3 mb-4 pl-4">
+                        <img src="http://192.168.1.180/e_dibo/public/assets/back-end/img/seller-information.png" class="mb-1" alt="">
+                        Vendor Address And Certificate
+                    </h5>
+                    <div class="row">
+                        <div class="col-lg-6 form-group">
+                            <label for="shop_name" class="title-color d-flex gap-1 align-items-center">Street Address</label>
+                            <input type="text" class="form-control form-control-user" id="address" name="address" placeholder="Ex: Jhon" value="" required="">
+                        </div>
+                        <div class="col-lg-6 form-group">
+                            <label for="shop_address" class="title-color d-flex gap-1 align-items-center">Street Address Line 2</label>
+                            <textarea name="address2" class="form-control" id="address2" rows="1" cols="1" placeholder="Street Address Line 2"></textarea>
+                        </div>
+                        <div class="col-lg-6 form-group">
+                            <label for="exampleInputEmail" class="title-color d-flex gap-1 align-items-center">City</label>
+                            <input type="text" class="form-control form-control-user" id="city" name="city" value="" placeholder="City" required="">
+                        </div>
+                        <div class="col-lg-6 form-group">
+                            <label for="exampleInputEmail" class="title-color d-flex gap-1 align-items-center">State</label>
+                            <input type="text" class="form-control form-control-user" id="state" name="state" value="" placeholder="State" required="">
+                        </div>
+                        <div class="col-lg-6 form-group">
+                            <label for="exampleInputEmail" class="title-color d-flex gap-1 align-items-center">Pin Code</label>
+                            <input type="text" class="form-control form-control-user" id="postalCode" name="postalCode" value="" placeholder="Pin Code" required="">
+                        </div>
+                        <div class="col-lg-6 form-group">
+                            <label for="exampleInputEmail" class="title-color d-flex gap-1 align-items-center">Country</label>
+                            <input type="text" class="form-control form-control-user" id="country" name="country" value="" placeholder="Country" required="">
+                        </div>
+                        <div class="col-lg-6 form-group">
+                   
+                                <img class="upload-img-view upload-img-view__banner" id="viewerLogo" src="http://192.168.1.180/e_dibo/public\assets\back-end\img\400x400\img2.jpg" alt="banner image">
+                      
+    
+                            <div class="mt-4">
+                                <div class="d-flex gap-1 align-items-center title-color mb-2">
+                                    Vendor Certificate 1
+                                    <!-- <span class="text-info">(Ratio 1:1)</span> -->
+                                </div>
+                                <div class="custom-file">
+                                    <input type="file" name="logo" id="LogoUpload" class="custom-file-input custom-file-upload" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
+                                    <label class="custom-file-label" for="LogoUpload">Upload logo</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 form-group">
+                       
+                                <img class="upload-img-view upload-img-view__banner" id="viewerBanner" src="http://192.168.1.180/e_dibo/public\assets\back-end\img\400x400\img2.jpg" alt="banner image">
+                
+    
+                            <div class="mt-4">
+                                <div class="d-flex gap-1 align-items-center title-color mb-2">
+                                    Vendor Certificate 2
+                                    <span class="text-info"></span>
+                                </div>
+    
+                                <div class="custom-file">
+                                    <input type="file" name="banner" id="BannerUpload" class="custom-file-input" accept=".jpg, .png, .jpeg, .gif, .bmp, .tif, .tiff|image/*">
+                                    <label class="custom-file-label" for="BannerUpload">Upload Banner</label>
+                                </div>
+                            </div>
+                        </div>
+    
+                        
+                    </div>
+    
+                    <div class="d-flex align-items-center justify-content-end gap-10">
+                        <input type="hidden" name="from_submit" value="admin">
+                        <button type="reset" onclick="resetBtn()" class="btn btn-secondary">Reset </button>
+                        <button type="submit" class="btn btn--primary btn-user" id="apply">Submit</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+       </div>
+        <%- include('../footer') %>

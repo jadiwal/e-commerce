@@ -1,0 +1,144 @@
+<%- include('../header', { pageTitle: 'Product Attribute' }) %>
+    <%- include('../sidebar') %>
+    <div class="page-wrapper">
+        <div class="content">
+            <div class="page-header">
+                <div class="page-title">
+                    <h4>Attribute Setup</h4>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <form>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Attribute Name <span class="text-danger">*</span>(EN)</label>
+                                <input type="text" id="attr_name" name="name">
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end gap-3">
+                            <button type="reset" id="reset" class="btn btn-cancel">Reset</button>
+                            <button type="submit" id="sumbit_button" class="btn btn-submit">Submit</button>
+                        </div>
+                    </div>
+                </form>
+                </div>
+            </div>
+
+            <div class="row mt-20">
+                <div class="col-md-12" id="category_card">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-top">
+                                <div class="page-title">
+                                    <h4>Attribute list</h4>
+                                 </div>
+                                <div class="search-set">
+                                    <div class="search-path" style="display: none;">
+                                        <a class="btn btn-filter" id="filter_search">
+                                            <img src="assets/img/icons/filter.svg" alt="img">
+                                            <span><img src="assets/img/icons/closes.svg" alt="img"></span>
+                                        </a>
+                                    </div>
+                                    <div class="search-input">
+                                        <a class="btn btn-searchset"><img src="assets/img/icons/search-white.svg"
+                                                alt="img"></a>
+                                    </div>
+                                </div>  
+                            </div>
+                            <div class="card mb-0" style="display: none;" id="filter_inputs">
+                                <div class="card-body pb-0">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-sm-12">
+                                            <div class="row">
+                                                <div class="col-lg-1 col-sm-6 col-12">
+                                                    <div class="form-group">
+                                                        <a class="btn btn-filters ms-auto"><img
+                                                                src="assets/img/icons/search-whites.svg"
+                                                                alt="img"></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table datanew" id="attributeTable">
+                                    <thead>
+                                        <tr>
+                                            <th>SL</th>
+                                            <th>Attribute Name</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+                
+            </div>
+        </div>
+    </div>
+  <!-- Modal Start -->
+  <div class="modal fade" id="deleteItem" tabindex="-1" aria-labelledby="deleteItem" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered delete-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Warning !</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+               <div class="delete-header swal2-header">
+                    <h2 class="swal2-title">Are you sure?</h2>
+               </div>
+               <div class="delete-content swal2-content">
+                    <div id="content">You won't be able to revert this!</div>
+               </div>
+               <div class="delete-actions swal2-actions">
+                <button type="button" class="btn btn-primary" id="deleteAPI">Yes, delete it!</button>
+                <!-- <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button> -->
+               </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    
+</div>
+
+<!-- Edit Modal Start -->
+<div class="modal fade" id="editmodal" tabindex="-1" aria-labelledby="editmodal" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered delete-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Attribute</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+               <div class="delete-header swal2-header">
+                    <h2 class="swal2-title">Attribute Name</h2>
+               </div>
+               <div class="delete-content swal2-content">
+                   <input type="text" id="editAttr" name="editAttr" class="form-control" value="">
+               </div>
+               <div class="delete-actions swal2-actions">
+                <button type="button" class="btn btn-primary" id="updateAttr">Update</button>
+                <!-- <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button> -->
+               </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Edit Modal End -->
+
+    <%- include('product_attributes_script') %>
+<%- include('../footer') %>

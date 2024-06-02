@@ -1,0 +1,259 @@
+<%- include('../header', { pageTitle: 'Review' }) %>
+    <%- include('../sidebar') %>
+    <div class="page-wrapper">
+        <div class="content">
+            <div class="page-header">
+                <div class="page-title">
+                    <h4>Customer reviews</h4>
+                </div>
+
+                <div class="modal fade" id="status" tabindex="-1" aria-labelledby="status" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Edit Payment</h5>
+                                <button type="button" class="close closefilter" data-bs-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">×</span></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <label>Customer</label>
+                                            <div class="input-groupicon">
+                                                <input type="text" value="2022-03-07" class="datetimepicker">
+                                                <div class="addonset">
+                                                    <img src="assets/img/icons/datepicker.svg" alt="img">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <label>Reference</label>
+                                            <input type="text" value="INV/SL0101">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <label>Received Amount</label>
+                                            <input type="text" value="0.00">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <label>Paying Amount</label>
+                                            <input type="text" value="0.00">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <label>Payment type</label>
+                                            <select class="select">
+                                                <option>Cash</option>
+                                                <option>Online</option>
+                                                <option>Inprogress</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div class="form-group mb-0">
+                                            <label>Note</label>
+                                            <textarea class="form-control"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-submit">Submit</button>
+                                <button type="button" class="btn btn-cancel closefilter" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                        <div class="row border-bottom pb-3 align-items-center mb-20">
+                            <div class="col-sm-4 col-md-6 col-lg-8 mb-2 mb-sm-0">
+                                <h5 class="text-capitalize d-flex gap-2 align-items-center">
+                                    Review table
+                                </h5>
+                            </div>
+                            <div class="col-sm-8 col-md-6 col-lg-4">
+                                <form>
+                                    <div class="input-group input-group-merge input-group-custom  filterborder">
+                                        <div class="input-group-prepend">
+                                            <div class="filtersearch">
+                                                <i class="fa fa-search"></i>
+                                            </div>
+                                        </div>
+                                        <input id="datatableSearch_" type="search" name="search" class="form-control" placeholder="Search by Product or Customer" aria-label="Search orders" value="" required="">
+                                        <button type="submit" class="btn btn-submit">Search</button>
+                                    </div>
+                                </form>
+                            </div>
+                            </div>
+                            <form>
+                                <div class="row gy-3">
+                                    <div class="col-md-4 col-12">
+                                        <label>Products</label>
+                                        <div class="dropdown select-product-search w-100">
+                                            <input type="text" class="product_id form-control" name="product_id" value="" hidden="">
+                                            <button class="form-control text-start dropdown-toggle text-truncate " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                Select Product
+                                            </button>
+                                            <div class="dropdown-menu w-100 px-2">
+                                                <div class="search-form mb-3">
+                                                    <button type="button" class="btn"><i class="tio-search"></i></button>
+                                                    <input type="text" class="js-form-search form-control search-bar-input" onkeyup="search_product()" placeholder="Search menu...">
+                                                </div>
+                                             </div>
+                                        </div>
+                                    </div>
+                                <div class="col-md-4 col-12">
+                                    <label>Customer</label>
+                                    <input type="hidden" id="customer_id" class="form-control" name="customer_id" value="all">
+                                    <select onchange="customer_id_value(this.value)" data-placeholder="All customer" class="js-data-example-ajax form-control form-ellipsis select2-hidden-accessible" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                    <option value="all" data-select2-id="3">All customer</option>
+                                    <option value="" disabled="" data-select2-id="4">Select your option</option>
+                                    </select>
+                                    <span class="select2 select2-container select2-container--default" dir="ltr" data-select2-id="2" style="width: 337.328px;">
+                                    <span class="selection"><span class="select2-selection select2-selection--single" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-arhm-container">
+                                    <span class="select2-selection__rendered" id="select2-arhm-container" role="textbox" aria-readonly="true">
+                                    <span class="select2-selection__placeholder">All customer</span>
+                                    </span>
+                                    <span class="select2-selection__arrow" role="presentation">
+                                        <b role="presentation"></b>
+                                    </span>
+                                    </span>
+                                    </span>
+                                    <span class="dropdown-wrapper" aria-hidden="true"></span>
+                                    </span>
+                                </div>
+                
+                                <div class="col-md-4 col-12">
+                                    <div>
+                                        <label>Choose Status</label>
+                                        <select class="form-control" name="status">
+                                            <option value="" selected="">--Select status--</option>
+                                            <option value="1">Active</option>
+                                            <option value="0">Inactive</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 col-12">
+                                    <div>
+                                        <label>From</label>
+                                        <input type="date" name="from" id="from_date" value="" class="form-control" title="From date">
+                                    </div>
+                                </div>
+                
+                                <div class="col-md-4 col-12">
+                                    <div>
+                                        <label>To</label>
+                                        <input type="date" name="to" id="to_date" value="" class="form-control" title="To date">
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-12">
+                                    <div>
+                                        <button id="filter" type="submit" class="btn btn-submit filterbtn">
+                                            <i class="fa-solid fa-filter"></i>
+                                            Filter
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-12">
+                                    <div>
+                                        <button type="button" class="btn btn-cancel filterbtn" data-toggle="dropdown">
+                                            <i class="fa-solid fa-download"></i>
+                                            Export
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-20">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-top">
+                                <div class="search-set">
+                                    <div class="search-path" style="display: none;">
+                                        <a class="btn btn-filter" id="filter_search">
+                                            <img src="assets/img/icons/filter.svg" alt="img">
+                                            <span><img src="assets/img/icons/closes.svg" alt="img"></span>
+                                        </a>
+                                    </div>
+                                    <div class="search-input">
+                                        <a class="btn btn-searchset"><img src="assets/img/icons/search-white.svg"
+                                                alt="img"></a>
+                                    </div>
+                                </div>
+                                <div class="wordset">
+                                    <ul>
+                                        <li>
+                                            <a data-bs-toggle="tooltip" data-bs-placement="top" title="pdf"><img
+                                                    src="assets/img/icons/pdf.svg" alt="img"></a>
+                                        </li>
+                                        <li>
+                                            <a data-bs-toggle="tooltip" data-bs-placement="top" title="excel"><img
+                                                    src="assets/img/icons/excel.svg" alt="img"></a>
+                                        </li>
+                                        <li>
+                                            <a data-bs-toggle="tooltip" data-bs-placement="top" title="print"><img
+                                                    src="assets/img/icons/printer.svg" alt="img"></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card mb-0" style="display: none;" id="filter_inputs">
+                                <div class="card-body pb-0">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-sm-12">
+                                            <div class="row">
+                                                <div class="col-lg-1 col-sm-6 col-12">
+                                                    <div class="form-group">
+                                                        <a class="btn btn-filters ms-auto"><img
+                                                                src="assets/img/icons/search-whites.svg"
+                                                                alt="img"></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="table-responsive">
+                                <table class="table datanew" id="customer_review_table">
+                                    <thead>
+                                        <tr>
+                                            <th>SL</th>
+                                            <th>Product</th>
+                                            <th>Customer</th>
+                                            <th>Rating</th>
+                                            <th>Review</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<%- include('customer_review_script') %>
+<%- include('../footer') %>

@@ -1,0 +1,62 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    fetch(`<%= url %>order/orderList/returned`, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+            "jwt_token": localStorage.getItem("token")
+        }
+    })
+        .then((response) => response.json())
+        .then((result) => {
+            console.log(result);
+            $(document).ready(function () {
+                $('#orderTable tbody').empty();
+                result.data.map((item, index) => {
+                    $("#orderTbody").append(
+                        `
+                            <tr>
+                                <td><input type="checkbox"/></td>
+                                <td>${index + 1}</td>
+                                <td>${item.order_id}</td>
+                                <td>${item.order_at}</td>
+                                <td>${item.full_name}</td>
+                                <td>${item.store}</td>
+                                <td>${item.total_amount}</td>
+                                <td>${item.order_status}</td>
+                                <td>
+                                 <a class="me-3 edit-category" href="/categorylistedit?id=${item.id}">
+                                    <img src="assets/img/icons/edit.svg" alt="Edit">
+                                </a>
+                                <a class="me-3 confirm-text" href="javascript:void(0);">
+                                <img src="assets/img/icons/delete.svg" alt="img">
+                                </a>
+                                </td>
+                            </tr>
+                            `)
+                })
+
+            })
+
+        })
+        .catch((error) => {
+            console.error("Error fetching order details:", error);
+            res.status(500).send("Internal Server Error");
+        });
+
+    $(document).ready(function () {
+
+        // Add click event listener to Sale Detail links
+        // $(".dropdown-item").click(function (event) {
+        //        event.preventDefault();
+
+        //        // Get the order_id from the data attribute
+        //        var orderId = $(this).data("order-id");
+        //        console.log("Clicked Sale Detail with order_id:", orderId);
+
+        //        // Redirect to /salesdetails page with the order_id as a query parameter
+        //        window.location.href = "/salesdetails?order_id=" + orderId;
+        // });
+    });
+
+</script>

@@ -1,0 +1,7 @@
+<script>
+    let data = <%- JSON.stringify(data) %>
+    console.log(data,"data")
+    data.map((value, index) => {
+        document.getElementById('title').value = value.title;
+    })
+</script>

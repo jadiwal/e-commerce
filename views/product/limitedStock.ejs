@@ -1,0 +1,175 @@
+<%- include('../header', { pageTitle: 'Product Attribute' }) %>
+    <%- include('../sidebar') %>
+        <div class="page-wrapper">
+            <div class="content">
+                <div class="page-header">
+                    <div class="page-title">
+                        <h4>Limited Stocked Products List</h4>
+                        <h6>The products are shown in this list which quantity is below 10</h6>
+                    </div>
+                </div>
+
+
+
+                <div class="row mt-20">
+                    <div class="col-md-12" id="category_card">
+                        <div class="card p-4">
+                            <div class="table-responsive">
+                                <table class="table datanew " id="productTable">
+                                    <thead>
+                                        <tr>
+                                            <th>SL</th>
+                                            <th>Product Name</th>
+                                            <th>Purchase Price</th>
+                                            <th>Selling Price</th>
+                                            <th>Quantity</th>
+                                            <th>Active Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <!-- <tbody id="product_tbody"></tbody> -->
+                                </table>
+
+                            </div>
+
+                            <div class="table-responsive mt-4">
+                                <div class="px-4 d-flex justify-content-lg-end">
+                                    <!-- Pagination -->
+
+                                </div>
+                            </div>
+
+                            <!-- <div class="text-center p-4">
+                                <img class="mb-3 w-160" src="assets/img/sorry.svg" alt="Image Description">
+                                <p class="mb-0">No data to show</p>
+                            </div> -->
+                        </div>
+                    </div>
+
+                </div>
+                  <!-- Stock Wise Modal Start -->
+            <div class="modal fade" id="stockModal" tabindex="-1" aria-labelledby="stockModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="stockModalLabel">Product price & stock!</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body modalContent">
+                            <div class="row">
+                                <div class="col-12 pt-4 sku_combination">
+                                    <table class="table physical_product_show table-borderless" id= 'stock_table'>
+                                        <thead class="thead-light thead-50 text-capitalize" >
+                                            <tr>
+                                                <th class="text-center">
+                                                    <label for="" class="control-label">SL</label>
+                                                </th>
+                                                <th class="text-center">
+                                                    <label for="" class="control-label">Attribute Variation</label>
+                                                </th>
+                                                <th class="text-center">
+                                                    <label for="" class="control-label">Variation Wise Price (₹)</label>
+                                                </th>
+                                                <th class="text-center">
+                                                    <label for="" class="control-label">SKU</label>
+                                                </th>
+                                                <th class="text-center">
+                                                    <label for="" class="control-label">Variation Wise Stock</label>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                      </table>
+                                </div>
+                                <div id="total_qty" class="row form-group">
+                                    
+                                    <label for="qty_input">Total Quantity</label>
+                                    <input type="text" readonly id="totalQuantity" class="form-control">
+                                   </Row>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-submit" id="stockUpdate">Submit</button>
+                            <button type="button" class="btn btn-cancel" data-bs-dismiss="modal" id="stock_close">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Stock Wise Modal End -->
+              <!-- Delete Modal Start -->
+              <div class="modal fade" id="proDelete" tabindex="-1" aria-labelledby="proDelete" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered delete-modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Warning !</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-lg-12 text-center">
+                                    <h4>Are you sure?</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-submit" id="deletePro">Submit</button>
+                            <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Delete Modal End -->
+
+
+
+               <!-- Update Success Modal Start -->
+               <div class="modal fade" id="proUpdate" tabindex="-1" aria-labelledby="proUpdate" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered delete-modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Horayy !</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-lg-12 text-center">
+                                    <h4>Product Updated Successfully!</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Update Succes Modal End -->
+
+            <!-- Active Status Modal Start -->
+             <div class="modal fade" id="status" tabindex="-1" aria-labelledby="status" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-centered" id="active_status_modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title"></h5>
+                            <button type="button" class="close closefilter" data-bs-dismiss="modal"
+                                aria-label="Close"><span aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body"></div>
+                        <div class="modal-footer" id="modal_footer_button">
+                            <button type="submit" class="btn btn-submit" id="switch_submit">Submit</button>
+                            <button type="button" class="btn btn-cancel closefilter"
+                                data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Active Status Modal End -->
+            </div>
+        </div>
+
+
+        <%- include('limitedStock_script') %>
+            <%- include('../footer') %>

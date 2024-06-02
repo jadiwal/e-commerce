@@ -1,0 +1,94 @@
+<%- include('../header', {pageTitle: 'Customer View'} ) %>
+<%- include('../sidebar') %>
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <!-- Page Title -->
+        <div class="mb-4">
+            <h2 class="h1 mb-0 text-capitalize d-flex align-items-center gap-2">
+               
+                Customer Details
+            </h2>
+        </div>
+        <!-- End Page Title -->
+
+        <div class="row gy-3" id="printableArea">
+            <div class="col-lg-8">
+                <!-- Card -->
+                <div class="card h-100">
+                    <!-- Body -->
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap gap-10 justify-content-between mb-4">
+                            <div class="d-flex flex-column gap-10">
+                                <h4 class="text-capitalize">Customer ID #<%= id %>
+                                </h4>
+                                <div id="created_at">
+                                </div>
+                            </div>
+                            <div class="text-sm-right">
+                                
+                             
+                            </div>
+                            <!-- Order Note -->
+                        </div>
+
+                        <div class="table-responsive datatable-custom">
+                            <table id="orderdetailTable"
+                                class="table fz-12 table-hover table-borderless table-thead-bordered table-nowrap table-align-middle card-table w-100">
+                                <thead class="thead-light thead-50 text-capitalize">
+                                    <tr>
+                                        <th>SL</th>
+                                        <th>Order ID</th>
+                                        <th>Total</th>
+                                        <th>Action</th>
+                                      
+                                    </tr>
+                                </thead>
+                                <tbody id="orderdetailTbody"></tbody>
+                            </table>
+                        </div>
+                  
+                        <!-- End Row -->
+                    </div>
+                    <!-- End Body -->
+                </div>
+                <!-- End Card -->
+            </div>
+
+            <div class="col-lg-4 d-flex flex-column gap-3">
+
+
+                <!-- Customer Info Card -->
+                <div class="card">
+                    <!-- Body -->
+                    <div class="card-body">
+                        <div class="d-flex gap-2 align-items-center justify-content-between mb-4">
+                            <h4 class="d-flex gap-2" style="align-items:center">
+                                <i class="fa-solid fa-user"></i>
+                                Customer information
+                            </h4>
+                        </div>
+                        <div class="media flex-wrap gap-3" style="display:flex;align-items: flex-start;">
+                            <div>
+                                <img class="avatar rounded-circle avatar-70"
+                                    onerror="this.src='http://192.168.1.180/e_dibo/public/assets/front-end/img/image-place-holder.png'"
+                                    src="http://192.168.1.180/e_dibo/public/assets/front-end/img/image-place-holder.png"
+                                    alt="Image">
+                            </div>
+                            <div class="media-body d-flex flex-column gap-1">
+                                <span class="title-color"><strong id="full_name"></strong></span>
+                                <span class="title-color"><strong id="orders"></strong>Orders</span>
+                                <span class="title-color break-all"><strong id="phone"></strong></span>
+                                <span class="title-color break-all" id="email"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Body -->
+                </div>
+                <!-- End Card -->
+                </div>
+          
+
+              
+
+<%- include('customer_view_script') %>
+<%- include('../footer') %>

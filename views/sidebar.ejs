@@ -1,0 +1,221 @@
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-inner slimscroll">
+        <div id="sidebar-menu" class="sidebar-menu">
+            <ul>
+                <li class="active">
+                    <a href="/index"><img src="assets/img/icons/dashboard.svg" alt="img"><span>
+                            Dashboard</span> </a>
+                </li>
+                <li class="submenu">
+                    <a href="javascript:void(0);"> <!-- Check this href attribute -->
+                        <img src="assets/img/icons/sales1.svg" alt="img" />
+                        <span>Vendor</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul id="salesListMenu"> <!-- Give an ID to the parent ul -->
+                        <li><a href="/vendorAdd">Add New Vendor</a></li>
+                        <li><a href="/vendorList">Vendor List</a></li>
+                    </ul>
+                </li>
+
+                <li class="submenu">
+                    <a href="javascript:void(0);"> <!-- Check this href attribute -->
+                        <img src="assets/img/icons/sales1.svg" alt="img" />
+                        <span>Warehouse</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul id="salesListMenu">
+                        <li><a href="/vendorAdd">Add New Warehouse</a></li>
+                        <li><a href="/vendorList">Warehouse List</a></li>
+                    </ul>
+                </li>
+
+                <li class="submenu">
+                    <a href="javascript:void(0);">
+                        <img src="assets/img/icons/sales1.svg" alt="img" />
+                        <span style="color: red;">Purchase Order</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                </li>
+
+                <li class="submenu">
+                    <a href="javascript:void(0);"> <!-- Check this href attribute -->
+                        <img src="assets/img/icons/sales1.svg" alt="img" />
+                        <span style="color: red;">POS</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                </li>
+
+                <li class="sidebar-titles">Order Management</li>
+
+                <li class="submenu">
+                    <a href="javascript:void(0);"> <!-- Check this href attribute -->
+                        <img src="assets/img/icons/sales1.svg" alt="img" />
+                        <span>Orders</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul id="salesListMenu"> <!-- Give an ID to the parent ul -->
+                        <li><a href="/saleslist_all">All</a></li>
+                        <li><a href="/saleslist_pending">Pending</a></li>
+                        <li><a href="/saleslist_confirmed">Confirmed</a></li>
+                        <li><a href="/saleslist_packaging">Packaging</a></li>
+                        <li><a href="/saleslist_out_of_delivery">Out for Delivery</a></li>
+                        <li><a href="/saleslist_delivered">Delivered</a></li>
+                        <li><a href="/saleslist_returned">Returned</a></li>
+                        <li><a href="/saleslist_failed">Failed</a></li>
+                        <li><a href="/saleslist_canceled">Canceled</a></li>
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="javascript:void(0);"> <!-- Check this href attribute -->
+                        <img src="assets/img/icons/sales1.svg" alt="img" />
+                        <span style="color: red;">Refund Request</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                </li>
+                <li class="sidebar-titles">Product Management</li>
+
+                <li class="submenu">
+                    <a href="javascript:void(0);"><img src="assets/img/icons/product.svg" alt="img" />
+                        <span>Category Setup</span>
+                        <span class="menu-arrow"></span></a>
+                    <ul>
+                        <li><a href="/addcategory">Categories</a></li>
+                        <li><a href="/subcategory">Sub Categories</a></li>
+                        <li><a href="/subsubcategory">Sub Sub Categories</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="/product_attributes">
+                        <img src="assets/img/icons/product.svg" alt="img"/>
+                        <span>Product Attributes</span>
+                    </a>
+                </li>
+
+                <li class="submenu">
+                    <a href="javascript:void(0);"><img src="assets/img/icons/product.svg" alt="img" /><span>
+                            Product</span>
+                        <span class="menu-arrow"></span></a>
+                    <ul>
+                        <li><a href="/productlist">Product List</a></li>
+                        <li><a href="/addproduct">Add Product</a></li>
+                        <li><a href="/bulk_import">Bulk Import</a></li>
+                    </ul>
+                </li>
+
+                <li class="sidebar-titles">Promotion Management</li>
+
+                <li class="submenu">
+                    <a href="javascript:void(0);"> <!-- Check this href attribute -->
+                        <img src="assets/img/icons/sales1.svg" alt="img" />
+                        <span style="color: red;">Banner</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul id="bannerListMenu"> <!-- Give an ID to the parent ul -->
+                        <li><a href="/bannercreate">banner</a></li>
+                    </ul>
+                </li>
+
+                <li class="submenu">
+                    <a href="javascript:void(0);"> <!-- Check this href attribute -->
+                        <img src="assets/img/icons/sales1.svg" alt="img" />
+                        <span style="color: red;">Offers & Deals</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul id="notificationListMenu"> <!-- Give an ID to the parent ul -->
+                        <li><a href="/coupon">Coupons</a></li>
+                        <li><a href="/flash">Flash Deals</a></li>
+                        <li><a href="/dealoftheday">Deal of the Day</a></li>
+                        <li><a href="/saleslist_packaging">featured Deal</a></li>
+                    </ul>
+                </li>
+
+                <li class="submenu">
+                    <a href="javascript:void(0);"> <!-- Check this href attribute -->
+                        <img src="assets/img/icons/sales1.svg" alt="img" />
+                        <span style="color: red;">Notifications</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul id="notificationListMenu"> <!-- Give an ID to the parent ul -->
+                        <li><a href="/coupon">Coupons</a></li>
+                        <li><a href="/flash">Flash Deals</a></li>
+                        <li><a href="/saleslist_confirmed">Deal of the Day</a></li>
+                        <li><a href="/saleslist_packaging">featured Deal</a></li>
+                    </ul>
+                </li>
+
+                <li class="submenu">
+                    <a href="javascript:void(0);"> <!-- Check this href attribute -->
+                        <img src="assets/img/icons/sales1.svg" alt="img" />
+                        <span style="color: red;">Announcements</span>
+                    </a>
+                </li>
+
+
+
+                <li class="sidebar-titles" style="color: red;">Help & Support</li>
+
+                <li class="submenu">
+                    <a href="javascript:void(0);"> <!-- Check this href attribute -->
+                        <img src="assets/img/icons/sales1.svg" alt="img" />
+                        <span>Messages</span>
+                    </a>
+                </li>
+
+                <li class="submenu">
+                    <a href="javascript:void(0);"> <!-- Check this href attribute -->
+                        <img src="assets/img/icons/sales1.svg" alt="img" />
+                        <span>Support Ticket</span>
+                    </a>
+                </li>
+
+
+
+
+                <li class="sidebar-titles" style="color: red;">Reports & Analysis</li>
+
+                <li class="submenu">
+                    <a href="javascript:void(0);"> <!-- Check this href attribute -->
+                        <img src="assets/img/icons/sales1.svg" alt="img" />
+                        <span title="Sales & Transaction Report">Sales & Transaction Report</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul id="notificationListMenu"> <!-- Give an ID to the parent ul -->
+                        <li><a href="/coupon">Coupons</a></li>
+                        <li><a href="/flash">Flash Deals</a></li>
+                        <li><a href="/saleslist_confirmed">Deal of the Day</a></li>
+                        <li><a href="/saleslist_packaging">featured Deal</a></li>
+                    </ul>
+                </li>
+
+                <li class="submenu">
+                    <a href="javascript:void(0);"> <!-- Check this href attribute -->
+                        <img src="assets/img/icons/sales1.svg" alt="img" />
+                        <span title="Product Report">Product Report</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                </li>
+
+                <li class="sidebar-titles">User Management</li>
+
+
+                <li class="submenu">
+                    <a href="javascript:void(0);"> <!-- Check this href attribute -->
+                        <img src="assets/img/icons/sales1.svg" alt="img" />
+                        <span>Customers</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul id="customersListMenu"> <!-- Give an ID to the parent ul -->
+                        <li><a href="/customer-list">Customer List</a></li>
+                        <li><a href="/customerreview">Customer Review</a></li>
+                        <li><a href="/saleslist_confirmed">Wallet</a></li>
+                        <li><a href="/saleslist_packaging">Wallet Bonus Status</a></li>
+                        <li><a href="/saleslist_packaging">Loyalty Points</a></li>
+                    </ul>
+                </li>
+                <li class="sidebar-titles">System Settings</li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,552 @@
+<script>
+    let data = <%- JSON.stringify(categoryData) %>;
+    let secondTable = []
+    console.log(secondTable, "secondTable")
+    function populateOptions() {
+        let selectElement = document.getElementById('categorylist');
+        selectElement.innerHTML = '';
+        let defaultOption = document.createElement('option');
+        defaultOption.text = 'Select main category';
+        defaultOption.value = '';
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        selectElement.appendChild(defaultOption);
+        data.forEach(item => {
+            let option = document.createElement('option');
+            option.text = item.name;
+            option.value = item.id;
+            selectElement.appendChild(option);
+        });
+    }
+
+    function populateSubcategories(subcategories) {
+        let subcategorySelect = document.getElementById('subCategory');
+        subcategorySelect.innerHTML = ''; // Clear existing options
+        let defaultOption = new Option('Select subcategory', ''); // Create default option
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        subcategorySelect.appendChild(defaultOption);
+        subcategories.forEach(subcategory => {
+            let option = document.createElement('option');
+            option.text = subcategory.name;
+            option.value = subcategory.id;
+            subcategorySelect.appendChild(option);
+        });
+    }
+
+    function populateSubSubcategories(subsubcategories) {
+        let subSubCategorySelect = document.getElementById('subSubCategory');
+        subSubCategorySelect.innerHTML = ''; // Clear existing options
+        let defaultOption = new Option('Select subcategory', ''); // Create default option
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        subSubCategorySelect.appendChild(defaultOption);
+        subsubcategories.forEach(subsubcategory => {
+            let option = document.createElement('option');
+            option.text = subsubcategory.name;
+            option.value = subsubcategory.id;
+            subSubCategorySelect.appendChild(option);
+        });
+    }
+
+    $(document).ready(function () {
+        populateOptions();
+        $('#categorylist').change(function () {
+            let id = $(this).val(); // Get the selected value
+            fetch(`<%= url %>category/categoryDropdown?id=${id}`, {
+                method: 'GET'
+            })
+                .then(res => res.json())
+                .then(result => {
+                    let subcategories = result.data;
+                    // console.log(subcategories); 
+                    populateSubcategories(subcategories)
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+        });
+
+        $('#subCategory').change(function () {
+            let id = $(this).val(); // Get the selected value
+            fetch(`<%= url %>category/categoryDropdown?id=${id}`, {
+                method: 'GET'
+            })
+                .then(res => res.json())
+                .then(result => {
+                    let subsubcategories = result.data;
+                    // console.log(subsubcategories); 
+                    populateSubSubcategories(subsubcategories)
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+        });
+    });
+
+
+
+    let tbody = document.createElement('tbody');
+    let productListData = <%- JSON.stringify(productListData) %>
+        // console.log(productListData)
+        productListData.map((item, index) => {
+            tbody.innerHTML += `<tr class=${index}>
+                                <td>${index + 1}</td>
+                                <td>
+                                    <a href="#" style="display:flex;width:50px" class="align-items-center">
+                                        <img src='<%= url %>${item.thumbnail}' style="width:100%;margin-right:9px">
+                                        <span>${item.name}</span>
+                                    </a>
+                                </td>
+                                <td>${item.product_type}</td>
+                                <td>${item.purchase_price}</td>
+                                <td>${item.purchase_price}</td>
+                                <td>
+                                    <label class="switcher">
+                                        <input type="checkbox" class="switcher_input" id="featured_statusswitcher" 
+                                             name="featured_status" data-bs-toggle="featured_status" data-bs-target="#featured_status" value="${item.featured_status}" ${item.featured_status === 1 ? 'checked' : ''} data-id="${item.id}">
+                                        <span class="switcher_control"></span>
+                                    </label>
+                                </td>
+                                <td>
+                                    <label class="switcher">
+                                        <input type="checkbox" class="switcher_input" 
+                                             name="status" data-bs-toggle="status" data-bs-target="#status" value="${item.status}" ${item.status === 1 ? 'checked' : ''} data-id="${item.id}">
+                                        <span class="switcher_control"></span>
+                                    </label>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/barcode?id=${item.id}" class="edit-pencil-btn">
+                                        <i class="fa-solid fa-barcode me-2"  style="font-size: x-large;"></i>
+                                    </a>
+                                    <a  href="/productDetails?id=${item.id}">
+                                        <img src="assets/img/icons/eye1.svg" class="me-2" alt="img">
+                                    </a>
+                                    <a  href="/productlistEdit?id=${item.id}" class="edit-pencil-btn">
+                                        <img src="assets/img/icons/edit.svg" class="me-2" alt="img">
+                                    </a>
+
+                                    <a class="deleteBTN" id='${item.id}' href="javascript:void(0);"" data-bs-toggle="modal" data-bs-target="#proDelete">
+                                        <img src="assets/img/icons/delete.svg" alt="img">
+                                    </a>
+                                </td>
+                            </tr>
+                            `
+        })
+    document.querySelector('#productTable').appendChild(tbody);
+
+
+    const statusCheckboxes = document.querySelectorAll('.switcher_input[name="status"]');
+
+    statusCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function (e) {
+            const modalId = e.target.getAttribute('data-bs-toggle');
+            const modal = document.getElementById(modalId);
+            const modalBody = modal.querySelector('.modal-body');
+
+            if (e.target.checked) {
+                modalBody.innerHTML = `
+            <div class="d-flex flex-column align-items-center text-center gap-2 mb-2">
+                <div class="toggle-modal-img-box d-flex flex-column justify-content-center align-items-center mb-3 position-relative">
+                    <img class="status-icon" src="" alt="" width="30">
+                    <img id="toggle-status-image" alt="" src="assets/img/product/product-status-on.png">
+                </div>
+                <h5 class="modal-title" id="toggle-status-title">Want to Turn ON old product Status</h5>
+                <div class="text-center" id="toggle-status-message"><p>If enabled this product will be available on the website and customer app</p></div>
+            </div>`;
+            } else {
+                modalBody.innerHTML = `
+            <div class="d-flex flex-column align-items-center text-center gap-2 mb-2">
+                <div class="toggle-modal-img-box d-flex flex-column justify-content-center align-items-center mb-3 position-relative">
+                    <img class="status-icon" src="" alt="" width="30">
+                    <img id="toggle-status-image" alt="" src="assets/img/product/product-status-off.png">
+                </div>
+                <h5 class="modal-title" id="toggle-status-title">Want to Turn OFF old product Status</h5>
+                <div class="text-center" id="toggle-status-message"><p>If disabled this product will be hidden from the website and customer app</p></div>
+            </div>`;
+            }
+
+            modal.classList.add('show');
+            modal.style.display = 'block';
+            const submitButton = modal.querySelector('#switch_submit');
+            submitButton.addEventListener('click', function () {
+                const id = e.target.dataset.id;
+                if (id) {
+                    const status = e.target.checked ? 1 : 0;
+                    updateStatus(id, status);
+                } else {
+                    console.error('Checkbox ID not found');
+                }
+            });
+        });
+    });
+
+    const closeButtons = document.querySelectorAll('.modal .closefilter');
+    closeButtons.forEach(closeButton => {
+        closeButton.addEventListener('click', function () {
+            const modal = this.closest('.modal');
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+            window.location.reload();
+        });
+    });
+
+    function updateStatus(id, status) {
+        fetch(`<%= url %>product/activeStatusUpdate?id=${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: status }) // Send status in request body
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // console.log(data);
+                location.reload()
+                // You can add further handling here if needed
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+    };
+
+    const featuredStatusSwitchers = document.querySelectorAll('.switcher_input[name="featured_status"]');
+
+    featuredStatusSwitchers.forEach(featuredStatusSwitcher => {
+        featuredStatusSwitcher.addEventListener('change', function (e) {
+            const modalId = e.target.getAttribute('data-bs-toggle');
+            const modal = document.getElementById(modalId);
+            const modalBody = modal.querySelector('.modal-body');
+
+            if (e.target.checked) {
+                modalBody.innerHTML = `
+            <div class="d-flex flex-column align-items-center text-center gap-2 mb-2">
+                <div class="toggle-modal-img-box d-flex flex-column justify-content-center align-items-center mb-3 position-relative">
+                    <img class="status-icon" src="" alt="" width="30">
+                    <img id="toggle-status-image" alt="" src="assets/img/product/product-status-on.png">
+                </div>
+                <h5 class="modal-title" id="toggle-status-title">Want to Add old product To the featured section</h5>
+                <div class="text-center" id="toggle-status-message"><p>If enabled this product will be shown in the featured product on the website and customer app</p></div>
+            </div>`;
+            } else {
+                modalBody.innerHTML = `
+            <div class="d-flex flex-column align-items-center text-center gap-2 mb-2">
+                <div class="toggle-modal-img-box d-flex flex-column justify-content-center align-items-center mb-3 position-relative">
+                    <img class="status-icon" src="" alt="" width="30">
+                    <img id="toggle-status-image" alt="" src="assets/img/product/product-status-off.png">
+                </div>
+                <h5 class="modal-title" id="toggle-status-title">Want to Remove old product To the featured section</h5>
+                <div class="text-center" id="toggle-status-message"><p>If disabled this product will be removed from the featured product section of the website and customer app</p></div>
+            </div>`;
+            }
+
+            modal.classList.add('show');
+            modal.style.display = 'block';
+            const submitButton = modal.querySelector('#feature_switch_submit');
+            submitButton.addEventListener('click', function () {
+                const id = e.target.dataset.id;
+                if (id) {
+                    const status = e.target.checked ? 1 : 0;
+                    updateFeaturedStatus(id, status);
+                } else {
+                    console.error('Checkbox ID not found');
+                }
+            });
+        });
+    });
+
+    function updateFeaturedStatus(id, status) {
+        fetch(`<%=url %>product/featuredStatusUpdate?id=${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ status: status })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // console.log(data);
+                location.reload()
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+    }
+
+
+    // Delete Product Start
+    const deleteButtons = document.querySelectorAll('.deleteBTN');
+    const modalDeleteButton = document.getElementById('deleteAPI');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function (event) {
+            const itemId = event.target.parentNode.id;
+            const deleteModal = new bootstrap.Modal(document.getElementById('proDelete'));
+            deleteModal.show();
+            let is_active = 0;
+
+            // Modal ke Delete button par click event listener attach kare
+            modalDeleteButton.addEventListener('click', function () {
+                fetch(`<%= url %>product/productDelete?id=${itemId}`, {
+                    method: "POST",
+                    headers: {
+                        "jwt_token": localStorage.getItem("token"),
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ is_active: is_active })
+                })
+                    .then((response) => response.json())
+                    .then((result) => {
+                        // console.log(result);
+                        // window.location.href = '<%=url %>addcategory'
+                        location.reload();
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching order details:", error);
+                    });
+            });
+        });
+    });
+    // Delete Product End
+
+    // Show Data Start
+    let showDataForm = document.querySelector('#showDataForm');
+
+    showDataForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        let  brand_id = document.querySelector('#brand_id').value;
+        let category_id = document.querySelector('#categorylist').value;
+        let sub_category_id = document.querySelector('#subCategory').value;
+        let sub_sub_category_id = document.querySelector('#subSubCategory').value;
+
+        let data = {
+            brand_id : brand_id,
+            category_id: category_id,
+            sub_category_id: sub_category_id,
+            sub_sub_category_id: sub_sub_category_id
+        }
+        // console.log(data)
+
+        fetch(`<%= url %>product/productListShow`, {
+            method: 'POST',
+            headers: {
+                "jwt_token": localStorage.getItem("token"),
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+            .then(res => res.json())
+            .then((data) => {
+                let productListData = data.data; // Assuming the data structure is similar to productListData
+                renderTable(productListData)
+
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    })
+
+
+    function renderTable(productListData) {
+        let tbody = document.createElement('tbody');
+        productListData.forEach((item, index) => {
+            tbody.innerHTML += `
+            <tr class=${index}>
+                <td>${index + 1}</td>
+                <td>
+                    <a href="#" style="display:flex;width:50px" class="align-items-center">
+                        <img src='<%= url %>${item.thumbnail}' style="width:100%;margin-right:9px">
+                        <span>${item.name}</span>
+                    </a>
+                </td>
+                <td>${item.product_type}</td>
+                <td>${item.purchase_price}</td>
+                <td>${item.purchase_price}</td>
+                <td>
+                    <label class="switcher">
+                        <input type="checkbox" class="switcher_input" id="featured_statusswitcher" 
+                             name="featured_status" data-bs-toggle="featured_status" data-bs-target="#featured_status" value="${item.featured_status}" ${item.featured_status === 1 ? 'checked' : ''} data-id="${item.id}">
+                        <span class="switcher_control"></span>
+                    </label>
+                </td>
+                <td>
+                    <label class="switcher">
+                        <input type="checkbox" class="switcher_input" 
+                             name="status" data-bs-toggle="status" data-bs-target="#status" value="${item.status}" ${item.status === 1 ? 'checked' : ''} data-id="${item.id}">
+                        <span class="switcher_control"></span>
+                    </label>
+                </td>
+                <td class="text-center">
+                    <a href="/barcode?id=${item.id}" class="edit-pencil-btn">
+                        <i class="fa-solid fa-barcode me-2"  style="font-size: x-large;"></i>
+                    </a>
+                    <a href="/productDetails?id=${item.id}">
+                        <img src="assets/img/icons/eye1.svg" class="me-2" alt="img">
+                    </a>
+                    <a href="/subsubcategoryedit?id=${item.subsubcategory_id}" class="edit-pencil-btn">
+                        <img src="assets/img/icons/edit.svg" class="me-2" alt="img">
+                    </a>
+                    <a class="deleteBTN" id='${item.id}' href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#proDelete">
+                        <img src="assets/img/icons/delete.svg" alt="img">
+                    </a>
+                </td>
+            </tr>`;
+        });
+        document.querySelector('#productTable tbody').innerHTML = tbody.innerHTML;
+    }
+
+    // Show Data End
+
+
+    // Excel Code Start
+    document.getElementById('downloadButton').addEventListener('click', async function() {
+    try {
+        // Fetch data from the backend
+        const response = await fetch(`<%= url %>product/productList`); // Replace 'backend-endpoint-url' with your actual backend endpoint URL
+        if (!response.ok) {
+            throw new Error('Failed to fetch data from the backend');
+        }
+        const productListData = await response.json();
+
+        // Generate Excel file with the fetched data
+        renderTable1(productListData.data);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+});
+
+function renderTable1(productListData) {
+    // Extracting data from the fetched data
+    let data = [];
+    console.log(productListData)
+    productListData.forEach((item, index) => {
+        let rowData = [
+            index + 1,
+            item.thumbnail,
+            item.name,
+            item.product_type,
+            item.purchase_price,
+            item.unit_price,
+            item.featured_status === 1 ? 'Yes' : 'No', // Convert 1/0 to Yes/No
+            item.status === 1 ? 'Active' : 'Inactive' // Convert 1/0 to Active/Inactive
+        ];
+        data.push(rowData);
+    });
+
+    // Create a new workbook
+    const workbook = XLSX.utils.book_new();
+
+    // Add a worksheet
+    const worksheet = XLSX.utils.aoa_to_sheet([
+        ['No.','thumbnail', 'Name', 'Product Type', 'Purchase Price', 'Sale Price', 'Featured Status', 'Status'], // Headers
+        ...data // Data rows
+    ]);
+
+    // Add the worksheet to the workbook
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Product List');
+
+    // Convert the workbook to a binary Excel file
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+    // Create a Blob from the binary Excel data
+    const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+
+    // Create a download link for the Blob
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = 'product_list.xlsx';
+
+    // Append the link to the body and trigger the download
+    document.body.appendChild(link);
+    link.click();
+
+    // Clean up
+    document.body.removeChild(link);
+}
+    // Excel Code End
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const deleteCategoryButton = document.getElementById("delete_category_button");
+        const activeCategoryButton = document.getElementById("active_category_button");
+        
+        const category_card = document.getElementById("category_card");
+        const delete_category_card = document.getElementById("delete_category_card");
+
+        deleteCategoryButton.addEventListener("click", function () {
+            // Hide categoryTable
+            category_card.style.display = "none";
+            // Show restoreTable
+            delete_category_card.style.display = "block";
+        });
+
+        activeCategoryButton.addEventListener("click", function () {
+            // Hide categoryTable
+            category_card.style.display = "block";
+            // Show restoreTable
+            delete_category_card.style.display = "none";
+        });
+
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+            let tbody_restore = document.createElement('tbody');
+
+            let deleteData = <%- JSON.stringify(deleteProductResult1) %>
+
+            deleteData.map((item, index) => {
+                tbody_restore.innerHTML += `<tr class=${index}>
+                                <td>${item.id}</td>
+                        
+                                <td>${item.name}</td>
+
+                                <td class="text-center">
+                                    <a class="restore-data" data-id="${item.id}" data-name="${item.name}">
+                                        <i class="fa-solid fa-trash-can-arrow-up" style="font-size: x-large;"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            `
+        })
+        document.querySelector('#restoreTable').appendChild(tbody_restore);
+        });
+
+
+        $(document).ready(function () {
+            $('.restore-data').click(function () {
+                let id = $(this).data('id');
+                let name = $(this).data('name');
+                let is_active = 1;
+                let data ={
+                    id:id,
+                    name:name,
+                    is_active:is_active
+                }
+                fetch(`<%= url %>product/productDelete?id=${id}`, {
+                    method: "POST",
+                    headers: {
+                        "jwt_token": localStorage.getItem("token"),
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data),
+                })
+                    .then((response) => response.json())
+                    .then((result) => {
+                        console.log(result);
+                        // window.location.href = '<%=url %>addcategory'
+                        location.reload();
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching order details:", error);
+                    });
+            });
+        });
+</script>
